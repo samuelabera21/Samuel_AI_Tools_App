@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Tools App</title>
+  <style>
+    body { font-family: Arial, sans-serif; background:#f3f4f6; margin:0; color:#111827; }
+    .topbar {
+      background: linear-gradient(90deg, #1d4ed8, #3b82f6);
+      color:#fff;
+      padding:14px 18px;
+      display:flex;
+      align-items:center;
+      gap:20px;
+    }
+    .brand { font-size:34px; font-weight:700; }
+    .nav { display:flex; align-items:center; gap:16px; }
+    .nav a, .drop-btn {
+      color:#fff;
+      text-decoration:none;
+      font-size:24px;
+      background:transparent;
+      border:none;
+      cursor:pointer;
+      padding:0;
+    }
+    .dropdown { position:relative; }
+    .dropdown-menu {
+      display:none;
+      position:absolute;
+      top:28px;
+      left:0;
+      min-width:300px;
+      background:#1e40af;
+      border:1px solid rgba(255,255,255,.2);
+      border-radius:8px;
+      z-index:20;
+      overflow:hidden;
+    }
+    .dropdown-menu a {
+      display:block;
+      padding:10px 12px;
+      color:#fff;
+      font-size:18px;
+    }
+    .dropdown-menu a:hover { background:#1d4ed8; }
+    .dropdown:hover .dropdown-menu { display:block; }
+    .wrap { max-width:1100px; margin:30px auto; padding:0 16px; }
+    h1 { margin-bottom:8px; }
+    .sub { color:#4b5563; margin-bottom:20px; }
+    h2 { margin:26px 0 10px; }
+    .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:14px; }
+    .card { background:#fff; border:1px solid #d1d5db; border-radius:10px; padding:14px; text-decoration:none; color:inherit; }
+    .card h3 { margin-bottom:8px; font-size:18px; }
+    .card p { color:#4b5563; font-size:14px; line-height:1.4; }
+    .live { color:#0f766e; font-weight:700; font-size:12px; }
+    .soon { color:#92400e; font-weight:700; font-size:12px; }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">MetaAppz</div>
+    <nav class="nav">
+      <a href="/">Home</a>
+      <div class="dropdown">
+        <button class="drop-btn" type="button">Tools ▾</button>
+        <div class="dropdown-menu">
+          <a href="/Tools/Amharic_OCR">Amharic OCR</a>
+          <a href="#">Amharic Numbers Converter</a>
+          <a href="#">Geez Numbers Converter</a>
+          <a href="#">Amharic Text Sorter</a>
+          <a href="#">Amharic Keyboard</a>
+        </div>
+      </div>
+      <div class="dropdown">
+        <button class="drop-btn" type="button">Games ▾</button>
+        <div class="dropdown-menu">
+          <a href="/Games/Amharic_Hangman_Game">Hangman in Amharic</a>
+          <a href="#">Amharic Riddles</a>
+          <a href="#">Amharic Typing Game</a>
+          <a href="#">Amharic Word Search</a>
+        </div>
+      </div>
+      <a href="#">Resources</a>
+      <a href="#">Videos</a>
+      <a href="#">Shop</a>
+      <a href="#">Contact</a>
+    </nav>
+  </header>
+  <main class="wrap">
+    <h1>Tools</h1>
+    <p class="sub">Project structure ready for step-by-step development. Start with OCR, then build the next tools one by one.</p>
+    <section class="grid">
+      <a class="card" href="/Tools/Amharic_OCR"><div class="live">LIVE</div><h3>Amharic OCR</h3><p>Convert Amharic images/PDFs to text.</p></a>
+      <a class="card" href="#"><div class="soon">COMING SOON</div><h3>Amharic Numbers Converter</h3><p>Convert western numbers to Amharic words.</p></a>
+      <a class="card" href="#"><div class="soon">COMING SOON</div><h3>Geez Numbers Converter</h3><p>Convert western numbers to Geez word and numeric.</p></a>
+      <a class="card" href="#"><div class="soon">COMING SOON</div><h3>Amharic Text Sorter</h3><p>Sort text in Amharic alphabet order.</p></a>
+      <a class="card" href="#"><div class="soon">COMING SOON</div><h3>Amharic Keyboard</h3><p>Online keyboard for mobile and desktop.</p></a>
+      <a class="card" href="#"><div class="soon">COMING SOON</div><h3>Amharic Text To Image</h3><p>Convert text into image output.</p></a>
+      <a class="card" href="#"><div class="soon">COMING SOON</div><h3>Amharic Spelling Checker</h3><p>Check Amharic spelling instantly.</p></a>
+      <a class="card" href="#"><div class="soon">COMING SOON</div><h3>Random Amharic Words Generator</h3><p>Generate random Amharic words.</p></a>
+      <a class="card" href="#"><div class="soon">COMING SOON</div><h3>Amharic Speech Recognition</h3><p>Transcribe speech to text.</p></a>
+      <a class="card" href="#"><div class="soon">COMING SOON</div><h3>Amharic to Phonetics</h3><p>Convert Amharic words to IPA.</p></a>
+      <a class="card" href="#"><div class="soon">COMING SOON</div><h3>Ethiopic Links</h3><p>Short links using Ethiopic characters.</p></a>
+      <a class="card" href="#"><div class="soon">COMING SOON</div><h3>Ethiopian Date Converter</h3><p>Convert Ethiopian and Gregorian dates.</p></a>
+    </section>
+
+    <h2>Games</h2>
+    <section class="grid">
+      <a class="card" href="/Games/Amharic_Hangman_Game"><div class="live">LIVE</div><h3>Hangman in Amharic</h3><p>Your favorite hangman game in Amharic.</p></a>
+      <a class="card" href="#"><div class="soon">COMING SOON</div><h3>Amharic Riddles</h3><p>Riddles with answers for daily fun.</p></a>
+      <a class="card" href="#"><div class="soon">COMING SOON</div><h3>Amharic Typing Game</h3><p>Improve typing speed and accuracy.</p></a>
+      <a class="card" href="#"><div class="soon">COMING SOON</div><h3>Amharic Word Search</h3><p>Word search puzzles in Amharic.</p></a>
+    </section>
+  </main>
+</body>
+</html>
