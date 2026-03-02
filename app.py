@@ -1,7 +1,10 @@
-from flask import Flask, request, render_template, send_file
+from flask import Flask, request, render_template, send_file, jsonify
 import io
 import base64
+from decimal import Decimal, InvalidOperation
+from gtts import gTTS
 from tools.ocr.ocr import extract_amharic_text_from_bytes
+from tools.amharic_numbers_converter.converter import number_to_amharic, number_to_currency
 
 app = Flask(__name__)
 
@@ -26,6 +29,66 @@ def amharic_ocr():
             image_url = f"data:{mime_type};base64,{encoded}"
 
     return render_template("ocr.html", text=text, image_url=image_url)
+
+
+@app.route("/Tools/Numbers_to_Amharic_Words_Converter", methods=["GET", "POST"])
+@app.route("/Tools/Amharic_Numbers_Converter", methods=["GET", "POST"])
+def amharic_numbers_converter():
+    # `result` stores the converted Amharic text shown in the result card.
+    result = ""
+    number_value = "0"
+    mode = "normal"
+
+    if request.method == "POST":
+        number_value = request.form.get("number", "0").strip() or "0"
+        normalized_value = number_value.replace(",", "")
+        mode = request.form.get("mode", "normal")
+
+        try:
+            if mode == "currency":
+                amount = Decimal(normalized_value)
+                result = number_to_currency(amount)
+            else:
+                if "." in normalized_value:
+                    raise ValueError
+                number = int(normalized_value)
+                result = number_to_amharic(number)
+        except (ValueError, InvalidOperation):
+            result = "እባክዎ ትክክለኛ ቁጥር ያስገቡ"
+
+    return render_template(
+        "amharic_numbers.html",
+        result=result,
+        number_value=number_value,
+        mode=mode,
+    )
+
+
+@app.route("/Tools/Numbers_to_Amharic_Words_Converter/speak", methods=["POST"])
+def speak_amharic_numbers_text():
+    # Receive the text to speak from the page.
+    payload = request.get_json(silent=True) or {}
+    text_to_speak = str(payload.get("text", "")).strip()
+
+    if not text_to_speak:
+        return jsonify({"error": "No text provided for speech."}), 400
+
+    try:
+        # Generate MP3 audio in memory (no temp file on disk).
+        audio_buffer = io.BytesIO()
+        tts = gTTS(text=text_to_speak, lang="am")
+        tts.write_to_fp(audio_buffer)
+        audio_buffer.seek(0)
+
+        # Stream the generated audio directly to the browser.
+        return send_file(
+            audio_buffer,
+            mimetype="audio/mpeg",
+            as_attachment=False,
+            download_name="amharic_numbers.mp3",
+        )
+    except Exception:
+        return jsonify({"error": "Audio generation failed. Please try again."}), 500
 
 
 @app.route("/Games/Amharic_Hangman_Game")
