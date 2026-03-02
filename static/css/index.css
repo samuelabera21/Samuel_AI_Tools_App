@@ -1,40 +1,17 @@
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
-
 body {
-    font-family: Arial, sans-serif;
     background: #f2f4f7;
     color: #1f2937;
 }
+.nav a {
+    opacity: 0.96;
+}
 
-.topbar {
-    background: linear-gradient(90deg, #1d4ed8, #3b82f6);
-    color: #fff;
-    padding: 14px 18px;
-    display: flex;
-    align-items: center;
-    gap: 22px;
+.nav {
+    font-size: 20px;
 }
 
 .brand {
     font-size: 20px;
-    font-weight: 700;
-    line-height: 1;
-}
-
-.nav {
-    display: flex;
-    gap: 16px;
-    font-size: 20px;
-}
-
-.nav a {
-    color: #fff;
-    text-decoration: none;
-    opacity: 0.96;
 }
 
 .page {
