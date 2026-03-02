@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Geez Numerals Converter - AI Tools App</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/geez_numbers.css') }}">
+</head>
+<body>
+    <header class="topbar">
+        <div class="brand">MetaAppz</div>
+        <nav class="nav">
+            <a href="/">Home</a>
+            <div class="dropdown">
+                <button class="drop-btn" type="button">Tools ▾</button>
+                <div class="dropdown-menu">
+                    <a href="/Tools/Amharic_OCR">Amharic OCR</a>
+                    <a href="/Tools/Numbers_to_Amharic_Words_Converter">Amharic Numbers Converter</a>
+                    <a href="/Tools/Geez_Numbers_Converter">Geez Numbers Converter</a>
+                    <a href="#">Amharic Text Sorter</a>
+                    <a href="#">Amharic Keyboard</a>
+                </div>
+            </div>
+            <a href="#">Resources</a>
+            <div class="dropdown">
+                <button class="drop-btn" type="button">Games ▾</button>
+                <div class="dropdown-menu">
+                    <a href="/Games/Amharic_Hangman_Game">Hangman in Amharic</a>
+                    <a href="#">Amharic Riddles</a>
+                    <a href="#">Amharic Typing Game</a>
+                    <a href="#">Amharic Word Search</a>
+                </div>
+            </div>
+            <a href="#">Videos</a>
+            <a href="#">Shop</a>
+            <a href="#">Contact</a>
+        </nav>
+    </header>
+
+    <main class="page">
+        <h1 class="title">Geez Numerals Converter</h1>
+        <p class="subtitle">
+            Geez is an ancient Semitic language with its own script originated around the 5th century BC. It uses the 'Abugida' writing system and is mainly used in the Ethiopian Orthodox Tewahedo church. By using this tool you can convert any Western/Arabic numbers to Geez and vice versa.
+        </p>
+
+        <section class="tool-card">
+            <div class="tabs">
+                <a href="/Tools/Geez_Numbers_Converter?handler=ToGeez" class="tab-link {% if mode == 'to_geez' %}active{% endif %}">Convert to Geez</a>
+                <a href="/Tools/Geez_Numbers_Converter?handler=ToArabicNumerals" class="tab-link {% if mode == 'from_geez' %}active{% endif %}">Convert from Geez</a>
+            </div>
+
+            <div class="inner">
+                <form method="POST" action="/Tools/Geez_Numbers_Converter">
+                    <input type="hidden" name="mode" value="{{ mode }}">
+
+                    {% if mode == 'to_geez' %}
+                    <div class="label">Enter Number to Convert to Geez</div>
+                    <div class="input-wrap">
+                        <input id="geez-value-input" type="text" name="value" value="{{ value }}" placeholder="ex. 251" required>
+                    </div>
+                    {% else %}
+                    <div class="label">Enter Number to Convert from Geez</div>
+                    <div class="input-wrap">
+                        <input id="geez-value-input" type="text" name="value" value="{{ value }}" placeholder="ex. ፪፻፶፩" required>
+                    </div>
+                    {% endif %}
+
+                    <button class="submit-btn" type="submit">Convert</button>
+                    <div class="error">{{ error }}</div>
+                </form>
+
+                {% if result %}
+                <div class="result-card">
+                    <div class="result-text" id="result-text">{{ result }}</div>
+                    <button type="button" class="copy-btn" onclick="copyResult()">📋</button>
+                </div>
+                {% endif %}
+
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>x1</th>
+                                <th>x10</th>
+                                <th>x100</th>
+                                <th>x10000</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td><button type="button" class="geez-char-btn" data-char="፩">፩</button></td>
+                                <td><button type="button" class="geez-char-btn" data-char="፲">፲</button></td>
+                                <td><button type="button" class="geez-char-btn" data-char="፻">፻</button></td>
+                                <td><button type="button" class="geez-char-btn" data-char="፼">፼</button></td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td><button type="button" class="geez-char-btn" data-char="፪">፪</button></td>
+                                <td><button type="button" class="geez-char-btn" data-char="፳">፳</button></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td><button type="button" class="geez-char-btn" data-char="፫">፫</button></td>
+                                <td><button type="button" class="geez-char-btn" data-char="፴">፴</button></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>4</td>
+                                <td><button type="button" class="geez-char-btn" data-char="፬">፬</button></td>
+                                <td><button type="button" class="geez-char-btn" data-char="፵">፵</button></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>5</td>
+                                <td><button type="button" class="geez-char-btn" data-char="፭">፭</button></td>
+                                <td><button type="button" class="geez-char-btn" data-char="፶">፶</button></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>6</td>
+                                <td><button type="button" class="geez-char-btn" data-char="፮">፮</button></td>
+                                <td><button type="button" class="geez-char-btn" data-char="፷">፷</button></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>7</td>
+                                <td><button type="button" class="geez-char-btn" data-char="፯">፯</button></td>
+                                <td><button type="button" class="geez-char-btn" data-char="፸">፸</button></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>8</td>
+                                <td><button type="button" class="geez-char-btn" data-char="፰">፰</button></td>
+                                <td><button type="button" class="geez-char-btn" data-char="፹">፹</button></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>9</td>
+                                <td><button type="button" class="geez-char-btn" data-char="፱">፱</button></td>
+                                <td><button type="button" class="geez-char-btn" data-char="፺">፺</button></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        function insertAtCursor(input, value) {
+            const start = input.selectionStart ?? input.value.length;
+            const end = input.selectionEnd ?? input.value.length;
+
+            input.value = input.value.slice(0, start) + value + input.value.slice(end);
+
+            const nextPos = start + value.length;
+            input.setSelectionRange(nextPos, nextPos);
+            input.focus();
+        }
+
+        function enableGeezTableTyping() {
+            const modeInput = document.querySelector('input[name="mode"]');
+            if (!modeInput || modeInput.value !== "from_geez") {
+                return;
+            }
+
+            const targetInput = document.getElementById("geez-value-input");
+            if (!targetInput) {
+                return;
+            }
+
+            const charButtons = document.querySelectorAll(".geez-char-btn");
+            charButtons.forEach((button) => {
+                button.addEventListener("click", () => {
+                    const charValue = button.getAttribute("data-char");
+                    if (!charValue) {
+                        return;
+                    }
+                    insertAtCursor(targetInput, charValue);
+                });
+            });
+        }
+
+        function copyResult() {
+            const resultNode = document.getElementById("result-text");
+            if (!resultNode) {
+                return;
+            }
+            navigator.clipboard.writeText(resultNode.innerText.trim());
+        }
+
+        enableGeezTableTyping();
+    </script>
+</body>
+</html>

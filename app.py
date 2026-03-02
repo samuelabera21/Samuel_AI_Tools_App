@@ -5,6 +5,7 @@ from decimal import Decimal, InvalidOperation
 from gtts import gTTS
 from tools.ocr.ocr import extract_amharic_text_from_bytes
 from tools.amharic_numbers_converter.converter import number_to_amharic, number_to_currency
+from tools.geez_numbers_converter.converter import arabic_to_geez, geez_to_arabic
 
 app = Flask(__name__)
 
@@ -61,6 +62,48 @@ def amharic_numbers_converter():
         result=result,
         number_value=number_value,
         mode=mode,
+    )
+
+
+@app.route("/Tools/Geez_Numbers_Converter", methods=["GET", "POST"])
+def geez_numbers_converter():
+    mode = "to_geez"
+    value = ""
+    result = ""
+    error = ""
+
+    handler = request.args.get("handler", "").strip()
+    if handler == "ToArabicNumerals":
+        mode = "from_geez"
+    elif handler == "ToGeez":
+        mode = "to_geez"
+
+    if request.method == "POST":
+        mode = request.form.get("mode", mode)
+        value = request.form.get("value", "").strip()
+
+        try:
+            if mode == "to_geez":
+                normalized = value.replace(",", "")
+                if not normalized or "." in normalized:
+                    raise ValueError
+
+                number = int(normalized)
+                result = arabic_to_geez(number)
+            else:
+                result = str(geez_to_arabic(value))
+        except ValueError:
+            if mode == "to_geez":
+                error = "Please enter a valid positive whole number."
+            else:
+                error = "Please enter a valid Geez numeral."
+
+    return render_template(
+        "geez_numbers.html",
+        mode=mode,
+        value=value,
+        result=result,
+        error=error,
     )
 
 
