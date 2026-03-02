@@ -103,6 +103,7 @@ ai_tools_app/
 
 ### Directory responsibilities
 - `tools/`
+- 
   - Business logic / AI logic for each tool.
   - Each tool should keep its own Python module(s).
 - `games/`
