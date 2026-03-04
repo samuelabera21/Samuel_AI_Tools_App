@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ethiopian Phone Number Validator - AI Tools App</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/ethiopian_phone_numbers.css') }}">
+</head>
+<body>
+    <header class="topbar">
+        <div class="brand">MetaAppz</div>
+        <nav class="nav">
+            <a href="/">Home</a>
+            <div class="dropdown">
+                <button class="drop-btn" type="button">Tools ▾</button>
+                <div class="dropdown-menu">
+                    <a href="/Tools/Amharic_OCR">Amharic OCR</a>
+                    <a href="/Tools/Numbers_to_Amharic_Words_Converter">Amharic Numbers Converter</a>
+                    <a href="/Tools/Geez_Numbers_Converter">Geez Numbers Converter</a>
+                    <a href="/Tools/Ethiopia_Phone_Numbers">Ethiopian Phone Number Validator</a>
+                    <a href="#">Amharic Text Sorter</a>
+                    <a href="#">Amharic Keyboard</a>
+                </div>
+            </div>
+            <a href="#">Resources</a>
+            <div class="dropdown">
+                <button class="drop-btn" type="button">Games ▾</button>
+                <div class="dropdown-menu">
+                    <a href="/Games/Amharic_Hangman_Game">Hangman in Amharic</a>
+                    <a href="#">Amharic Riddles</a>
+                    <a href="#">Amharic Typing Game</a>
+                    <a href="#">Amharic Word Search</a>
+                </div>
+            </div>
+            <a href="#">Videos</a>
+            <a href="#">Shop</a>
+            <a href="#">Contact</a>
+        </nav>
+    </header>
+
+    <main class="page">
+        <h1 class="title">Ethiopian Phone Number Validator</h1>
+        <p class="subtitle">
+            Use our Ethiopian Phone Number Validator to quickly verify Ethiopian phone numbers. Enter any number to instantly receive
+            details such as the carrier name, line type (mobile or landline), geographical location, and more. Perfect for businesses
+            and individuals seeking accurate and reliable phone number information.
+        </p>
+
+        <section class="tool-card">
+            <form id="phone-form" class="validator-form" novalidate>
+                <label class="input-label" for="phone-input">Enter Number to Validate</label>
+                <input
+                    id="phone-input"
+                    type="tel"
+                    inputmode="numeric"
+                    placeholder="ex. 0911203040"
+                    autocomplete="off"
+                    aria-describedby="phone-error"
+                >
+                <button class="validate-btn" type="submit">Validate</button>
+                <p id="phone-error" class="error-text" role="alert"></p>
+            </form>
+
+            <section id="result-panel" class="result-panel hidden" aria-live="polite">
+                <h2>Phone Number Information</h2>
+
+                <h3>Network Information</h3>
+                <div class="table-grid">
+                    <div><strong>Line Type:</strong> <span id="line-type">-</span></div>
+                    <div><strong>Carrier:</strong> <span id="carrier">Ethio Telecom</span></div>
+                </div>
+
+                <h3>Location Information</h3>
+                <div class="table-grid">
+                    <div><strong>Country:</strong> <span id="country">Ethiopia</span></div>
+                    <div><strong>Site/Region:</strong> <span id="region">Countrywide</span></div>
+                    <div><strong>Timezone:</strong> <span id="timezone">East Africa Time (EAT) (UTC+03:00)</span></div>
+                </div>
+
+                <h3>Format Information</h3>
+                <div class="table-grid">
+                    <div><strong>Country Code:</strong> <span id="country-code">251</span></div>
+                    <div><strong>Area Code:</strong> <span id="area-code">-</span></div>
+                    <div><strong>National Format:</strong> <span id="national-format">-</span></div>
+                    <div><strong>International Format:</strong> <span id="international-format">-</span></div>
+                    <div><strong>E.164 Format:</strong> <span id="e164-format">-</span></div>
+                </div>
+
+                <h3>Calling Information</h3>
+                <div class="table-grid">
+                    <div><strong>From Ethiopia:</strong> <span id="call-et" class="call-link">-</span></div>
+                    <div><strong>From USA:</strong> <span id="call-us" class="call-link">-</span></div>
+                    <div><strong>From UK:</strong> <span id="call-uk" class="call-link">-</span></div>
+                    <div><strong>From UAE:</strong> <span id="call-uae" class="call-link">-</span></div>
+                    <div><strong>From China:</strong> <span id="call-cn" class="call-link">-</span></div>
+                </div>
+
+                <button id="copy-btn" class="copy-btn" type="button" aria-label="Copy phone details">Copy</button>
+            </section>
+        </section>
+
+        <section class="short-codes">
+            <h2>Ethiopian Emergency and Service Short Numbers</h2>
+            <p>
+                Below is a list of key short numbers used in Ethiopia for emergency and special services, organized by category.
+            </p>
+
+            <div id="short-code-groups"></div>
+        </section>
+    </main>
+
+    <script src="{{ url_for('static', filename='vendor/libphonenumber-max.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/ethiopian_phone_numbers.js') }}"></script>
+</body>
+</html>

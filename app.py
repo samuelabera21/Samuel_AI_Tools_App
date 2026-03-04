@@ -107,6 +107,11 @@ def geez_numbers_converter():
     )
 
 
+@app.route("/Tools/Ethiopia_Phone_Numbers")
+def ethiopian_phone_number_validator():
+    return render_template("ethiopian_phone_numbers.html")
+
+
 @app.route("/Tools/Numbers_to_Amharic_Words_Converter/speak", methods=["POST"])
 def speak_amharic_numbers_text():
     # Receive the text to speak from the page.
