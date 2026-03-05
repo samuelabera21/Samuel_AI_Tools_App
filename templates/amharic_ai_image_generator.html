@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Amharic AI Prompt to Image Generator - AI Tools App</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/amharic_ai_image_generator.css') }}">
+</head>
+<body>
+    <header class="topbar">
+        <div class="brand">MetaAppz</div>
+        <nav class="nav">
+            <a href="/">Home</a>
+            <div class="dropdown">
+                <button class="drop-btn" type="button">Tools ▾</button>
+                <div class="dropdown-menu">
+                    <a href="/Tools/Amharic_OCR">Amharic OCR</a>
+                    <a href="/Tools/Numbers_to_Amharic_Words_Converter">Amharic Numbers Converter</a>
+                    <a href="/Tools/Geez_Numbers_Converter">Geez Numbers Converter</a>
+                    <a href="/Tools/Ethiopia_Phone_Numbers">Ethiopian Phone Number Validator</a>
+                    <a href="/Tools/Amharic_to_Image">Amharic AI Prompt to Image Generator</a>
+                    <a href="#">Amharic Text Sorter</a>
+                    <a href="#">Amharic Keyboard</a>
+                </div>
+            </div>
+            <a href="#">Resources</a>
+            <div class="dropdown">
+                <button class="drop-btn" type="button">Games ▾</button>
+                <div class="dropdown-menu">
+                    <a href="/Games/Amharic_Hangman_Game">Hangman in Amharic</a>
+                    <a href="#">Amharic Riddles</a>
+                    <a href="#">Amharic Typing Game</a>
+                    <a href="#">Amharic Word Search</a>
+                </div>
+            </div>
+            <a href="#">Videos</a>
+            <a href="#">Shop</a>
+            <a href="#">Contact</a>
+        </nav>
+    </header>
+
+    <main class="page">
+        <h1 class="title">Amharic AI Prompt to Image Generator</h1>
+        <p class="subtitle">
+            Enter an Amharic prompt and generate a brand-new AI image from meaning, not text rendering.
+            Example: "በጫካ ውስጥ ያለ ትልቅ አንበሳ".
+        </p>
+
+        <section class="card">
+            <div class="form-grid">
+                <label class="field">
+                    <span>Amharic Prompt</span>
+                    <textarea id="prompt" rows="5" placeholder="Type your Amharic image prompt here..."></textarea>
+                </label>
+
+                <div class="row">
+                    <label class="field">
+                        <span>Image Size</span>
+                        <select id="size">
+                            <option value="1024x1024" selected>1024 x 1024 (Recommended)</option>
+                        </select>
+                    </label>
+
+                    <label class="field">
+                        <span>Style (Optional)</span>
+                        <input id="style" type="text" placeholder="e.g. cinematic, watercolor, photorealistic">
+                    </label>
+                </div>
+
+                <div class="actions">
+                    <button id="generate-btn" class="btn-primary" type="button">Generate Image</button>
+                    <span id="loading" class="loading hidden">Generating image, please wait...</span>
+                </div>
+
+                <p id="error" class="error hidden"></p>
+            </div>
+
+            <section id="result" class="result hidden" aria-live="polite">
+                <h2>Generated Image</h2>
+                <img id="generated-image" alt="Generated image from Amharic prompt">
+                <div class="result-actions">
+                    <a id="download-link" class="btn-secondary" href="#" download="amharic-ai-image.png">Download Image</a>
+                </div>
+            </section>
+        </section>
+    </main>
+
+    <script>
+        const promptEl = document.getElementById("prompt");
+        const sizeEl = document.getElementById("size");
+        const styleEl = document.getElementById("style");
+        const generateButton = document.getElementById("generate-btn");
+        const loadingEl = document.getElementById("loading");
+        const errorEl = document.getElementById("error");
+        const resultEl = document.getElementById("result");
+        const imageEl = document.getElementById("generated-image");
+        const downloadLink = document.getElementById("download-link");
+
+        function setLoading(isLoading) {
+            generateButton.disabled = isLoading;
+            loadingEl.classList.toggle("hidden", !isLoading);
+            if (isLoading) {
+                errorEl.classList.add("hidden");
+            }
+        }
+
+        function showError(message) {
+            errorEl.textContent = message;
+            errorEl.classList.remove("hidden");
+        }
+
+        async function generateImage() {
+            const prompt = promptEl.value.trim();
+            if (!prompt) {
+                showError("Please enter an Amharic prompt first.");
+                return;
+            }
+
+            setLoading(true);
+            resultEl.classList.add("hidden");
+
+            try {
+                const response = await fetch("/api/amharic-ai-image", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        prompt,
+                        size: sizeEl.value,
+                        style: styleEl.value.trim()
+                    })
+                });
+
+                const data = await response.json();
+                if (!response.ok) {
+                    throw new Error(data.error || "Image generation failed.");
+                }
+
+                imageEl.src = data.imageUrl;
+                downloadLink.href = data.imageUrl;
+                resultEl.classList.remove("hidden");
+                errorEl.classList.add("hidden");
+            } catch (error) {
+                showError(error.message || "Unable to generate image right now.");
+            } finally {
+                setLoading(false);
+            }
+        }
+
+        generateButton.addEventListener("click", generateImage);
+        promptEl.addEventListener("keydown", (event) => {
+            if ((event.ctrlKey || event.metaKey) && event.key === "Enter") {
+                generateImage();
+            }
+        });
+    </script>
+</body>
+</html>

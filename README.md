@@ -6,6 +6,7 @@ Flask-based web app for Ethiopian/Amharic tools and games.
 - Amharic OCR
 - Amharic Numbers Converter (number words + currency + sound)
 - Geez Numerals Converter (Arabic ↔ Geez, copy, tabs, validation, clickable reference table)
+- Amharic AI Prompt to Image Generator (Amharic prompt -> AI-generated image)
 
 ---
 
@@ -149,6 +150,26 @@ ai_tools_app/
 - `GET, POST /Tools/Geez_Numbers_Converter`
 - `GET /Games/Amharic_Hangman_Game`
 - `POST /download`
+- `GET /Tools/Amharic_AI_Prompt_to_Image_Generator`
+- `GET /Tools/Amharic_to_Image` (alias)
+- `POST /api/amharic-ai-image`
+
+---
+
+## Amharic AI Prompt to Image Generator Setup
+
+This tool calls NVIDIA's OpenAI-compatible image generation API from the Flask backend.
+
+Set environment variables before running `app.py`:
+
+Windows PowerShell:
+```powershell
+$env:NVIDIA_API_KEY = "your_nvidia_api_key"
+# Optional
+$env:NVIDIA_IMAGE_API_URL = "https://ai.api.nvidia.com/v1/genai/black-forest-labs/flux.1-dev"
+```
+
+The frontend sends prompt/size/style to `/api/amharic-ai-image`, and the backend returns an image URL for display and download.
 
 ---
 

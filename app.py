@@ -6,12 +6,19 @@ from gtts import gTTS
 from tools.ocr.ocr import extract_amharic_text_from_bytes
 from tools.amharic_numbers_converter.converter import number_to_amharic, number_to_currency
 from tools.geez_numbers_converter.converter import arabic_to_geez, geez_to_arabic
+from tools.amharic_text_to_image.generator import generate_image_from_prompt
 
 app = Flask(__name__)
 
 @app.route("/")
 def home():
     return render_template("home.html")
+
+
+@app.route("/Tools/Amharic_AI_Prompt_to_Image_Generator")
+@app.route("/Tools/Amharic_to_Image")
+def amharic_ai_prompt_to_image_generator():
+    return render_template("amharic_ai_image_generator.html")
 
 
 @app.route("/Tools/Amharic_OCR", methods=["GET", "POST"])
@@ -142,6 +149,31 @@ def speak_amharic_numbers_text():
 @app.route("/Games/Amharic_Hangman_Game")
 def amharic_hangman_game():
     return render_template("game_hangman.html")
+
+
+@app.route("/api/amharic-ai-image", methods=["POST"])
+def amharic_ai_image_api():
+    payload = request.get_json(silent=True) or {}
+    prompt = str(payload.get("prompt", "")).strip()
+    size = str(payload.get("size", "1024x1024")).strip() or "1024x1024"
+    style = str(payload.get("style", "")).strip() or None
+
+    if not prompt:
+        return jsonify({"error": "Prompt is required."}), 400
+
+    allowed_sizes = {"1024x1024"}
+    if size not in allowed_sizes:
+        return jsonify({"error": "Currently supported image size is 1024x1024."}), 400
+
+    try:
+        generated = generate_image_from_prompt(prompt=prompt, size=size, style=style)
+        return jsonify({"imageUrl": generated["image_url"]})
+    except RuntimeError:
+        return jsonify({"error": "Server is missing NVIDIA_API_KEY configuration."}), 500
+    except ValueError as exc:
+        return jsonify({"error": str(exc)}), 502
+    except Exception:
+        return jsonify({"error": "Unexpected server error while generating image."}), 500
 
 
 @app.route("/download", methods=["POST"])
