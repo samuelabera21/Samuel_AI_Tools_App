@@ -7,6 +7,7 @@ from tools.ocr.ocr import extract_amharic_text_from_bytes
 from tools.amharic_numbers_converter.converter import number_to_amharic, number_to_currency
 from tools.geez_numbers_converter.converter import arabic_to_geez, geez_to_arabic
 from tools.amharic_text_to_image.generator import generate_image_from_prompt
+from tools.amharic_keyboard.assistant import polish_amharic_text
 
 app = Flask(__name__)
 
@@ -19,6 +20,12 @@ def home():
 @app.route("/Tools/Amharic_to_Image")
 def amharic_ai_prompt_to_image_generator():
     return render_template("amharic_ai_image_generator.html")
+
+
+@app.route("/Tools/Free_Amharic_Keyboard")
+@app.route("/Tools/Amharic_Keyboard")
+def free_amharic_keyboard():
+    return render_template("amharic_keyboard.html")
 
 
 @app.route("/Tools/Amharic_OCR", methods=["GET", "POST"])
@@ -174,6 +181,25 @@ def amharic_ai_image_api():
         return jsonify({"error": str(exc)}), 502
     except Exception:
         return jsonify({"error": "Unexpected server error while generating image."}), 500
+
+
+@app.route("/api/amharic-keyboard/ai-polish", methods=["POST"])
+def amharic_keyboard_ai_polish_api():
+    payload = request.get_json(silent=True) or {}
+    text = str(payload.get("text", "")).strip()
+
+    if not text:
+        return jsonify({"error": "Text is required."}), 400
+
+    try:
+        polished = polish_amharic_text(text)
+        return jsonify({"text": polished})
+    except RuntimeError:
+        return jsonify({"error": "Server is missing NVIDIA_API_KEY configuration."}), 500
+    except ValueError as exc:
+        return jsonify({"error": str(exc)}), 502
+    except Exception:
+        return jsonify({"error": "Unexpected server error while polishing text."}), 500
 
 
 @app.route("/download", methods=["POST"])

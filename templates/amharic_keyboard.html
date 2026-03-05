@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Free Amharic Keyboard - AI Tools App</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/amharic_keyboard.css') }}">
+</head>
+<body>
+    <header class="topbar">
+        <div class="brand">MetaAppz</div>
+        <nav class="nav">
+            <a href="/">Home</a>
+            <div class="dropdown">
+                <button class="drop-btn" type="button">Tools ▾</button>
+                <div class="dropdown-menu">
+                    <a href="/Tools/Amharic_OCR">Amharic OCR</a>
+                    <a href="/Tools/Numbers_to_Amharic_Words_Converter">Amharic Numbers Converter</a>
+                    <a href="/Tools/Geez_Numbers_Converter">Geez Numbers Converter</a>
+                    <a href="/Tools/Ethiopia_Phone_Numbers">Ethiopian Phone Number Validator</a>
+                    <a href="/Tools/Amharic_to_Image">Amharic AI Prompt to Image Generator</a>
+                    <a href="/Tools/Free_Amharic_Keyboard">Amharic Keyboard</a>
+                    <a href="#">Amharic Text Sorter</a>
+                </div>
+            </div>
+            <a href="#">Resources</a>
+            <div class="dropdown">
+                <button class="drop-btn" type="button">Games ▾</button>
+                <div class="dropdown-menu">
+                    <a href="/Games/Amharic_Hangman_Game">Hangman in Amharic</a>
+                    <a href="#">Amharic Riddles</a>
+                    <a href="#">Amharic Typing Game</a>
+                    <a href="#">Amharic Word Search</a>
+                </div>
+            </div>
+            <a href="#">Videos</a>
+            <a href="#">Shop</a>
+            <a href="#">Contact</a>
+        </nav>
+    </header>
+
+    <main class="page">
+        <h1 class="title">Amharic Online Keyboard</h1>
+        <p class="subtitle">
+            The Free Amharic Keyboard lets you type in Amharic (Ge'ez script) directly from your browser without installing anything.
+            It's fast, easy to use, and works on all devices. Perfect for writing messages, social media posts, emails, or documents in Amharic.
+            Simply click in the text area, start typing, and copy your text with one click.
+        </p>
+
+        <section class="card">
+            <textarea id="input-text" rows="5" placeholder="Start typing here ... እዚህ መጻፍ ይጀምሩ ..."></textarea>
+
+            <div class="actions">
+                <button id="copy-btn" type="button">Copy Text 📋</button>
+                <button id="convert-btn" type="button">Convert to Image 📥</button>
+                <button id="speech-btn" type="button">Speech-to-Text 🎙</button>
+                <button id="ai-improve-btn" type="button">AI Improve Text</button>
+            </div>
+
+            <p id="status" class="status hidden"></p>
+
+            <section id="image-result" class="image-result hidden" aria-live="polite">
+                <div class="preview-shell">
+                    <img id="preview-image" alt="Rendered Amharic text image">
+                </div>
+                <a id="download-btn" class="download-btn" href="#" download="amharic_text_image.png">Download Image</a>
+            </section>
+        </section>
+    </main>
+
+    <script src="{{ url_for('static', filename='js/amharic_keyboard.js') }}"></script>
+</body>
+</html>

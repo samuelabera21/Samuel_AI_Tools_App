@@ -1,0 +1,166 @@
+body {
+    background: #f2f4f7;
+    color: #1f2937;
+}
+
+.brand {
+    font-size: 20px;
+}
+
+.nav {
+    font-size: 20px;
+}
+
+.nav a,
+.drop-btn {
+    opacity: 0.96;
+    font-size: 20px;
+}
+
+.page {
+    max-width: 1240px;
+    margin: 36px auto;
+    padding: 0 16px;
+}
+
+.title {
+    text-align: center;
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 12px;
+}
+
+.subtitle {
+    text-align: center;
+    max-width: 1180px;
+    margin: 0 auto 26px;
+    color: #374151;
+    font-size: 20px;
+    line-height: 1.45;
+}
+
+.card {
+    background: #fff;
+    border: 1px solid #d1d5db;
+    border-radius: 10px;
+    padding: 24px 18px;
+}
+
+#input-text {
+    width: 100%;
+    min-height: 160px;
+    resize: vertical;
+    border: 1px solid #d1d5db;
+    border-radius: 10px;
+    padding: 14px;
+    font-size: 20px;
+    line-height: 1.45;
+    font-family: "Noto Sans Ethiopic", "Abyssinica SIL", sans-serif;
+}
+
+.actions {
+    margin-top: 12px;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.actions button,
+.download-btn {
+    border: 1px solid #2563eb;
+    background: #2563eb;
+    color: #fff;
+    border-radius: 8px;
+    padding: 9px 14px;
+    font-size: 20px;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.actions button:hover,
+.download-btn:hover {
+    background: #1d4ed8;
+}
+
+.status {
+    margin-top: 10px;
+    padding: 8px 10px;
+    border-radius: 8px;
+    border: 1px solid #fecaca;
+    background: #fef2f2;
+    color: #b91c1c;
+    font-size: 20px;
+}
+
+.image-result {
+    margin-top: 26px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    width: 100%;
+}
+
+.preview-shell {
+    display: inline-flex;
+    padding: 10px 14px;
+    border-radius: 8px;
+    background: #fff;
+    box-shadow: 0 1px 7px rgba(0, 0, 0, 0.08);
+    max-width: 100%;
+    overflow: auto;
+}
+
+#preview-image {
+    display: block;
+    width: auto;
+    height: auto;
+    max-width: min(100%, 820px);
+}
+
+.download-btn {
+    background: #1f9d55;
+    border-color: #1f9d55;
+}
+
+.download-btn:hover {
+    background: #168147;
+}
+
+.hidden {
+    display: none;
+}
+
+@media (max-width: 860px) {
+    .brand {
+        font-size: 20px;
+    }
+
+    .nav {
+        font-size: 16px;
+        gap: 10px;
+    }
+
+    .nav a,
+    .drop-btn {
+        font-size: 16px;
+    }
+
+    .title {
+        font-size: 20px;
+    }
+
+    .subtitle {
+        font-size: 20px;
+    }
+
+    #input-text {
+        font-size: 20px;
+    }
+
+    .actions button,
+    .download-btn,
+    .status {
+        font-size: 20px;
+    }
+}
