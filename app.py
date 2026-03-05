@@ -8,6 +8,11 @@ from tools.amharic_numbers_converter.converter import number_to_amharic, number_
 from tools.geez_numbers_converter.converter import arabic_to_geez, geez_to_arabic
 from tools.amharic_text_to_image.generator import generate_image_from_prompt
 from tools.amharic_keyboard.assistant import polish_amharic_text
+from tools.amharic_text_to_speech.service import synthesize_amharic_speech
+from tools.random_amharic_words_generator.service import (
+    generate_random_amharic_words,
+    get_prefix_options,
+)
 
 app = Flask(__name__)
 
@@ -26,6 +31,18 @@ def amharic_ai_prompt_to_image_generator():
 @app.route("/Tools/Amharic_Keyboard")
 def free_amharic_keyboard():
     return render_template("amharic_keyboard.html")
+
+
+@app.route("/Tools/Amharic_Text_To_Speech")
+@app.route("/Tools/Amharic_Text_to_Speech")
+def amharic_text_to_speech_page():
+    return render_template("amharic_text_to_speech.html")
+
+
+@app.route("/Tools/Amharic_Words_Generator")
+@app.route("/Tools/Random_Amharic_Words_Generator")
+def amharic_words_generator_page():
+    return render_template("amharic_words_generator.html", prefix_options=get_prefix_options())
 
 
 @app.route("/Tools/Amharic_OCR", methods=["GET", "POST"])
@@ -200,6 +217,55 @@ def amharic_keyboard_ai_polish_api():
         return jsonify({"error": str(exc)}), 502
     except Exception:
         return jsonify({"error": "Unexpected server error while polishing text."}), 500
+
+
+@app.route("/api/amharic-text-to-speech", methods=["POST"])
+def amharic_text_to_speech_api():
+    payload = request.get_json(silent=True) or {}
+    text = str(payload.get("text", "")).strip()
+    voice = str(payload.get("voice", "male")).strip().lower()
+
+    if not text:
+        return jsonify({"error": "Text is required."}), 400
+
+    if voice not in {"male", "female"}:
+        return jsonify({"error": "Unsupported voice option."}), 400
+
+    try:
+        audio_buffer = synthesize_amharic_speech(text=text, voice_key=voice)
+        return send_file(
+            audio_buffer,
+            mimetype="audio/mpeg",
+            as_attachment=False,
+            download_name="amharic_text_to_speech.mp3",
+        )
+    except RuntimeError as exc:
+        return jsonify({"error": str(exc)}), 500
+    except ValueError as exc:
+        return jsonify({"error": str(exc)}), 502
+    except Exception:
+        return jsonify({"error": "Unexpected server error while generating speech."}), 500
+
+
+@app.route("/api/amharic-words-generator", methods=["POST"])
+def amharic_words_generator_api():
+    payload = request.get_json(silent=True) or {}
+    count = payload.get("count", 10)
+    prefix = str(payload.get("prefix", "any")).strip() or "any"
+    order = str(payload.get("order", "random")).strip().lower() or "random"
+
+    try:
+        count = int(count)
+    except (TypeError, ValueError):
+        return jsonify({"error": "Invalid word count value."}), 400
+
+    try:
+        words = generate_random_amharic_words(count=count, prefix_key=prefix, order=order)
+        return jsonify({"words": words})
+    except ValueError as exc:
+        return jsonify({"error": str(exc)}), 400
+    except Exception:
+        return jsonify({"error": "Unexpected server error while generating words."}), 500
 
 
 @app.route("/download", methods=["POST"])

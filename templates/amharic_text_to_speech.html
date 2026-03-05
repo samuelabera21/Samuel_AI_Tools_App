@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Amharic Text-to-Speech - AI Tools App</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/amharic_text_to_speech.css') }}">
+</head>
+<body>
+    <header class="topbar">
+        <div class="brand">MetaAppz</div>
+        <nav class="nav">
+            <a href="/">Home</a>
+            <div class="dropdown">
+                <button class="drop-btn" type="button">Tools ▾</button>
+                <div class="dropdown-menu">
+                    <a href="/Tools/Amharic_OCR">Amharic OCR</a>
+                    <a href="/Tools/Numbers_to_Amharic_Words_Converter">Amharic Numbers Converter</a>
+                    <a href="/Tools/Geez_Numbers_Converter">Geez Numbers Converter</a>
+                    <a href="/Tools/Ethiopia_Phone_Numbers">Ethiopian Phone Number Validator</a>
+                    <a href="/Tools/Free_Amharic_Keyboard">Amharic Keyboard</a>
+                    <a href="/Tools/Amharic_Text_To_Speech">Amharic Text-to-Speech</a>
+                    <a href="/Tools/Amharic_to_Image">Amharic AI Prompt to Image Generator</a>
+                </div>
+            </div>
+            <a href="#">Resources</a>
+            <div class="dropdown">
+                <button class="drop-btn" type="button">Games ▾</button>
+                <div class="dropdown-menu">
+                    <a href="/Games/Amharic_Hangman_Game">Hangman in Amharic</a>
+                    <a href="#">Amharic Riddles</a>
+                    <a href="#">Amharic Typing Game</a>
+                    <a href="#">Amharic Word Search</a>
+                </div>
+            </div>
+            <a href="#">Videos</a>
+            <a href="#">Shop</a>
+            <a href="#">Contact</a>
+        </nav>
+    </header>
+
+    <main class="page">
+        <h1 class="title">Amharic Text-to-Speech</h1>
+        <p class="subtitle">
+            Experience the power of Amharic Text-to-Speech technology with our free tool. Simply enter your Amharic text in the textbox below,
+            and it will be converted into natural-sounding Amharic voice in seconds. You can play the audio live or download it for future use.
+        </p>
+
+        <section class="card">
+            <textarea id="tts-text" rows="5" placeholder="Start typing here ... እዚህ መጻፍ ይጀምሩ ..."></textarea>
+
+            <label class="switch-row">
+                <input id="enable-keyboard" type="checkbox">
+                <span>Enable Amharic Keyboard</span>
+            </label>
+
+            <div class="voice-row">
+                <label for="voice-select">Voice:</label>
+                <select id="voice-select">
+                    <option value="male">Gender: Male - Name: Ameha</option>
+                    <option value="female">Gender: Female - Name: Mekdes</option>
+                </select>
+            </div>
+
+            <div class="actions">
+                <button id="generate-btn" type="button">Generate</button>
+            </div>
+
+            <p id="error" class="error hidden"></p>
+        </section>
+
+        <section id="audio-result" class="audio-result hidden" aria-live="polite">
+            <audio id="audio-player" controls></audio>
+            <a id="download-audio" class="download-btn" href="#" download="amharic_tts.mp3">⬇</a>
+        </section>
+    </main>
+
+    <script src="{{ url_for('static', filename='js/amharic_text_to_speech.js') }}"></script>
+</body>
+</html>
