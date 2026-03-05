@@ -13,6 +13,10 @@ from tools.random_amharic_words_generator.service import (
     generate_random_amharic_words,
     get_prefix_options,
 )
+from tools.ethiopian_baby_name_generator.service import (
+    generate_random_ethiopian_name,
+    synthesize_name_pronunciation,
+)
 
 app = Flask(__name__)
 
@@ -43,6 +47,11 @@ def amharic_text_to_speech_page():
 @app.route("/Tools/Random_Amharic_Words_Generator")
 def amharic_words_generator_page():
     return render_template("amharic_words_generator.html", prefix_options=get_prefix_options())
+
+
+@app.route("/Tools/Ethiopian_Name_Generator")
+def ethiopian_name_generator_page():
+    return render_template("ethiopian_name_generator.html")
 
 
 @app.route("/Tools/Amharic_OCR", methods=["GET", "POST"])
@@ -266,6 +275,29 @@ def amharic_words_generator_api():
         return jsonify({"error": str(exc)}), 400
     except Exception:
         return jsonify({"error": "Unexpected server error while generating words."}), 500
+
+
+@app.route("/api/ethiopian-name-generator", methods=["POST"])
+def ethiopian_name_generator_api():
+    payload = request.get_json(silent=True) or {}
+    gender = str(payload.get("gender", "girl")).strip().lower() or "girl"
+
+    try:
+        generated = generate_random_ethiopian_name(gender=gender)
+        audio_buffer = synthesize_name_pronunciation(generated["amharic"])
+        audio_base64 = base64.b64encode(audio_buffer.getvalue()).decode("utf-8")
+        return jsonify(
+            {
+                "name": generated,
+                "audioDataUrl": f"data:audio/mpeg;base64,{audio_base64}",
+            }
+        )
+    except FileNotFoundError as exc:
+        return jsonify({"error": str(exc)}), 500
+    except ValueError as exc:
+        return jsonify({"error": str(exc)}), 400
+    except Exception:
+        return jsonify({"error": "Unexpected server error while generating name."}), 500
 
 
 @app.route("/download", methods=["POST"])

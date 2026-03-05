@@ -1,0 +1,169 @@
+body {
+    background: #eef0f3;
+    color: #1f2937;
+}
+
+.page {
+    max-width: 1180px;
+    margin: 28px auto;
+    padding: 0 16px;
+}
+
+.title {
+    text-align: center;
+    font-size: 20px;
+    margin: 20px 0 12px;
+}
+
+.subtitle {
+    text-align: center;
+    max-width: 1100px;
+    margin: 0 auto 24px;
+    line-height: 1.45;
+    font-size: 20px;
+    color: #374151;
+}
+
+.card {
+    min-height: 470px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    background: #f2f4f6;
+    padding: 28px 18px;
+}
+
+.label {
+    text-align: center;
+    margin: 0 0 10px;
+    font-weight: 700;
+    font-size: 20px;
+}
+
+.filters {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    flex-wrap: wrap;
+}
+
+.gender-option {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 20px;
+}
+
+.actions {
+    display: flex;
+    justify-content: center;
+    margin-top: 16px;
+}
+
+#generate-btn,
+.again-btn {
+    border: 1px solid #2563eb;
+    background: #2563eb;
+    color: #fff;
+    border-radius: 10px;
+    padding: 10px 26px;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+#generate-btn:disabled,
+.again-btn:disabled {
+    opacity: 0.75;
+    cursor: not-allowed;
+}
+
+.error {
+    margin: 14px auto 0;
+    max-width: 560px;
+    border: 1px solid #fecaca;
+    background: #fef2f2;
+    color: #b91c1c;
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-size: 18px;
+}
+
+.result-card {
+    width: 410px;
+    max-width: 100%;
+    margin: 26px auto 0;
+    background: #cfe0f7;
+    border: 1px solid #b5ccee;
+    border-radius: 8px;
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.name-amharic {
+    font-family: "Abyssinica SIL", "Noto Sans Ethiopic", sans-serif;
+    font-size: 50px;
+    color: #0f3a80;
+    line-height: 1.2;
+}
+
+.name-english {
+    font-size: 20px;
+    color: #0f3a80;
+    line-height: 1.2;
+}
+
+.result-actions {
+    margin-top: 2px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+#name-audio {
+    width: calc(100% - 58px);
+}
+
+.icon-btn {
+    width: 42px;
+    height: 42px;
+    border: 1px solid #2563eb;
+    border-radius: 8px;
+    background: #eff6ff;
+    color: #1d4ed8;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.again-btn {
+    margin-top: 4px;
+}
+
+.hidden {
+    display: none;
+}
+
+@media (max-width: 860px) {
+    .title {
+        font-size: 20px;
+    }
+
+    .subtitle {
+        font-size: 20px;
+    }
+
+    .gender-option {
+        font-size: 20px;
+    }
+
+    .name-amharic {
+        font-size: 20px;
+    }
+
+    .name-english {
+        font-size: 20px;
+    }
+}
