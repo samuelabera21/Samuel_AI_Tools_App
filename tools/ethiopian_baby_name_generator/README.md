@@ -52,7 +52,20 @@ Success response:
     "gender": "girl",
     "amharic": "ማህሌት",
     "english": "Mahlet"
-  },
+  }
+}
+```
+
+Audio endpoint request:
+```json
+{
+  "nameAmharic": "ማህሌት"
+}
+```
+
+Audio endpoint success response:
+```json
+{
   "audioDataUrl": "data:audio/mpeg;base64,..."
 }
 ```
@@ -61,3 +74,4 @@ Success response:
 - Supported genders: `boy`, `girl`
 - Dataset is loaded from `data/names.json` and cached in memory.
 - Audio uses `gTTS` with Amharic language (`lang="am"`).
+- Audio endpoint: `POST /api/ethiopian-name-generator/audio`

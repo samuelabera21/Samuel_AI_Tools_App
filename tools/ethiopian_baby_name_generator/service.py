@@ -9,6 +9,8 @@ DATA_FILE_PATH = Path(__file__).resolve().parent / "data" / "names.json"
 VALID_GENDERS = {"boy", "girl"}
 
 _CACHED_NAMES = None
+_AUDIO_CACHE = {}
+_MAX_AUDIO_CACHE_ITEMS = 256
 
 
 def _load_names_dataset():
@@ -71,7 +73,17 @@ def synthesize_name_pronunciation(name_text: str):
     if not text:
         raise ValueError("Name text is required for pronunciation.")
 
+    cached_audio = _AUDIO_CACHE.get(text)
+    if cached_audio is not None:
+        return io.BytesIO(cached_audio)
+
     audio_buffer = io.BytesIO()
     gTTS(text=text, lang="am").write_to_fp(audio_buffer)
-    audio_buffer.seek(0)
-    return audio_buffer
+    audio_bytes = audio_buffer.getvalue()
+
+    # Keep a small in-memory cache to speed up repeated names.
+    if len(_AUDIO_CACHE) >= _MAX_AUDIO_CACHE_ITEMS:
+        _AUDIO_CACHE.pop(next(iter(_AUDIO_CACHE)))
+    _AUDIO_CACHE[text] = audio_bytes
+
+    return io.BytesIO(audio_bytes)

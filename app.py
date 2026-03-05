@@ -284,20 +284,30 @@ def ethiopian_name_generator_api():
 
     try:
         generated = generate_random_ethiopian_name(gender=gender)
-        audio_buffer = synthesize_name_pronunciation(generated["amharic"])
-        audio_base64 = base64.b64encode(audio_buffer.getvalue()).decode("utf-8")
-        return jsonify(
-            {
-                "name": generated,
-                "audioDataUrl": f"data:audio/mpeg;base64,{audio_base64}",
-            }
-        )
+        return jsonify({"name": generated})
     except FileNotFoundError as exc:
         return jsonify({"error": str(exc)}), 500
     except ValueError as exc:
         return jsonify({"error": str(exc)}), 400
     except Exception:
         return jsonify({"error": "Unexpected server error while generating name."}), 500
+
+
+@app.route("/api/ethiopian-name-generator/audio", methods=["POST"])
+def ethiopian_name_generator_audio_api():
+    payload = request.get_json(silent=True) or {}
+    name_amharic = str(payload.get("nameAmharic", "")).strip()
+    if not name_amharic:
+        return jsonify({"error": "Name value is required."}), 400
+
+    try:
+        audio_buffer = synthesize_name_pronunciation(name_amharic)
+        audio_base64 = base64.b64encode(audio_buffer.getvalue()).decode("utf-8")
+        return jsonify({"audioDataUrl": f"data:audio/mpeg;base64,{audio_base64}"})
+    except ValueError as exc:
+        return jsonify({"error": str(exc)}), 400
+    except Exception:
+        return jsonify({"error": "Audio is temporarily unavailable."}), 502
 
 
 @app.route("/download", methods=["POST"])

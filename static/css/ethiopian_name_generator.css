@@ -87,6 +87,17 @@ body {
     font-size: 18px;
 }
 
+.warning {
+    margin: 10px auto 0;
+    max-width: 560px;
+    border: 1px solid #fcd34d;
+    background: #fffbeb;
+    color: #92400e;
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-size: 18px;
+}
+
 .result-card {
     width: 410px;
     max-width: 100%;
