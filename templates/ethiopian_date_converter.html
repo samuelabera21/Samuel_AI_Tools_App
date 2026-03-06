@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ethiopian Calendar Converter - AI Tools App</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/ethiopian_date_converter.css') }}">
+</head>
+<body>
+    <header class="topbar">
+        <div class="brand">MetaAppz</div>
+        <nav class="nav">
+            <a href="/">Home</a>
+            <div class="dropdown">
+                <button class="drop-btn" type="button">Tools ▾</button>
+                <div class="dropdown-menu">
+                    <a href="/Tools/Amharic_OCR">Amharic OCR</a>
+                    <a href="/Tools/Numbers_to_Amharic_Words_Converter">Amharic Numbers Converter</a>
+                    <a href="/Tools/Geez_Numbers_Converter">Geez Numbers Converter</a>
+                    <a href="/Tools/Ethiopia_Phone_Numbers">Ethiopian Phone Number Validator</a>
+                    <a href="/Tools/Ethiopian_Name_Generator">Ethiopian Baby Name Generator</a>
+                    <a href="/Tools/Amharic_Link_Shortner">Amharic Link Shortner</a>
+                    <a href="/Tools/Ethiopian_Date_Converter">Ethiopian Date Converter</a>
+                    <a href="/Tools/Free_Amharic_Keyboard">Amharic Keyboard</a>
+                    <a href="/Tools/Amharic_Text_To_Speech">Amharic Text-to-Speech</a>
+                    <a href="/Tools/Amharic_Words_Generator">Random Amharic Words Generator</a>
+                    <a href="/Tools/Amharic_to_Image">Amharic AI Prompt to Image Generator</a>
+                </div>
+            </div>
+            <a href="#">Resources</a>
+            <div class="dropdown">
+                <button class="drop-btn" type="button">Games ▾</button>
+                <div class="dropdown-menu">
+                    <a href="/Games/Amharic_Hangman_Game">Hangman in Amharic</a>
+                    <a href="#">Amharic Riddles</a>
+                    <a href="#">Amharic Typing Game</a>
+                    <a href="#">Amharic Word Search</a>
+                </div>
+            </div>
+            <a href="#">Videos</a>
+            <a href="#">Shop</a>
+            <a href="#">Contact</a>
+        </nav>
+    </header>
+
+    <main class="page">
+        <h1 class="title">Ethiopian Calendar Converter</h1>
+        <p class="subtitle">
+            Easy tool to convert any dates between Ethiopian and Gregorian calendars. The Ethiopian calendar is composed of 13 months,
+            12 months of 30 days and 1 month of 5 or 6 days depending if it's a leap year.
+        </p>
+
+        <section class="card">
+            <div class="tabs" role="tablist" aria-label="Ethiopian Date Tools">
+                <button id="tab-date-converter" class="tab active" type="button" data-handler="ToGregorian">Date Converter</button>
+                <button id="tab-date-calculator" class="tab" type="button" data-handler="DateCalculator">Date Calculator</button>
+            </div>
+
+            <div id="panel-date-converter" class="panel active">
+                <section class="converter-block">
+                    <h2>Ethiopian Date to Gregorian Date</h2>
+                    <div class="controls-row">
+                        <select id="to-gregorian-month"></select>
+                        <select id="to-gregorian-day"></select>
+                        <select id="to-gregorian-year"></select>
+                    </div>
+                    <div class="action-row">
+                        <button id="to-gregorian-btn" type="button">Convert</button>
+                    </div>
+                    <div id="to-gregorian-result" class="result-card hidden" aria-live="polite">
+                        <span id="to-gregorian-text"></span>
+                        <div class="result-actions">
+                            <button id="to-gregorian-speak" class="icon-btn" type="button" title="Speak result">🔊</button>
+                            <button id="to-gregorian-copy" class="icon-btn" type="button" title="Copy result">📋</button>
+                        </div>
+                    </div>
+                </section>
+
+                <hr>
+
+                <section class="converter-block">
+                    <h2>Gregorian Date to Ethiopian Date</h2>
+                    <div class="controls-row">
+                        <select id="to-ethiopian-month"></select>
+                        <select id="to-ethiopian-day"></select>
+                        <select id="to-ethiopian-year"></select>
+                    </div>
+                    <div class="action-row">
+                        <button id="to-ethiopian-btn" type="button">Convert</button>
+                    </div>
+                    <div id="to-ethiopian-result" class="result-card hidden" aria-live="polite">
+                        <span id="to-ethiopian-text"></span>
+                        <div class="result-actions">
+                            <button id="to-ethiopian-speak" class="icon-btn" type="button" title="Speak result">🔊</button>
+                            <button id="to-ethiopian-copy" class="icon-btn" type="button" title="Copy result">📋</button>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <div id="panel-date-calculator" class="panel">
+                <section class="converter-block">
+                    <h2>Ethiopian Date Calculator: Add or Subtract</h2>
+                    <div class="controls-row">
+                        <select id="calc-month"></select>
+                        <select id="calc-day"></select>
+                        <select id="calc-year"></select>
+                    </div>
+
+                    <div class="controls-row narrow">
+                        <select id="calc-operation">
+                            <option value="add">Add (+)</option>
+                            <option value="subtract">Subtract (-)</option>
+                        </select>
+
+                        <div class="input-group">
+                            <input id="calc-days" type="number" min="0" value="0">
+                            <span>days</span>
+                        </div>
+
+                        <div class="input-group">
+                            <input id="calc-months" type="number" min="0" value="0">
+                            <span>months</span>
+                        </div>
+                    </div>
+
+                    <div class="action-row">
+                        <button id="calc-btn" type="button">Calculate</button>
+                    </div>
+
+                    <div id="calc-result" class="result-card hidden" aria-live="polite">
+                        <div class="result-lines">
+                            <div id="calc-ethiopian-text" class="line-am"></div>
+                            <div id="calc-gregorian-text" class="line-en"></div>
+                        </div>
+                        <div class="result-actions">
+                            <button id="calc-copy" class="icon-btn" type="button" title="Copy result">📋</button>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <p id="converter-error" class="error hidden"></p>
+        </section>
+    </main>
+
+    <script src="{{ url_for('static', filename='js/ethiopian_date_converter.js') }}"></script>
+</body>
+</html>

@@ -22,6 +22,13 @@ from tools.ethiopic_links.service import (
     create_amharic_short_link,
     resolve_amharic_short_link,
 )
+from tools.ethiopian_date_converter.service import (
+    ETHIOPIAN_MONTHS,
+    GREGORIAN_MONTHS,
+    calculator_payload,
+    to_ethiopian_payload,
+    to_gregorian_payload,
+)
 
 app = Flask(__name__)
 SHORT_LINK_PUBLIC_BASE_URL = os.getenv("SHORT_LINK_PUBLIC_BASE_URL", "https://መ.com")
@@ -64,6 +71,11 @@ def ethiopian_name_generator_page():
 @app.route("/Tools/Amharic_Link_Shortener")
 def amharic_link_shortner_page():
     return render_template("amharic_link_shortner.html")
+
+
+@app.route("/Tools/Ethiopian_Date_Converter")
+def ethiopian_date_converter_page():
+    return render_template("ethiopian_date_converter.html")
 
 
 @app.route("/Tools/Amharic_OCR", methods=["GET", "POST"])
@@ -345,6 +357,80 @@ def amharic_link_shortner_api():
         return jsonify({"error": str(exc)}), 503
     except Exception:
         return jsonify({"error": "Unexpected server error while creating short URL."}), 500
+
+
+@app.route("/api/ethiopian-date/meta", methods=["GET"])
+def ethiopian_date_meta_api():
+    return jsonify(
+        {
+            "ethiopianMonths": [
+                {"month": index + 1, "amharic": value[0], "english": value[1]}
+                for index, value in enumerate(ETHIOPIAN_MONTHS)
+            ],
+            "gregorianMonths": [
+                {"month": index + 1, "english": value}
+                for index, value in enumerate(GREGORIAN_MONTHS)
+            ],
+        }
+    )
+
+
+@app.route("/api/ethiopian-date/to-gregorian", methods=["POST"])
+def ethiopian_to_gregorian_api():
+    payload = request.get_json(silent=True) or {}
+
+    try:
+        year = int(payload.get("year", 0))
+        month = int(payload.get("month", 0))
+        day = int(payload.get("day", 0))
+        return jsonify(to_gregorian_payload(year=year, month=month, day=day))
+    except ValueError as exc:
+        return jsonify({"error": str(exc)}), 400
+    except Exception:
+        return jsonify({"error": "Unexpected server error while converting Ethiopian date."}), 500
+
+
+@app.route("/api/ethiopian-date/to-ethiopian", methods=["POST"])
+def gregorian_to_ethiopian_api():
+    payload = request.get_json(silent=True) or {}
+
+    try:
+        year = int(payload.get("year", 0))
+        month = int(payload.get("month", 0))
+        day = int(payload.get("day", 0))
+        return jsonify(to_ethiopian_payload(year=year, month=month, day=day))
+    except ValueError as exc:
+        return jsonify({"error": str(exc)}), 400
+    except Exception:
+        return jsonify({"error": "Unexpected server error while converting Gregorian date."}), 500
+
+
+@app.route("/api/ethiopian-date/calculate", methods=["POST"])
+def ethiopian_date_calculator_api():
+    payload = request.get_json(silent=True) or {}
+
+    try:
+        year = int(payload.get("year", 0))
+        month = int(payload.get("month", 0))
+        day = int(payload.get("day", 0))
+        operation = str(payload.get("operation", "add")).strip().lower()
+        days = int(payload.get("days", 0))
+        months = int(payload.get("months", 0))
+
+        return jsonify(
+            calculator_payload(
+                year=year,
+                month=month,
+                day=day,
+                operation=operation,
+                days=days,
+                months=months,
+            )
+        )
+    except ValueError as exc:
+        return jsonify({"error": str(exc)}), 400
+    except Exception:
+        return jsonify({"error": "Unexpected server error while calculating Ethiopian date."}), 500
 
 
 @app.route("/download", methods=["POST"])
