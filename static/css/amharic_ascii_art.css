@@ -1,0 +1,158 @@
+body {
+    background: #eef0f3;
+    color: #1f2937;
+}
+
+.page {
+    max-width: 1180px;
+    margin: 28px auto;
+    padding: 0 16px;
+}
+
+.title {
+    text-align: center;
+    font-size: 50px;
+    margin: 20px 0 12px;
+}
+
+.subtitle {
+    text-align: center;
+    max-width: 1100px;
+    margin: 0 auto 24px;
+    line-height: 1.45;
+    font-size: 20px;
+    color: #374151;
+}
+
+.card {
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    background: #f2f4f6;
+    padding: 28px 24px;
+}
+
+.label {
+    display: block;
+    text-align: center;
+    margin: 0 0 8px;
+    font-weight: 700;
+    font-size: 20px;
+}
+
+#ascii-input {
+    width: 280px;
+    max-width: 100%;
+    display: block;
+    margin: 0 auto;
+    border: 1px solid #d1d5db;
+    border-radius: 10px;
+    padding: 12px 14px;
+    font-size: 22px;
+    color: #1f2937;
+    background: #fff;
+    font-family: "Abyssinica SIL", "Noto Sans Ethiopic", sans-serif;
+}
+
+#ascii-input:focus {
+    outline: 3px solid #bfdbfe;
+    border-color: #2563eb;
+}
+
+.switch-row {
+    width: fit-content;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 10px auto 0;
+    font-size: 18px;
+}
+
+.actions {
+    display: flex;
+    justify-content: center;
+    margin-top: 16px;
+}
+
+#submit-btn {
+    border: 1px solid #2563eb;
+    background: #2563eb;
+    color: #fff;
+    border-radius: 10px;
+    padding: 10px 28px;
+    font-size: 22px;
+    cursor: pointer;
+}
+
+.error {
+    margin: 14px auto 0;
+    max-width: 620px;
+    border: 1px solid #fecaca;
+    background: #fef2f2;
+    color: #b91c1c;
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-size: 18px;
+}
+
+.result-wrap {
+    margin-top: 22px;
+    background: #bdd0ec;
+    border: 1px solid #a3bfdf;
+    border-radius: 8px;
+    padding: 16px;
+}
+
+.style-card + .style-card {
+    margin-top: 26px;
+}
+
+.style-head {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.style-head h2 {
+    font-size: 26px;
+    color: #0f3a80;
+}
+
+.copy-btn {
+    width: 40px;
+    height: 40px;
+    border: 1px solid #2563eb;
+    border-radius: 8px;
+    background: #eff6ff;
+    color: #1d4ed8;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+pre {
+    margin-top: 10px;
+    white-space: pre;
+    overflow-x: auto;
+    color: #133d80;
+    font-size: 22px;
+    line-height: 1.15;
+    font-family: "Abyssinica SIL", "Noto Sans Ethiopic", monospace;
+}
+
+.hidden {
+    display: none;
+}
+
+@media (max-width: 860px) {
+    .title {
+        font-size: 40px;
+    }
+
+    .subtitle {
+        font-size: 18px;
+    }
+
+    #submit-btn,
+    pre {
+        font-size: 18px;
+    }
+}
