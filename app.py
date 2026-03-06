@@ -1,6 +1,7 @@
 from flask import Flask, request, render_template, send_file, jsonify, redirect, abort
 import io
 import base64
+import os
 from decimal import Decimal, InvalidOperation
 from gtts import gTTS
 from tools.ocr.ocr import extract_amharic_text_from_bytes
@@ -23,6 +24,7 @@ from tools.ethiopic_links.service import (
 )
 
 app = Flask(__name__)
+SHORT_LINK_PUBLIC_BASE_URL = os.getenv("SHORT_LINK_PUBLIC_BASE_URL", "https://መ.com")
 
 @app.route("/")
 def home():
@@ -328,7 +330,7 @@ def amharic_link_shortner_api():
     try:
         generated = create_amharic_short_link(
             long_url=long_url,
-            base_url=request.host_url,
+            base_url=SHORT_LINK_PUBLIC_BASE_URL,
         )
         return jsonify(
             {
