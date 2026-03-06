@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template, send_file, jsonify
+from flask import Flask, request, render_template, send_file, jsonify, redirect, abort
 import io
 import base64
 from decimal import Decimal, InvalidOperation
@@ -16,6 +16,10 @@ from tools.random_amharic_words_generator.service import (
 from tools.ethiopian_baby_name_generator.service import (
     generate_random_ethiopian_name,
     synthesize_name_pronunciation,
+)
+from tools.ethiopic_links.service import (
+    create_amharic_short_link,
+    resolve_amharic_short_link,
 )
 
 app = Flask(__name__)
@@ -52,6 +56,12 @@ def amharic_words_generator_page():
 @app.route("/Tools/Ethiopian_Name_Generator")
 def ethiopian_name_generator_page():
     return render_template("ethiopian_name_generator.html")
+
+
+@app.route("/Tools/Amharic_Link_Shortner")
+@app.route("/Tools/Amharic_Link_Shortener")
+def amharic_link_shortner_page():
+    return render_template("amharic_link_shortner.html")
 
 
 @app.route("/Tools/Amharic_OCR", methods=["GET", "POST"])
@@ -310,6 +320,31 @@ def ethiopian_name_generator_audio_api():
         return jsonify({"error": "Audio is temporarily unavailable."}), 502
 
 
+@app.route("/api/amharic-link-shortner", methods=["POST"])
+def amharic_link_shortner_api():
+    payload = request.get_json(silent=True) or {}
+    long_url = str(payload.get("longUrl", "")).strip()
+
+    try:
+        generated = create_amharic_short_link(
+            long_url=long_url,
+            base_url=request.host_url,
+        )
+        return jsonify(
+            {
+                "longUrl": generated["long_url"],
+                "code": generated["code"],
+                "shortUrl": generated["short_url"],
+            }
+        )
+    except ValueError as exc:
+        return jsonify({"error": str(exc)}), 400
+    except RuntimeError as exc:
+        return jsonify({"error": str(exc)}), 503
+    except Exception:
+        return jsonify({"error": "Unexpected server error while creating short URL."}), 500
+
+
 @app.route("/download", methods=["POST"])
 def download_text():
     text = request.form.get("text", "")
@@ -321,6 +356,15 @@ def download_text():
         download_name="ocr_result.txt",
         mimetype="text/plain",
     )
+
+
+@app.route("/<short_code>")
+def redirect_amharic_short_link(short_code):
+    target_url = resolve_amharic_short_link(short_code)
+    if not target_url:
+        abort(404)
+
+    return redirect(target_url, code=302)
 
 if __name__ == "__main__":
     app.run(debug=True)
