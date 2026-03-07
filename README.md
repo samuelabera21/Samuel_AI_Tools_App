@@ -54,7 +54,6 @@ ai_tools_app/
 │   ├── ocr.html
 │   ├── amharic_numbers.html
 │   ├── geez_numbers.html
-│   ├── game_hangman.html
 │   ├── translator.html
 │   └── index.html
 ├── tools/
@@ -114,7 +113,6 @@ ai_tools_app/
 ### Navigation pages
 - `templates/home.html`
   - Landing page and links to tools.
-- `templates/game_hangman.html`
   - Current game placeholder route.
 
 ---
@@ -148,7 +146,6 @@ ai_tools_app/
 - `GET, POST /Tools/Amharic_Numbers_Converter` (alias)
 - `POST /Tools/Numbers_to_Amharic_Words_Converter/speak`
 - `GET, POST /Tools/Geez_Numbers_Converter`
-- `GET /Games/Amharic_Hangman_Game`
 - `POST /download`
 - `GET /Tools/Amharic_AI_Prompt_to_Image_Generator`
 - `GET /Tools/Amharic_to_Image` (alias)

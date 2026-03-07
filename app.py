@@ -203,11 +203,6 @@ def speak_amharic_numbers_text():
         return jsonify({"error": "Audio generation failed. Please try again."}), 500
 
 
-@app.route("/Games/Amharic_Hangman_Game")
-def amharic_hangman_game():
-    return render_template("game_hangman.html")
-
-
 @app.route("/Games/Amharic_Fidel_Sliding_Puzzle_Game")
 def amharic_fidel_sliding_puzzle_game():
     return render_template("amharic_fidel_sliding_puzzle_game.html")
