@@ -20,34 +20,57 @@ let timerStarted = false;
 let gameOver = false;
 let wordNodes = [];
 let wordContainers = [];
+let isProgrammaticUpdate = false;
 
-const transliterationMap = {
+const fidelFamilies = {
+  h: ["ሀ", "ሁ", "ሂ", "ሃ", "ሄ", "ህ", "ሆ"],
+  hh: ["ሐ", "ሑ", "ሒ", "ሓ", "ሔ", "ሕ", "ሖ"],
+  l: ["ለ", "ሉ", "ሊ", "ላ", "ሌ", "ል", "ሎ"],
+  m: ["መ", "ሙ", "ሚ", "ማ", "ሜ", "ም", "ሞ"],
+  s: ["ሰ", "ሱ", "ሲ", "ሳ", "ሴ", "ስ", "ሶ"],
+  sh: ["ሸ", "ሹ", "ሺ", "ሻ", "ሼ", "ሽ", "ሾ"],
+  r: ["ረ", "ሩ", "ሪ", "ራ", "ሬ", "ር", "ሮ"],
+  q: ["ቀ", "ቁ", "ቂ", "ቃ", "ቄ", "ቅ", "ቆ"],
+  b: ["በ", "ቡ", "ቢ", "ባ", "ቤ", "ብ", "ቦ"],
+  t: ["ተ", "ቱ", "ቲ", "ታ", "ቴ", "ት", "ቶ"],
+  ch: ["ቸ", "ቹ", "ቺ", "ቻ", "ቼ", "ች", "ቾ"],
+  n: ["ነ", "ኑ", "ኒ", "ና", "ኔ", "ን", "ኖ"],
+  gn: ["ኘ", "ኙ", "ኚ", "ኛ", "ኜ", "ኝ", "ኞ"],
+  k: ["ከ", "ኩ", "ኪ", "ካ", "ኬ", "ክ", "ኮ"],
+  kh: ["ኸ", "ኹ", "ኺ", "ኻ", "ኼ", "ኽ", "ኾ"],
+  z: ["ዘ", "ዙ", "ዚ", "ዛ", "ዜ", "ዝ", "ዞ"],
+  zh: ["ዠ", "ዡ", "ዢ", "ዣ", "ዤ", "ዥ", "ዦ"],
+  d: ["ደ", "ዱ", "ዲ", "ዳ", "ዴ", "ድ", "ዶ"],
+  j: ["ጀ", "ጁ", "ጂ", "ጃ", "ጄ", "ጅ", "ጆ"],
+  g: ["ገ", "ጉ", "ጊ", "ጋ", "ጌ", "ግ", "ጎ"],
+  tt: ["ጠ", "ጡ", "ጢ", "ጣ", "ጤ", "ጥ", "ጦ"],
+  c: ["ጨ", "ጩ", "ጪ", "ጫ", "ጬ", "ጭ", "ጮ"],
+  ph: ["ጰ", "ጱ", "ጲ", "ጳ", "ጴ", "ጵ", "ጶ"],
+  ts: ["ጸ", "ጹ", "ጺ", "ጻ", "ጼ", "ጽ", "ጾ"],
+  f: ["ፈ", "ፉ", "ፊ", "ፋ", "ፌ", "ፍ", "ፎ"],
+  p: ["ፐ", "ፑ", "ፒ", "ፓ", "ፔ", "ፕ", "ፖ"],
+  w: ["ወ", "ዉ", "ዊ", "ዋ", "ዌ", "ው", "ዎ"],
+  y: ["የ", "ዩ", "ዪ", "ያ", "ዬ", "ይ", "ዮ"]
+};
+
+const consonantTokens = Object.keys(fidelFamilies).sort((a, b) => b.length - a.length);
+const standaloneVowels = {
   a: "አ",
-  b: "በ",
-  c: "ቸ",
-  d: "ደ",
   e: "እ",
-  f: "ፈ",
-  g: "ገ",
-  h: "ሀ",
   i: "ኢ",
-  j: "ጀ",
-  k: "ከ",
-  l: "ለ",
-  m: "መ",
-  n: "ነ",
   o: "ኦ",
-  p: "ፐ",
-  q: "ቀ",
-  r: "ረ",
-  s: "ሰ",
-  t: "ተ",
-  u: "ኡ",
-  v: "ቨ",
-  w: "ወ",
-  x: "ሸ",
-  y: "የ",
-  z: "ዘ"
+  u: "ኡ"
+};
+
+const vowelOrders = {
+  e: 1,
+  u: 2,
+  i: 3,
+  a: 4,
+  ee: 5,
+  ie: 5,
+  ae: 5,
+  o: 7
 };
 
 const targetTextDiv = document.getElementById("targetText");
@@ -71,6 +94,8 @@ typingInput.addEventListener("drop", (event) => {
   event.preventDefault();
 });
 
+keyboardToggle.addEventListener("change", renderKeyboardHints);
+
 typingInput.addEventListener("keydown", (event) => {
   if (!keyboardToggle.checked) {
     return;
@@ -80,33 +105,103 @@ typingInput.addEventListener("keydown", (event) => {
     return;
   }
 
-  if (event.key.length !== 1) {
+  const finalizeKeys = new Set([" ", "Enter", ".", ",", ";", ":", "?", "!"]);
+  if (!finalizeKeys.has(event.key)) {
     return;
   }
 
-  const mapped = transliterationMap[event.key.toLowerCase()];
-  if (!mapped) {
-    return;
-  }
-
-  event.preventDefault();
-  insertAtCursor(typingInput, mapped);
-
-  // Trigger standard live validation workflow after programmatic insertion.
-  typingInput.dispatchEvent(new Event("input", { bubbles: true }));
+  transliterateInputAroundCursor(true);
 });
 
-keyboardToggle.addEventListener("change", renderKeyboardHints);
+function matchConsonant(text, index) {
+  for (const token of consonantTokens) {
+    if (text.startsWith(token, index)) {
+      return token;
+    }
+  }
+  return "";
+}
 
-function insertAtCursor(inputElement, text) {
-  const start = inputElement.selectionStart;
-  const end = inputElement.selectionEnd;
-  const value = inputElement.value;
+function matchVowel(text, index) {
+  if (text.startsWith("ee", index)) return { key: "ee", len: 2 };
+  if (text.startsWith("ie", index)) return { key: "ie", len: 2 };
+  if (text.startsWith("ae", index)) return { key: "ae", len: 2 };
 
-  inputElement.value = `${value.slice(0, start)}${text}${value.slice(end)}`;
-  const nextCursor = start + text.length;
-  inputElement.selectionStart = nextCursor;
-  inputElement.selectionEnd = nextCursor;
+  const ch = text[index] || "";
+  if (Object.prototype.hasOwnProperty.call(vowelOrders, ch)) {
+    return { key: ch, len: 1 };
+  }
+
+  return { key: "", len: 0 };
+}
+
+function transliterateLatinToken(token, finalize) {
+  const raw = token.toLowerCase();
+  let output = "";
+  let index = 0;
+
+  while (index < raw.length) {
+    const consonant = matchConsonant(raw, index);
+    if (!consonant) {
+      const vowel = raw[index];
+      if (standaloneVowels[vowel]) {
+        output += standaloneVowels[vowel];
+      } else {
+        output += raw[index];
+      }
+      index += 1;
+      continue;
+    }
+
+    let order = 6;
+    const vowel = matchVowel(raw, index + consonant.length);
+    if (vowel.len > 0) {
+      order = vowelOrders[vowel.key];
+      index += consonant.length + vowel.len;
+    } else {
+      // Keep a trailing consonant pending until next key unless finalizing.
+      if (!finalize && index + consonant.length === raw.length) {
+        output += raw.slice(index);
+        break;
+      }
+      index += consonant.length;
+    }
+
+    output += fidelFamilies[consonant][order - 1];
+  }
+
+  return output;
+}
+
+function transliterateInputAroundCursor(finalize = false) {
+  const start = typingInput.selectionStart;
+  const end = typingInput.selectionEnd;
+  if (start !== end) {
+    return;
+  }
+
+  const value = typingInput.value;
+  const left = value.slice(0, start);
+  const right = value.slice(start);
+  const match = left.match(/([A-Za-z]+)$/);
+
+  if (!match) {
+    return;
+  }
+
+  const latinTail = match[1];
+  const converted = transliterateLatinToken(latinTail, finalize);
+  if (converted === latinTail) {
+    return;
+  }
+
+  const newLeft = left.slice(0, left.length - latinTail.length) + converted;
+  const newValue = newLeft + right;
+
+  isProgrammaticUpdate = true;
+  typingInput.value = newValue;
+  typingInput.setSelectionRange(newLeft.length, newLeft.length);
+  isProgrammaticUpdate = false;
 }
 
 function renderKeyboardHints() {
@@ -115,7 +210,7 @@ function renderKeyboardHints() {
     return;
   }
 
-  const hints = ["h=ሀ", "l=ለ", "m=መ", "s=ሰ", "r=ረ", "b=በ", "t=ተ", "n=ነ", "k=ከ", "w=ወ"];
+  const hints = ["ya=ያ", "ye=የ", "we=ወ", "shi=ሺ", "cha=ቻ", "gna=ኛ", "tsa=ጻ", "ha=ሀ", "hu=ሁ"];
   keyboardAssist.innerHTML = hints
     .map((item) => `<span class=\"kbd-helper\">${item}</span>`)
     .join("");
@@ -262,6 +357,10 @@ function validateInput() {
 }
 
 typingInput.addEventListener("input", () => {
+  if (keyboardToggle.checked && !isProgrammaticUpdate) {
+    transliterateInputAroundCursor();
+  }
+
   if (!timerStarted && typingInput.value.length > 0) {
     startTimer();
   }

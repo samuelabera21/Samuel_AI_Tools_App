@@ -47,8 +47,18 @@ Page route:
 
 ## Amharic Keyboard Toggle
 - `Enable Amharic Keyboard` switch controls transliteration mode
-- When enabled, latin keys map to common Amharic characters
+- When enabled, latin key sequences are converted to fidel in real-time
+- Examples:
+  - `ya` -> `ያ`
+  - `ye` -> `የ`
+  - `we` -> `ወ`
+  - `shi` -> `ሺ`
+  - `cha` -> `ቻ`
 - Keyboard helper hints are shown under the input
+
+## Dependencies
+- No additional Python package is required for this feature.
+- Transliteration is implemented directly in frontend JavaScript (`static/js/amharic_typing_game.js`).
 
 ## Local Run
 From project root:
