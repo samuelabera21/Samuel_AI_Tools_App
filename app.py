@@ -213,6 +213,11 @@ def amharic_fidel_sliding_puzzle_game():
     return render_template("amharic_fidel_sliding_puzzle_game.html")
 
 
+@app.route("/Games/Amharic_Typing_Game")
+def amharic_typing_game():
+    return render_template("amharic_typing_game.html")
+
+
 @app.route("/api/amharic-ai-image", methods=["POST"])
 def amharic_ai_image_api():
     payload = request.get_json(silent=True) or {}

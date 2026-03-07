@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Amharic Typing Game - AI Tools App</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/amharic_typing_game.css') }}">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">MetaAppz</div>
+    <nav class="nav">
+      <a href="/">Home</a>
+      <div class="dropdown">
+        <button class="drop-btn" type="button">Tools ▾</button>
+        <div class="dropdown-menu">
+          <a href="/Tools/Amharic_OCR">Amharic OCR</a>
+          <a href="/Tools/Numbers_to_Amharic_Words_Converter">Amharic Numbers Converter</a>
+          <a href="/Tools/Geez_Numbers_Converter">Geez Numbers Converter</a>
+          <a href="/Tools/Ethiopia_Phone_Numbers">Ethiopian Phone Number Validator</a>
+          <a href="/Tools/Ethiopian_Name_Generator">Ethiopian Baby Name Generator</a>
+          <a href="/Tools/Amharic_Link_Shortner">Amharic Link Shortner</a>
+          <a href="/Tools/Ethiopian_Date_Converter">Ethiopian Date Converter</a>
+          <a href="/Tools/Amharic_to_Image">Amharic AI Prompt to Image Generator</a>
+          <a href="/Tools/Free_Amharic_Keyboard">Amharic Keyboard</a>
+          <a href="/Tools/Amharic_Text_To_Speech">Amharic Text-to-Speech</a>
+          <a href="/Tools/Amharic_Words_Generator">Random Amharic Words Generator</a>
+        </div>
+      </div>
+      <div class="dropdown">
+        <button class="drop-btn" type="button">Games ▾</button>
+        <div class="dropdown-menu">
+          <a href="/Games/Amharic_Hangman_Game">Hangman in Amharic</a>
+          <a href="/Games/Amharic_Fidel_Sliding_Puzzle_Game">Amharic Fidel Sliding Puzzle</a>
+          <a href="/Games/Amharic_Typing_Game">Amharic Typing Game</a>
+          <a href="#">Amharic Riddles</a>
+          <a href="#">Amharic Word Search</a>
+        </div>
+      </div>
+      <a href="#">Resources</a>
+      <a href="#">Videos</a>
+      <a href="#">Shop</a>
+      <a href="#">Contact</a>
+    </nav>
+  </header>
+
+  <main class="typing-page container-fluid">
+    <h1 class="text-center game-title mb-4">Amharic Typing Game</h1>
+
+    <p class="text-center game-subtitle m-2">
+      Learn to type in Amharic in a fun way. Test your speed and accuracy. Challenge yourself!
+      This is a very amusing and addictive typing game where you can improve your Amharic typing
+      skill as well as your vocabulary.
+    </p>
+
+    <div class="container mt-5">
+      <div class="card typing-card shadow-sm p-4 mx-auto">
+        <div class="text-center">
+          <h5 id="levelIndicator" class="card-subtitle mb-3"></h5>
+          <p class="card-text">Type the following text:</p>
+
+          <div id="targetText" class="mb-3 fs-2"></div>
+
+          <input
+            type="text"
+            id="typingInput"
+            class="form-control"
+            autocapitalize="off"
+            spellcheck="false"
+            autocomplete="off"
+            autocorrect="off"
+            placeholder="Start typing..."
+            autofocus
+          >
+
+          <div class="mt-3">
+            <div class="kbd-container" id="amhKeyAss"></div>
+
+            <div class="form-check form-switch mb-3 text-start">
+              <input class="form-check-input" type="checkbox" id="amharicKey" checked>
+              <label class="form-check-label" for="amharicKey">Enable Amharic Keyboard</label>
+            </div>
+
+            <span>Time remaining: <span id="timer">180</span> seconds</span>
+
+            <div class="progress mt-2">
+              <div
+                id="timeProgressBar"
+                class="progress-bar bg-success"
+                role="progressbar"
+                style="width: 100%;"
+                aria-valuenow="180"
+                aria-valuemin="0"
+                aria-valuemax="180"
+              ></div>
+            </div>
+          </div>
+
+          <button id="restartBtn" class="btn btn-primary mt-3">Restart Game</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <div class="modal fade" id="resultModal" tabindex="-1" aria-labelledby="resultModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="resultModalLabel"></h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" id="resultModalBody"></div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+  <script src="{{ url_for('static', filename='js/amharic_typing_game.js') }}"></script>
+</body>
+</html>

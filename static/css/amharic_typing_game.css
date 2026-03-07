@@ -1,0 +1,137 @@
+body {
+  background: #f3f4f6;
+  color: #111827;
+}
+
+.typing-page {
+  max-width: 1080px;
+  padding: 24px 16px 42px;
+}
+
+.game-title {
+  font-size: clamp(34px, 4.2vw, 52px);
+  margin-top: 8px;
+}
+
+.game-subtitle {
+  color: #374151;
+  line-height: 1.52;
+  font-size: 21px;
+  max-width: 1060px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.typing-card {
+  border: 1px solid #d1d5db;
+  max-width: 1020px;
+}
+
+#targetText {
+  min-height: 58px;
+  line-height: 1.45;
+  font-family: "Noto Sans Ethiopic", "Abyssinica SIL", sans-serif;
+}
+
+#typingInput {
+  font-size: 34px;
+  border-width: 2px;
+  border-color: #9ec5ff;
+  font-family: "Noto Sans Ethiopic", "Abyssinica SIL", sans-serif;
+}
+
+#typingInput:focus {
+  border-color: #86b7fe;
+  box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+
+.kbd-container {
+  min-height: 20px;
+  margin-bottom: 8px;
+  text-align: left;
+}
+
+.kbd-helper {
+  display: inline-block;
+  margin-right: 8px;
+  margin-bottom: 6px;
+  padding: 3px 8px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  background: #f9fafb;
+  color: #374151;
+  font-size: 12px;
+}
+
+.kbd_targetText {
+  font-size: x-small;
+  vertical-align: middle;
+}
+
+.word-container {
+  display: inline-block;
+  position: relative;
+  margin-right: 4px;
+}
+
+.word-container.animated-underline::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  height: 2px;
+  background: blue;
+  width: 100%;
+  animation: underline-grow 1.5s infinite;
+}
+
+.kbd_targetText.animated-underline {
+  position: relative;
+}
+
+.kbd_targetText.animated-underline::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  height: 2px;
+  background: blue;
+  width: 100%;
+  animation: underline-grow 1.5s infinite;
+}
+
+@keyframes underline-grow {
+  0% {
+    width: 0;
+  }
+
+  50% {
+    width: 100%;
+  }
+
+  100% {
+    width: 0;
+  }
+}
+
+.text-success {
+  color: green !important;
+}
+
+@media (max-width: 700px) {
+  .game-title {
+    font-size: clamp(28px, 8vw, 38px);
+  }
+
+  .game-subtitle {
+    font-size: 18px;
+  }
+
+  #targetText {
+    font-size: 2rem !important;
+  }
+
+  #typingInput {
+    font-size: 24px;
+  }
+}
