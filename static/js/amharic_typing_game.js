@@ -1,4 +1,4 @@
-const levels = [
+const baseLevels = [
   "ያወቀ ናቀ",
   "አለም ሀላፊ መልክ ረጋፊ",
   "አይን አይቶ ልብ ይፈርዳል",
@@ -11,6 +11,8 @@ const levels = [
   "የማህበር ኣሽከር በልቶም ኣይጠገን ታሞም አይድን"
 ];
 
+let levels = [...baseLevels];
+
 let currentLevel = 0;
 let currentRawText = "";
 let remainingTime = 180;
@@ -21,6 +23,7 @@ let gameOver = false;
 let wordNodes = [];
 let wordContainers = [];
 let isProgrammaticUpdate = false;
+let lastLevelOnePhrase = "";
 
 const fidelFamilies = {
   h: ["ሀ", "ሁ", "ሂ", "ሃ", "ሄ", "ህ", "ሆ"],
@@ -216,6 +219,32 @@ function renderKeyboardHints() {
     .join("");
 }
 
+function shuffleArray(items) {
+  const arr = [...items];
+  for (let i = arr.length - 1; i > 0; i -= 1) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+function buildShuffledLevels() {
+  if (baseLevels.length < 2) {
+    return [...baseLevels];
+  }
+
+  let candidate = shuffleArray(baseLevels);
+  let attempts = 0;
+
+  // Try a few times to avoid repeating the same level-1 phrase on restart.
+  while (candidate[0] === lastLevelOnePhrase && attempts < 6) {
+    candidate = shuffleArray(baseLevels);
+    attempts += 1;
+  }
+
+  return candidate;
+}
+
 function startTimer() {
   timerStarted = true;
   timerInterval = setInterval(() => {
@@ -368,10 +397,17 @@ typingInput.addEventListener("input", () => {
 });
 
 restartBtn.addEventListener("click", () => {
-  window.location.reload();
+  initGame(true);
 });
 
-function initGame() {
+function initGame(reshuffle = true) {
+  if (reshuffle) {
+    levels = buildShuffledLevels();
+    lastLevelOnePhrase = levels[0] || "";
+  }
+
+  clearInterval(timerInterval);
+
   currentLevel = 0;
   remainingTime = totalTime;
   timerSpan.textContent = String(remainingTime);
@@ -386,7 +422,6 @@ function initGame() {
 
   renderKeyboardHints();
   loadLevel(currentLevel);
-  clearInterval(timerInterval);
 }
 
-window.onload = initGame;
+window.onload = () => initGame(true);
