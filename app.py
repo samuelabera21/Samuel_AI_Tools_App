@@ -29,7 +29,6 @@ from tools.ethiopian_date_converter.service import (
     to_ethiopian_payload,
     to_gregorian_payload,
 )
-from tools.amharic_ascii_art.service import generate_amharic_ascii_art
 
 app = Flask(__name__)
 SHORT_LINK_PUBLIC_BASE_URL = os.getenv("SHORT_LINK_PUBLIC_BASE_URL", "https://መ.com")
@@ -77,11 +76,6 @@ def amharic_link_shortner_page():
 @app.route("/Tools/Ethiopian_Date_Converter")
 def ethiopian_date_converter_page():
     return render_template("ethiopian_date_converter.html")
-
-
-@app.route("/Tools/Amharic_To_ASCII_Art")
-def amharic_ascii_art_page():
-    return render_template("amharic_ascii_art.html")
 
 
 @app.route("/Tools/Amharic_OCR", methods=["GET", "POST"])
@@ -212,6 +206,11 @@ def speak_amharic_numbers_text():
 @app.route("/Games/Amharic_Hangman_Game")
 def amharic_hangman_game():
     return render_template("game_hangman.html")
+
+
+@app.route("/Games/Amharic_Fidel_Sliding_Puzzle_Game")
+def amharic_fidel_sliding_puzzle_game():
+    return render_template("amharic_fidel_sliding_puzzle_game.html")
 
 
 @app.route("/api/amharic-ai-image", methods=["POST"])
@@ -437,19 +436,6 @@ def ethiopian_date_calculator_api():
         return jsonify({"error": str(exc)}), 400
     except Exception:
         return jsonify({"error": "Unexpected server error while calculating Ethiopian date."}), 500
-
-
-@app.route("/api/amharic-ascii-art", methods=["POST"])
-def amharic_ascii_art_api():
-    payload = request.get_json(silent=True) or {}
-    text = str(payload.get("text", "")).strip()
-
-    try:
-        return jsonify(generate_amharic_ascii_art(text))
-    except ValueError as exc:
-        return jsonify({"error": str(exc)}), 400
-    except Exception:
-        return jsonify({"error": "Unexpected server error while generating ASCII art."}), 500
 
 
 @app.route("/download", methods=["POST"])

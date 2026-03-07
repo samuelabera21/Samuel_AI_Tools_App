@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Amharic Fidel Sliding Puzzle - AI Tools App</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/amharic_fidel_sliding_puzzle.css') }}">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">MetaAppz</div>
+    <nav class="nav">
+      <a href="/">Home</a>
+      <div class="dropdown">
+        <button class="drop-btn" type="button">Tools ▾</button>
+        <div class="dropdown-menu">
+          <a href="/Tools/Amharic_OCR">Amharic OCR</a>
+          <a href="/Tools/Numbers_to_Amharic_Words_Converter">Amharic Numbers Converter</a>
+          <a href="/Tools/Geez_Numbers_Converter">Geez Numbers Converter</a>
+          <a href="/Tools/Ethiopia_Phone_Numbers">Ethiopian Phone Number Validator</a>
+          <a href="/Tools/Ethiopian_Name_Generator">Ethiopian Baby Name Generator</a>
+          <a href="/Tools/Amharic_Link_Shortner">Amharic Link Shortner</a>
+          <a href="/Tools/Ethiopian_Date_Converter">Ethiopian Date Converter</a>
+          <a href="/Tools/Amharic_to_Image">Amharic AI Prompt to Image Generator</a>
+          <a href="/Tools/Free_Amharic_Keyboard">Amharic Keyboard</a>
+          <a href="/Tools/Amharic_Text_To_Speech">Amharic Text-to-Speech</a>
+          <a href="/Tools/Amharic_Words_Generator">Random Amharic Words Generator</a>
+        </div>
+      </div>
+      <div class="dropdown">
+        <button class="drop-btn" type="button">Games ▾</button>
+        <div class="dropdown-menu">
+          <a href="/Games/Amharic_Hangman_Game">Hangman in Amharic</a>
+          <a href="/Games/Amharic_Fidel_Sliding_Puzzle_Game">Amharic Fidel Sliding Puzzle</a>
+          <a href="#">Amharic Riddles</a>
+          <a href="#">Amharic Typing Game</a>
+          <a href="#">Amharic Word Search</a>
+        </div>
+      </div>
+      <a href="#">Resources</a>
+      <a href="#">Videos</a>
+      <a href="#">Shop</a>
+      <a href="#">Contact</a>
+    </nav>
+  </header>
+
+  <main class="page-wrap">
+    <h1 class="title">Amharic Fidel Sliding Puzzle</h1>
+    <p class="subtitle">
+      Challenge yourself with this original Amharic sliding puzzle game!
+      <br>
+      The goal of the game is to sort the Amharic letters in alphabetical order.
+      Move the puzzle pieces into their correct places to complete the level.
+    </p>
+
+    <section class="game-shell">
+      <div class="game-body">
+        <div id="levelComplete" class="level-complete"></div>
+        <div class="status-line">
+          Level: <span id="currentLevel"></span> | Moves left: <span id="movesLeft"></span>
+        </div>
+
+        <div class="sliding-puzzle-figure">
+          <ul id="boxContainer" class="sliding-puzzle">
+            <li id="1" class="tile">M</li>
+            <li id="2" class="tile">e</li>
+            <li id="3" class="tile">t</li>
+            <li id="4" class="tile">a</li>
+            <li id="5" class="tile">A</li>
+            <li id="6" class="tile">p</li>
+            <li id="7" class="tile">p</li>
+            <li id="8" class="tile">z</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="{{ url_for('static', filename='js/amharic_fidel_sliding_puzzle.js') }}"></script>
+</body>
+</html>
