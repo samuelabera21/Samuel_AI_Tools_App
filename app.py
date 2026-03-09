@@ -2,7 +2,11 @@ from flask import Flask, request, render_template, send_file, jsonify, redirect,
 import io
 import base64
 import os
+import uuid
+from pathlib import Path
 from decimal import Decimal, InvalidOperation
+from werkzeug.utils import secure_filename
+from dotenv import load_dotenv
 from gtts import gTTS
 from tools.ocr.ocr import extract_amharic_text_from_bytes
 from tools.amharic_numbers_converter.converter import number_to_amharic, number_to_currency
@@ -29,6 +33,13 @@ from tools.ethiopian_date_converter.service import (
     to_ethiopian_payload,
     to_gregorian_payload,
 )
+from tools.ethiopian_knowledge_assistant.service import (
+    get_uploads_dir,
+    ingest_knowledge,
+    ask_knowledge_question,
+)
+
+load_dotenv()
 
 app = Flask(__name__)
 SHORT_LINK_PUBLIC_BASE_URL = os.getenv("SHORT_LINK_PUBLIC_BASE_URL", "https://áˆ˜.com")
@@ -36,6 +47,16 @@ SHORT_LINK_PUBLIC_BASE_URL = os.getenv("SHORT_LINK_PUBLIC_BASE_URL", "https://áˆ
 @app.route("/")
 def home():
     return render_template("home.html")
+
+
+@app.route("/Resources")
+def resources():
+    return render_template("resources.html")
+
+
+@app.route("/Resources/Ethiopian_Knowledge_AI_Assistant")
+def ethiopian_knowledge_ai_assistant_page():
+    return render_template("ethiopian_knowledge_ai_assistant.html")
 
 
 @app.route("/Tools/Amharic_AI_Prompt_to_Image_Generator")
@@ -436,6 +457,71 @@ def ethiopian_date_calculator_api():
         return jsonify({"error": str(exc)}), 400
     except Exception:
         return jsonify({"error": "Unexpected server error while calculating Ethiopian date."}), 500
+
+
+@app.route("/api/ethiopian-knowledge/ingest", methods=["POST"])
+def ethiopian_knowledge_ingest_api():
+    files = request.files.getlist("files")
+    urls_raw = str(request.form.get("urls", "")).strip()
+    urls = [
+        line.strip()
+        for line in urls_raw.splitlines()
+        if line.strip().startswith(("http://", "https://"))
+    ]
+
+    saved_paths = []
+    allowed_extensions = {".pdf", ".txt", ".md"}
+    upload_dir = get_uploads_dir()
+    upload_dir.mkdir(parents=True, exist_ok=True)
+
+    for file in files:
+        if not file or not file.filename:
+            continue
+
+        original_name = secure_filename(file.filename)
+        if not original_name:
+            continue
+
+        extension = Path(original_name).suffix.lower()
+        if extension not in allowed_extensions:
+            return jsonify({"error": f"Unsupported file type: {original_name}"}), 400
+
+        unique_name = f"{uuid.uuid4().hex}_{original_name}"
+        destination = upload_dir / unique_name
+        file.save(destination)
+        saved_paths.append(destination)
+
+    if not saved_paths and not urls:
+        return jsonify({"error": "Upload at least one document or add at least one URL."}), 400
+
+    try:
+        result = ingest_knowledge(file_paths=saved_paths, urls=urls)
+        return jsonify(result)
+    except RuntimeError as exc:
+        return jsonify({"error": str(exc)}), 500
+    except ValueError as exc:
+        return jsonify({"error": str(exc)}), 400
+    except Exception as exc:
+        return jsonify({"error": f"Unexpected server error during ingestion: {exc}"}), 500
+
+
+@app.route("/api/ethiopian-knowledge/ask", methods=["POST"])
+def ethiopian_knowledge_ask_api():
+    payload = request.get_json(silent=True) or {}
+    question = str(payload.get("question", "")).strip()
+
+    if not question:
+        return jsonify({"error": "Question is required."}), 400
+
+    try:
+        answer = ask_knowledge_question(question=question, top_k=3)
+        return jsonify(answer)
+    except RuntimeError as exc:
+        return jsonify({"error": str(exc)}), 500
+    except ValueError as exc:
+        return jsonify({"error": str(exc)}), 400
+    except Exception as exc:
+        return jsonify({"error": f"Unexpected server error while answering question: {exc}"}), 500
 
 
 @app.route("/download", methods=["POST"])

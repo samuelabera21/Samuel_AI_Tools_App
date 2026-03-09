@@ -1,0 +1,123 @@
+.page {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 2rem 1rem 3rem;
+  display: grid;
+  gap: 1rem;
+}
+
+.hero {
+  background: linear-gradient(135deg, #edf4ff 0%, #fff8e7 100%);
+  border: 1px solid #d8e4f8;
+  border-radius: 16px;
+  padding: 1.2rem;
+}
+
+.panel {
+  background: #fff;
+  border: 1px solid #dde4f1;
+  border-radius: 14px;
+  padding: 1rem;
+}
+
+.stack {
+  display: grid;
+  gap: 0.85rem;
+}
+
+label {
+  display: grid;
+  gap: 0.4rem;
+  font-weight: 600;
+  color: #1c2f4f;
+}
+
+input[type="file"],
+textarea,
+input[type="text"] {
+  width: 100%;
+  border: 1px solid #c5d2eb;
+  border-radius: 10px;
+  padding: 0.7rem;
+  font: inherit;
+}
+
+.btn {
+  width: fit-content;
+  border: 0;
+  border-radius: 10px;
+  background: #0e66c8;
+  color: #fff;
+  padding: 0.65rem 1rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.status {
+  min-height: 1.4rem;
+  color: #244170;
+  margin-top: 0.8rem;
+}
+
+.ask-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.6rem;
+}
+
+.examples {
+  margin-top: 0.9rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.chip {
+  border: 1px solid #c8d7f2;
+  border-radius: 999px;
+  background: #f4f8ff;
+  color: #17305a;
+  padding: 0.35rem 0.7rem;
+  cursor: pointer;
+}
+
+.result {
+  margin-top: 1rem;
+  border: 1px solid #e0e6f4;
+  border-radius: 12px;
+  background: #fbfcff;
+  padding: 0.8rem;
+}
+
+.sources {
+  display: grid;
+  gap: 0.7rem;
+}
+
+.source-item {
+  border: 1px solid #d5deef;
+  border-radius: 10px;
+  background: #fff;
+  padding: 0.65rem;
+}
+
+.source-item h4 {
+  margin: 0 0 0.35rem;
+  font-size: 0.9rem;
+  color: #223c67;
+}
+
+.source-item p {
+  margin: 0;
+  color: #2a3b58;
+}
+
+@media (max-width: 720px) {
+  .ask-row {
+    grid-template-columns: 1fr;
+  }
+
+  .btn {
+    width: 100%;
+  }
+}

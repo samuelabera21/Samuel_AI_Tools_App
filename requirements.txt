@@ -4,3 +4,11 @@ numpy
 pytesseract
 gTTS
 edge-tts
+langchain
+langchain-community
+faiss-cpu
+pypdf
+beautifulsoup4
+tiktoken
+openai
+python-dotenv

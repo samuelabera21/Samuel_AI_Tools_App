@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ethiopian Knowledge AI Assistant</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/ethiopian_knowledge_ai_assistant.css') }}">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">MetaAppz</div>
+    <nav class="nav">
+      <a href="/">Home</a>
+      <a href="/Resources">Resources</a>
+    </nav>
+  </header>
+
+  <main class="page">
+    <section class="hero">
+      <h1>Ethiopian Knowledge AI Assistant</h1>
+      <p>Build a searchable knowledge base from Ethiopian PDF documents, text files, and trusted web pages. Ask questions and get grounded answers with sources.</p>
+    </section>
+
+    <section class="panel">
+      <h2>1. Ingest Knowledge Sources</h2>
+      <form id="ingest-form" class="stack" enctype="multipart/form-data">
+        <label>
+          Upload files (.pdf, .txt, .md)
+          <input type="file" name="files" id="files" multiple accept=".pdf,.txt,.md">
+        </label>
+        <label>
+          Add URLs (one per line: Wikipedia, culture articles, language guides)
+          <textarea id="urls" name="urls" rows="5" placeholder="https://en.wikipedia.org/wiki/Ethiopian_calendar"></textarea>
+        </label>
+        <button type="submit" class="btn">Index Knowledge Base</button>
+      </form>
+      <p id="ingest-status" class="status"></p>
+    </section>
+
+    <section class="panel">
+      <h2>2. Ask Questions</h2>
+      <form id="ask-form" class="ask-row">
+        <input type="text" id="question" placeholder="What is the Ethiopian calendar?" required>
+        <button type="submit" class="btn">Ask</button>
+      </form>
+
+      <div class="examples">
+        <button type="button" class="chip" data-q="What is the Ethiopian calendar?">What is the Ethiopian calendar?</button>
+        <button type="button" class="chip" data-q="Explain Ethiopian coffee ceremony">Explain Ethiopian coffee ceremony</button>
+        <button type="button" class="chip" data-q="How does Ethiopian phone numbering work?">How does Ethiopian phone numbering work?</button>
+        <button type="button" class="chip" data-q="Translate common Amharic cultural phrases">Translate common Amharic cultural phrases</button>
+      </div>
+
+      <article class="result">
+        <h3>Answer</h3>
+        <p id="answer">No answer yet. Ingest sources, then ask a question.</p>
+      </article>
+
+      <article class="result">
+        <h3>Source Snippets</h3>
+        <div id="sources" class="sources"></div>
+      </article>
+    </section>
+  </main>
+
+  <script src="{{ url_for('static', filename='js/ethiopian_knowledge_ai_assistant.js') }}"></script>
+</body>
+</html>
