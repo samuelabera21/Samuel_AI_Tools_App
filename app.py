@@ -3,6 +3,7 @@ import io
 import base64
 import os
 import uuid
+import traceback
 from pathlib import Path
 from decimal import Decimal, InvalidOperation
 from werkzeug.utils import secure_filename
@@ -502,7 +503,14 @@ def ethiopian_knowledge_ingest_api():
     except ValueError as exc:
         return jsonify({"error": str(exc)}), 400
     except Exception as exc:
-        return jsonify({"error": f"Unexpected server error during ingestion: {exc}"}), 500
+        trace_text = traceback.format_exc()
+        print(trace_text)
+        return jsonify(
+            {
+                "error": f"Unexpected server error during ingestion: {exc}",
+                "errorType": type(exc).__name__,
+            }
+        ), 500
 
 
 @app.route("/api/ethiopian-knowledge/ask", methods=["POST"])
@@ -521,7 +529,14 @@ def ethiopian_knowledge_ask_api():
     except ValueError as exc:
         return jsonify({"error": str(exc)}), 400
     except Exception as exc:
-        return jsonify({"error": f"Unexpected server error while answering question: {exc}"}), 500
+        trace_text = traceback.format_exc()
+        print(trace_text)
+        return jsonify(
+            {
+                "error": f"Unexpected server error while answering question: {exc}",
+                "errorType": type(exc).__name__,
+            }
+        ), 500
 
 
 @app.route("/download", methods=["POST"])

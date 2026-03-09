@@ -3,6 +3,9 @@ import threading
 from pathlib import Path
 from typing import Iterable
 
+# Set before langchain loader imports so request headers are available early.
+os.environ.setdefault("USER_AGENT", "ai-tools-app-rag/1.0")
+
 from openai import OpenAI
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_community.document_loaders import PyPDFLoader, TextLoader, WebBaseLoader
@@ -22,8 +25,13 @@ DEFAULT_NVIDIA_BASE_URL = os.getenv("NVIDIA_BASE_URL", "https://integrate.api.nv
 DEFAULT_CHUNK_SIZE = int(os.getenv("RAG_CHUNK_SIZE", "900"))
 DEFAULT_CHUNK_OVERLAP = int(os.getenv("RAG_CHUNK_OVERLAP", "150"))
 
-# WebBaseLoader warns if USER_AGENT is missing; set a safe default.
-os.environ.setdefault("USER_AGENT", "ai-tools-app-rag/1.0")
+
+def _sanitize_ssl_env_vars() -> None:
+    """Drop invalid certificate env vars that can break httpx SSL setup."""
+    for env_name in ("SSL_CERT_FILE", "REQUESTS_CA_BUNDLE", "CURL_CA_BUNDLE"):
+        value = os.getenv(env_name)
+        if value and not Path(value).exists():
+            os.environ.pop(env_name, None)
 
 
 def get_uploads_dir() -> Path:
@@ -38,6 +46,7 @@ def _require_nvidia_api_key() -> str:
 
 
 def _build_nvidia_client() -> OpenAI:
+    _sanitize_ssl_env_vars()
     api_key = _require_nvidia_api_key()
     return OpenAI(base_url=DEFAULT_NVIDIA_BASE_URL, api_key=api_key)
 
@@ -134,7 +143,10 @@ def _load_web_documents(urls: Iterable[str]) -> list[Document]:
 
 
 def _load_vector_store(embeddings: Embeddings) -> FAISS:
-    if not (VECTOR_DIR / "index.faiss").exists():
+    index_faiss = VECTOR_DIR / "index.faiss"
+    index_pkl = VECTOR_DIR / "index.pkl"
+
+    if not (index_faiss.exists() and index_pkl.exists()):
         raise ValueError("Knowledge base is empty. Ingest documents first.")
 
     return FAISS.load_local(
@@ -161,10 +173,19 @@ def ingest_knowledge(file_paths: list[Path], urls: list[str]) -> dict:
     embeddings = NVIDIAEmbeddings(client=client, model=DEFAULT_EMBEDDING_MODEL)
 
     with LOCK:
-        if (VECTOR_DIR / "index.faiss").exists():
+        index_faiss = VECTOR_DIR / "index.faiss"
+        index_pkl = VECTOR_DIR / "index.pkl"
+        store_ready = index_faiss.exists() and index_pkl.exists()
+
+        if store_ready:
             vector_store = _load_vector_store(embeddings)
             vector_store.add_documents(chunks)
         else:
+            # Clean up partial/old artifacts before building a fresh FAISS index.
+            for stale_path in (index_faiss, index_pkl):
+                if stale_path.exists():
+                    stale_path.unlink()
+
             vector_store = FAISS.from_documents(chunks, embeddings)
 
         vector_store.save_local(str(VECTOR_DIR))
