@@ -156,7 +156,14 @@ def _load_vector_store(embeddings: Embeddings) -> FAISS:
     )
 
 
-def ingest_knowledge(file_paths: list[Path], urls: list[str]) -> dict:
+def _clear_vector_store_files() -> None:
+    for file_name in ("index.faiss", "index.pkl"):
+        file_path = VECTOR_DIR / file_name
+        if file_path.exists():
+            file_path.unlink()
+
+
+def ingest_knowledge(file_paths: list[Path], urls: list[str], replace_existing: bool = True) -> dict:
     file_docs = _load_file_documents(file_paths)
     web_docs = _load_web_documents(urls)
     all_docs = file_docs + web_docs
@@ -173,6 +180,9 @@ def ingest_knowledge(file_paths: list[Path], urls: list[str]) -> dict:
     embeddings = NVIDIAEmbeddings(client=client, model=DEFAULT_EMBEDDING_MODEL)
 
     with LOCK:
+        if replace_existing:
+            _clear_vector_store_files()
+
         index_faiss = VECTOR_DIR / "index.faiss"
         index_pkl = VECTOR_DIR / "index.pkl"
         store_ready = index_faiss.exists() and index_pkl.exists()

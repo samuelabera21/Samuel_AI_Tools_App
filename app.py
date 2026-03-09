@@ -464,6 +464,8 @@ def ethiopian_date_calculator_api():
 def ethiopian_knowledge_ingest_api():
     files = request.files.getlist("files")
     urls_raw = str(request.form.get("urls", "")).strip()
+    replace_existing_raw = str(request.form.get("replaceExisting", "true")).strip().lower()
+    replace_existing = replace_existing_raw not in {"0", "false", "no", "off"}
     urls = [
         line.strip()
         for line in urls_raw.splitlines()
@@ -496,7 +498,11 @@ def ethiopian_knowledge_ingest_api():
         return jsonify({"error": "Upload at least one document or add at least one URL."}), 400
 
     try:
-        result = ingest_knowledge(file_paths=saved_paths, urls=urls)
+        result = ingest_knowledge(
+            file_paths=saved_paths,
+            urls=urls,
+            replace_existing=replace_existing,
+        )
         return jsonify(result)
     except RuntimeError as exc:
         return jsonify({"error": str(exc)}), 500
