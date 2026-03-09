@@ -1,4 +1,5 @@
 import os
+import re
 import threading
 from pathlib import Path
 from typing import Iterable
@@ -163,6 +164,19 @@ def _clear_vector_store_files() -> None:
             file_path.unlink()
 
 
+def _clean_answer_text(text: str) -> str:
+    """Normalize model output so UI shows concise, readable plain text."""
+    cleaned = text or ""
+    cleaned = cleaned.replace("**", "")
+    cleaned = cleaned.replace("\r\n", "\n")
+    cleaned = re.sub(r"\n{3,}", "\n\n", cleaned)
+    cleaned = re.sub(r"[ \t]{2,}", " ", cleaned)
+
+    # Remove common trailing json-like wrappers if model returns fenced text.
+    cleaned = cleaned.strip().strip("`")
+    return cleaned.strip()
+
+
 def ingest_knowledge(file_paths: list[Path], urls: list[str], replace_existing: bool = True) -> dict:
     file_docs = _load_file_documents(file_paths)
     web_docs = _load_web_documents(urls)
@@ -237,7 +251,9 @@ def ask_knowledge_question(question: str, top_k: int = 3) -> dict:
     system_prompt = (
         "You are Ethiopian Knowledge AI Assistant. "
         "Answer using only the provided context. "
-        "If the answer is not in context, say you do not know."
+        "If the answer is not in context, say 'I do not know based on the uploaded sources.' "
+        "Style rules: respond in plain natural prose, no markdown, no JSON, no bullet symbols, "
+        "no asterisks, and keep the answer concise and readable."
     )
     user_prompt = f"Question: {question}\n\nRetrieved Context:\n{chr(10).join(context_blocks)}"
 
@@ -256,6 +272,7 @@ def ask_knowledge_question(question: str, top_k: int = 3) -> dict:
         raise RuntimeError(f"NVIDIA chat request failed: {exc}") from exc
 
     answer_text = completion.choices[0].message.content or "No answer generated."
+    answer_text = _clean_answer_text(answer_text)
 
     return {
         "answer": answer_text.strip(),
