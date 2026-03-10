@@ -4,7 +4,6 @@ from urllib import error as url_error
 from urllib import request as url_request
 
 NVIDIA_CHAT_API_URL = os.getenv("NVIDIA_CHAT_API_URL", "https://integrate.api.nvidia.com/v1/chat/completions")
-DEFAULT_NVIDIA_API_KEY = "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"
 NVIDIA_CHAT_MODEL = os.getenv("NVIDIA_CHAT_MODEL", "meta/llama-3.1-70b-instruct")
 
 
@@ -27,7 +26,7 @@ def _looks_like_valid_amharic(text: str):
 
 def polish_amharic_text(text: str):
     """Light AI cleanup for Amharic text while preserving meaning and language."""
-    api_key = os.getenv("NVIDIA_API_KEY", DEFAULT_NVIDIA_API_KEY).strip()
+    api_key = os.getenv("NVIDIA_API_KEY", "").strip()
     if not api_key:
         raise RuntimeError("NVIDIA_API_KEY is missing")
 

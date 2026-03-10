@@ -5,7 +5,6 @@ from urllib import parse as url_parse
 from urllib import request as url_request
 
 NVIDIA_IMAGE_API_URL = os.getenv("NVIDIA_IMAGE_API_URL", "https://ai.api.nvidia.com/v1/genai/black-forest-labs/flux.1-dev")
-DEFAULT_NVIDIA_API_KEY = "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"
 MYMEMORY_TRANSLATE_URL = "https://api.mymemory.translated.net/get"
 
 
@@ -81,8 +80,7 @@ def build_generation_prompt(prompt: str, style: str | None = None):
 
 def generate_image_from_prompt(prompt: str, size: str = "1024x1024", style: str | None = None):
     """Call NVIDIA's OpenAI-compatible image endpoint and return image URL/base64."""
-    # Prefer environment variable, but keep local fallback key for this workspace setup.
-    api_key = os.getenv("NVIDIA_API_KEY", DEFAULT_NVIDIA_API_KEY).strip()
+    api_key = os.getenv("NVIDIA_API_KEY", "").strip()
     if not api_key:
         raise RuntimeError("NVIDIA_API_KEY is missing")
 
