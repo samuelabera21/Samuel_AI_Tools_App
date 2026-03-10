@@ -380,8 +380,8 @@ def amharic_link_shortner_api():
 
     public_base_url = SHORT_LINK_PUBLIC_BASE_URL.rstrip("/")
     if not public_base_url:
-        # Match live behavior by serving short links under /ethio_links/<code>.
-        public_base_url = f"{request.host_url.rstrip('/')}/ethio_links"
+        # Keep links as short as possible in local/default mode.
+        public_base_url = request.host_url.rstrip("/")
 
     try:
         generated = create_amharic_short_link(
