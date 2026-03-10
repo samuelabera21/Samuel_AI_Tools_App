@@ -44,7 +44,7 @@ from tools.ethiopian_knowledge_assistant.service import (
 load_dotenv()
 
 app = Flask(__name__)
-SHORT_LINK_PUBLIC_BASE_URL = os.getenv("SHORT_LINK_PUBLIC_BASE_URL", "https://መ.com")
+SHORT_LINK_PUBLIC_BASE_URL = os.getenv("SHORT_LINK_PUBLIC_BASE_URL", "").strip()
 
 frontend_origins_raw = os.getenv("FRONTEND_ORIGINS", "*").strip()
 if frontend_origins_raw == "*":
@@ -378,10 +378,15 @@ def amharic_link_shortner_api():
     payload = request.get_json(silent=True) or {}
     long_url = str(payload.get("longUrl", "")).strip()
 
+    public_base_url = SHORT_LINK_PUBLIC_BASE_URL.rstrip("/")
+    if not public_base_url:
+        # Match live behavior by serving short links under /ethio_links/<code>.
+        public_base_url = f"{request.host_url.rstrip('/')}/ethio_links"
+
     try:
         generated = create_amharic_short_link(
             long_url=long_url,
-            base_url=SHORT_LINK_PUBLIC_BASE_URL,
+            base_url=public_base_url,
         )
         return jsonify(
             {
@@ -570,6 +575,7 @@ def download_text():
     )
 
 
+@app.route("/ethio_links/<short_code>")
 @app.route("/<short_code>")
 def redirect_amharic_short_link(short_code):
     target_url = resolve_amharic_short_link(short_code)
