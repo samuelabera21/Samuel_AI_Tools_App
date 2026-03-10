@@ -8,6 +8,7 @@ from pathlib import Path
 from decimal import Decimal, InvalidOperation
 from werkzeug.utils import secure_filename
 from dotenv import load_dotenv
+from flask_cors import CORS
 from gtts import gTTS
 from tools.ocr.ocr import extract_amharic_text_from_bytes
 from tools.amharic_numbers_converter.converter import number_to_amharic, number_to_currency
@@ -44,6 +45,17 @@ load_dotenv()
 
 app = Flask(__name__)
 SHORT_LINK_PUBLIC_BASE_URL = os.getenv("SHORT_LINK_PUBLIC_BASE_URL", "https://መ.com")
+
+frontend_origins_raw = os.getenv("FRONTEND_ORIGINS", "*").strip()
+if frontend_origins_raw == "*":
+    CORS(app, resources={r"/api/*": {"origins": "*"}})
+else:
+    frontend_origins = [
+        origin.strip()
+        for origin in frontend_origins_raw.split(",")
+        if origin.strip()
+    ]
+    CORS(app, resources={r"/api/*": {"origins": frontend_origins}})
 
 @app.route("/")
 def home():

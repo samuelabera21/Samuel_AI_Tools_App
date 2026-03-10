@@ -1,0 +1,30 @@
+services:
+  - type: web
+    name: ai-tools-backend
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app
+    healthCheckPath: /
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.9
+      - key: NVIDIA_API_KEY
+        sync: false
+      - key: NVIDIA_BASE_URL
+        value: https://integrate.api.nvidia.com/v1
+      - key: NVIDIA_CHAT_MODEL
+        value: nvidia/nemotron-3-nano-30b-a3b
+      - key: NVIDIA_EMBEDDING_MODEL
+        value: nvidia/nv-embedqa-e5-v5
+      - key: RAG_CHUNK_SIZE
+        value: 900
+      - key: RAG_CHUNK_OVERLAP
+        value: 150
+      - key: FRONTEND_ORIGINS
+        value: https://YOUR_VERCEL_DOMAIN.vercel.app
+
+disks:
+  - name: ai-tools-rag-data
+    mountPath: /opt/render/project/src/tools/ethiopian_knowledge_assistant/data
+    sizeGB: 1

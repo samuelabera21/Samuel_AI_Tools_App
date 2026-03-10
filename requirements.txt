@@ -1,4 +1,5 @@
 flask
+flask-cors
 opencv-python
 numpy
 pytesseract
@@ -12,3 +13,4 @@ beautifulsoup4
 tiktoken
 openai
 python-dotenv
+gunicorn
