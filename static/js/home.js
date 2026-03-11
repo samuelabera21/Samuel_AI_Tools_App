@@ -313,103 +313,129 @@
 })();
 
 (function () {
-  const viewport = document.getElementById("tools-viewport");
-  const prevBtn = document.getElementById("tools-prev");
-  const nextBtn = document.getElementById("tools-next");
-  const dotsHost = document.getElementById("tools-dots");
-
-  if (!viewport || !prevBtn || !nextBtn || !dotsHost) {
+  const story = document.getElementById("tools-grid");
+  const progressHost = document.getElementById("tools-story-progress");
+  if (!story || !progressHost) {
     return;
   }
 
-  let pageCount = 1;
-  let currentPage = 0;
-  let autoplayId = null;
-
-  function maxScroll() {
-    return Math.max(0, viewport.scrollWidth - viewport.clientWidth);
+  const scenes = Array.from(story.querySelectorAll(".tool-scene"));
+  if (scenes.length === 0) {
+    return;
   }
 
-  function pageWidth() {
-    return Math.max(1, viewport.clientWidth);
-  }
+  let activeIndex = 0;
+  let lockUntil = 0;
+  let touchStartY = null;
 
-  function setPage(pageIndex) {
-    const bounded = Math.max(0, Math.min(pageCount - 1, pageIndex));
-    viewport.scrollTo({
-      left: bounded * pageWidth(),
-      behavior: "smooth",
-    });
-  }
+  function setScene(index) {
+    activeIndex = Math.max(0, Math.min(scenes.length - 1, index));
+    for (let i = 0; i < scenes.length; i += 1) {
+      scenes[i].classList.toggle("is-active", i === activeIndex);
+    }
 
-  function syncActiveDot() {
-    const width = pageWidth();
-    currentPage = Math.round(viewport.scrollLeft / width);
-    currentPage = Math.max(0, Math.min(pageCount - 1, currentPage));
-
-    const dots = dotsHost.querySelectorAll(".tools-dot");
+    const dots = progressHost.querySelectorAll(".tools-story-dot");
     for (let i = 0; i < dots.length; i += 1) {
-      dots[i].classList.toggle("active", i === currentPage);
+      dots[i].classList.toggle("is-active", i === activeIndex);
     }
   }
 
-  function rebuildDots() {
-    const width = pageWidth();
-    pageCount = Math.max(1, Math.ceil((maxScroll() + width) / width));
-
-    dotsHost.innerHTML = "";
-    for (let i = 0; i < pageCount; i += 1) {
+  function buildProgress() {
+    progressHost.innerHTML = "";
+    for (let i = 0; i < scenes.length; i += 1) {
       const dot = document.createElement("button");
       dot.type = "button";
-      dot.className = "tools-dot";
-      dot.setAttribute("aria-label", "Go to tools page " + (i + 1));
+      dot.className = "tools-story-dot";
+      dot.setAttribute("aria-label", "Go to tool scene " + (i + 1));
       dot.addEventListener("click", function () {
-        setPage(i);
+        setScene(i);
       });
-      dotsHost.appendChild(dot);
-    }
-
-    syncActiveDot();
-  }
-
-  function stopAutoplay() {
-    if (autoplayId) {
-      window.clearInterval(autoplayId);
-      autoplayId = null;
+      progressHost.appendChild(dot);
     }
   }
 
-  function startAutoplay() {
-    stopAutoplay();
-    autoplayId = window.setInterval(function () {
-      if (pageCount <= 1) {
-        return;
-      }
-
-      const nextPage = currentPage + 1 >= pageCount ? 0 : currentPage + 1;
-      setPage(nextPage);
-    }, 4200);
+  function isStoryInControlZone() {
+    const rect = story.getBoundingClientRect();
+    return rect.top <= 16 && rect.bottom >= window.innerHeight - 16;
   }
 
-  prevBtn.addEventListener("click", function () {
-    setPage(currentPage - 1);
+  function stepScene(direction) {
+    const now = Date.now();
+    if (now < lockUntil) {
+      return false;
+    }
+
+    const next = activeIndex + direction;
+    if (next < 0 || next >= scenes.length) {
+      return false;
+    }
+
+    lockUntil = now + 650;
+    setScene(next);
+    return true;
+  }
+
+  window.addEventListener("wheel", function (event) {
+    if (!isStoryInControlZone()) {
+      return;
+    }
+
+    const direction = event.deltaY > 0 ? 1 : -1;
+    const changed = stepScene(direction);
+    if (changed) {
+      event.preventDefault();
+    }
+  }, { passive: false });
+
+  window.addEventListener("touchstart", function (event) {
+    if (event.touches.length === 1) {
+      touchStartY = event.touches[0].clientY;
+    }
+  }, { passive: true });
+
+  window.addEventListener("touchmove", function (event) {
+    if (!isStoryInControlZone() || touchStartY === null || event.touches.length !== 1) {
+      return;
+    }
+
+    const currentY = event.touches[0].clientY;
+    const delta = touchStartY - currentY;
+    if (Math.abs(delta) < 26) {
+      return;
+    }
+
+    const direction = delta > 0 ? 1 : -1;
+    const changed = stepScene(direction);
+    if (changed) {
+      touchStartY = currentY;
+      event.preventDefault();
+    }
+  }, { passive: false });
+
+  window.addEventListener("mousemove", function (event) {
+    const activeScene = scenes[activeIndex];
+    if (!activeScene) {
+      return;
+    }
+
+    const media = activeScene.querySelector(".tool-scene-media img");
+    if (!media) {
+      return;
+    }
+
+    const rect = activeScene.getBoundingClientRect();
+    const px = (event.clientX - rect.left) / Math.max(rect.width, 1) - 0.5;
+    const py = (event.clientY - rect.top) / Math.max(rect.height, 1) - 0.5;
+    media.style.transform = "scale(1.04) translate(" + (px * 10).toFixed(2) + "px," + (py * 8).toFixed(2) + "px)";
   });
 
-  nextBtn.addEventListener("click", function () {
-    setPage(currentPage + 1 >= pageCount ? 0 : currentPage + 1);
+  story.addEventListener("mouseleave", function () {
+    const media = scenes[activeIndex] && scenes[activeIndex].querySelector(".tool-scene-media img");
+    if (media) {
+      media.style.transform = "scale(1.02) translate(0,0)";
+    }
   });
 
-  viewport.addEventListener("scroll", syncActiveDot, { passive: true });
-  viewport.addEventListener("mouseenter", stopAutoplay);
-  viewport.addEventListener("mouseleave", startAutoplay);
-  viewport.addEventListener("touchstart", stopAutoplay, { passive: true });
-  viewport.addEventListener("touchend", startAutoplay, { passive: true });
-
-  window.addEventListener("resize", function () {
-    rebuildDots();
-    setPage(currentPage);
-  });
-
-  rebuildDots();
-  startAutoplay();
+  buildProgress();
+  setScene(0);
 })();
