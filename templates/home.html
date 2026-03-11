@@ -100,26 +100,34 @@
   </div>
 
   <div id="chatbot-launcher" class="chatbot-launcher">
-    <p class="chatbot-launcher-label">aske me any thing</p>
+    <p class="chatbot-launcher-label">Ask me anything</p>
     <button id="chatbot-toggle" class="chatbot-fab" type="button" aria-label="Open AI chat" aria-expanded="false" aria-controls="chatbot-panel">
-      <span class="chatbot-fab-core">AI</span>
+      <span class="chatbot-fab-core" aria-hidden="true">
+        <svg viewBox="0 0 24 24" focusable="false">
+          <path d="M12 3C6.48 3 2 6.94 2 11.8c0 2.69 1.37 5.1 3.53 6.72L4.5 22l4.08-2.24c1.08.3 2.23.46 3.42.46 5.52 0 10-3.94 10-8.8S17.52 3 12 3Zm-4 9.3a1.3 1.3 0 1 1 0-2.6 1.3 1.3 0 0 1 0 2.6Zm4 0a1.3 1.3 0 1 1 0-2.6 1.3 1.3 0 0 1 0 2.6Zm4 0a1.3 1.3 0 1 1 0-2.6 1.3 1.3 0 0 1 0 2.6Z" />
+        </svg>
+      </span>
     </button>
   </div>
 
   <section id="chatbot-panel" class="chatbot-panel" aria-label="AI Chat Assistant" hidden>
     <header class="chatbot-header">
-      <h2>AI Chat Assistant</h2>
-      <button id="chatbot-close" class="chatbot-close" type="button" aria-label="Close chat">X</button>
+      <div class="chatbot-title-block">
+        <h2>MetaAppz AI</h2>
+        <p>Ask about the platform or anything else</p>
+      </div>
+      <button id="chatbot-close" class="chatbot-close" type="button" aria-label="Close chat">&times;</button>
     </header>
     <div id="chatbot-messages" class="chatbot-messages">
       <article class="chatbot-msg bot">
-        Hello. Ask any question. For platform and developer questions, I will use project knowledge.
+        Welcome. I can answer general questions and platform-specific questions using project knowledge.
       </article>
     </div>
     <form id="chatbot-form" class="chatbot-form">
       <input id="chatbot-input" type="text" placeholder="Ask anything..." maxlength="500" required>
-      <button type="submit">Send</button>
+      <button type="submit" aria-label="Send message">&#10148;</button>
     </form>
+    <p class="chatbot-footnote">AI can make mistakes. Verify important information.</p>
   </section>
 
   <script src="{{ url_for('static', filename='js/home.js') }}"></script>
