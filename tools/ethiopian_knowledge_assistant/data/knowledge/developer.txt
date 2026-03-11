@@ -1,5 +1,7 @@
-Samuel Abera is a Software Engineering student from Ethiopia.
+My name is Samuel Abera.
 
-He is building AI technologies focused on Amharic language.
+I am a 3rd year Software Engineering student in Ethiopia.
 
-His platform includes OCR, speech recognition, and AI knowledge systems.
+I focus on AI projects and I am building AI technologies focused on the Amharic language.
+
+My platform includes OCR, speech recognition, and AI knowledge systems.
