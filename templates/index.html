@@ -8,7 +8,18 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
 </head>
 <body>
-  {% include "_global_ui.html" %}
+    <header class="topbar">
+        <div class="brand">MetaAppz</div>
+        <nav class="nav">
+            <a href="#">Home</a>
+            <a href="#">Tools</a>
+            <a href="/Resources">Resources</a>
+            <a href="#">Games</a>
+            <a href="#">Videos</a>
+            <a href="#">Shop</a>
+            <a href="#">Contact</a>
+        </nav>
+    </header>
 
     <main class="page">
         <h1 class="title">Amharic OCR - Amharic Text Converter</h1>

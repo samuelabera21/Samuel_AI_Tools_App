@@ -8,7 +8,35 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/amharic_words_generator.css') }}">
 </head>
 <body>
-  {% include "_global_ui.html" %}
+    <header class="topbar">
+        <div class="brand">MetaAppz</div>
+        <nav class="nav">
+            <a href="/">Home</a>
+            <div class="dropdown">
+                <button class="drop-btn" type="button">Tools ▾</button>
+                <div class="dropdown-menu">
+                    <a href="/Tools/Amharic_OCR">Amharic OCR</a>
+                    <a href="/Tools/Numbers_to_Amharic_Words_Converter">Amharic Numbers Converter</a>
+                    <a href="/Tools/Geez_Numbers_Converter">Geez Numbers Converter</a>
+                    <a href="/Tools/Ethiopia_Phone_Numbers">Ethiopian Phone Number Validator</a>
+                    <a href="/Tools/Free_Amharic_Keyboard">Amharic Keyboard</a>
+                    <a href="/Tools/Amharic_Text_To_Speech">Amharic Text-to-Speech</a>
+                    <a href="/Tools/Amharic_Words_Generator">Random Amharic Words Generator</a>
+                    <a href="/Tools/Amharic_to_Image">Amharic AI Prompt to Image Generator</a>
+                </div>
+            </div>
+            <a href="/Resources">Resources</a>
+            <div class="dropdown">
+                <button class="drop-btn" type="button">Games ▾</button>
+                <div class="dropdown-menu">
+                    <a href="/Games/Amharic_Typing_Game">Amharic Typing Game</a>
+                </div>
+            </div>
+            <a href="#">Videos</a>
+            <a href="#">Shop</a>
+            <a href="#">Contact</a>
+        </nav>
+    </header>
 
     <main class="page">
         <h1 class="title">Random Amharic Words Generator</h1>

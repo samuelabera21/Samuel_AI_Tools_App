@@ -8,7 +8,13 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='css/resources.css') }}">
 </head>
 <body>
-  {% include "_global_ui.html" %}
+  <header class="topbar">
+    <div class="brand">MetaAppz</div>
+    <nav class="nav">
+      <a href="/">Home</a>
+      <a href="/Resources">Resources</a>
+    </nav>
+  </header>
 
   <main class="wrap">
     <h1>Resources</h1>
