@@ -1,0 +1,5 @@
+Samuel Abera is a Software Engineering student from Ethiopia.
+
+He is building AI technologies focused on Amharic language.
+
+His platform includes OCR, speech recognition, and AI knowledge systems.

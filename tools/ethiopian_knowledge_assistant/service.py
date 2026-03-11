@@ -16,11 +16,12 @@ from langchain_core.embeddings import Embeddings
 
 BASE_DIR = Path(__file__).resolve().parent
 DATA_DIR = BASE_DIR / "data"
+KNOWLEDGE_DIR = DATA_DIR / "knowledge"
 UPLOADS_DIR = DATA_DIR / "uploads"
 VECTOR_DIR = DATA_DIR / "vector_store"
 LOCK = threading.Lock()
 
-DEFAULT_CHAT_MODEL = os.getenv("NVIDIA_CHAT_MODEL", "nvidia/nemotron-3-nano-30b-a3b")
+DEFAULT_CHAT_MODEL = os.getenv("NVIDIA_CHAT_MODEL", "qwen/qwen3.5-397b-a17b")
 DEFAULT_EMBEDDING_MODEL = os.getenv("NVIDIA_EMBEDDING_MODEL", "nvidia/nv-embedqa-e5-v5")
 DEFAULT_NVIDIA_BASE_URL = os.getenv("NVIDIA_BASE_URL", "https://integrate.api.nvidia.com/v1")
 DEFAULT_CHUNK_SIZE = int(os.getenv("RAG_CHUNK_SIZE", "900"))
@@ -39,16 +40,30 @@ def get_uploads_dir() -> Path:
     return UPLOADS_DIR
 
 
-def _require_nvidia_api_key() -> str:
+def _require_nvidia_embedding_api_key() -> str:
     api_key = os.getenv("NVIDIA_API_KEY")
     if not api_key:
         raise RuntimeError("Server is missing NVIDIA_API_KEY configuration.")
     return api_key
 
 
-def _build_nvidia_client() -> OpenAI:
+def _require_nvidia_chat_api_key() -> str:
+    # Keep fallback for backward compatibility, but prefer a dedicated chat key.
+    api_key = os.getenv("NVIDIA_CHAT_API_KEY") or os.getenv("NVIDIA_API_KEY")
+    if not api_key:
+        raise RuntimeError("Server is missing NVIDIA_CHAT_API_KEY configuration.")
+    return api_key
+
+
+def _build_nvidia_embedding_client() -> OpenAI:
     _sanitize_ssl_env_vars()
-    api_key = _require_nvidia_api_key()
+    api_key = _require_nvidia_embedding_api_key()
+    return OpenAI(base_url=DEFAULT_NVIDIA_BASE_URL, api_key=api_key)
+
+
+def _build_nvidia_chat_client() -> OpenAI:
+    _sanitize_ssl_env_vars()
+    api_key = _require_nvidia_chat_api_key()
     return OpenAI(base_url=DEFAULT_NVIDIA_BASE_URL, api_key=api_key)
 
 
@@ -143,6 +158,24 @@ def _load_web_documents(urls: Iterable[str]) -> list[Document]:
     return docs
 
 
+def _load_bundled_knowledge_documents() -> list[Document]:
+    if not KNOWLEDGE_DIR.exists():
+        return []
+
+    docs: list[Document] = []
+    for path in sorted(KNOWLEDGE_DIR.glob("*")):
+        if path.suffix.lower() not in {".txt", ".md"}:
+            continue
+
+        loaded_docs = TextLoader(str(path), encoding="utf-8").load()
+        for document in loaded_docs:
+            document.metadata["source"] = f"knowledge/{path.name}"
+            document.metadata["source_type"] = "bundled"
+        docs.extend(loaded_docs)
+
+    return docs
+
+
 def _load_vector_store(embeddings: Embeddings) -> FAISS:
     index_faiss = VECTOR_DIR / "index.faiss"
     index_pkl = VECTOR_DIR / "index.pkl"
@@ -164,6 +197,55 @@ def _clear_vector_store_files() -> None:
             file_path.unlink()
 
 
+def _index_documents(documents: list[Document], replace_existing: bool = False) -> int:
+    if not documents:
+        return 0
+
+    chunks = _split_documents(documents)
+    if not chunks:
+        return 0
+
+    VECTOR_DIR.mkdir(parents=True, exist_ok=True)
+    embeddings = NVIDIAEmbeddings(
+        client=_build_nvidia_embedding_client(),
+        model=DEFAULT_EMBEDDING_MODEL,
+    )
+
+    with LOCK:
+        if replace_existing:
+            _clear_vector_store_files()
+
+        index_faiss = VECTOR_DIR / "index.faiss"
+        index_pkl = VECTOR_DIR / "index.pkl"
+        store_ready = index_faiss.exists() and index_pkl.exists()
+
+        if store_ready:
+            vector_store = _load_vector_store(embeddings)
+            vector_store.add_documents(chunks)
+        else:
+            for stale_path in (index_faiss, index_pkl):
+                if stale_path.exists():
+                    stale_path.unlink()
+            vector_store = FAISS.from_documents(chunks, embeddings)
+
+        vector_store.save_local(str(VECTOR_DIR))
+
+    return len(chunks)
+
+
+def _ensure_bundled_knowledge_index() -> None:
+    index_faiss = VECTOR_DIR / "index.faiss"
+    index_pkl = VECTOR_DIR / "index.pkl"
+    if index_faiss.exists() and index_pkl.exists():
+        return
+
+    bundled_docs = _load_bundled_knowledge_documents()
+    if not bundled_docs:
+        return
+
+    _index_documents(bundled_docs, replace_existing=True)
+
+
 def _clean_answer_text(text: str) -> str:
     """Normalize model output so UI shows concise, readable plain text."""
     cleaned = text or ""
@@ -180,65 +262,44 @@ def _clean_answer_text(text: str) -> str:
 def ingest_knowledge(file_paths: list[Path], urls: list[str], replace_existing: bool = True) -> dict:
     file_docs = _load_file_documents(file_paths)
     web_docs = _load_web_documents(urls)
-    all_docs = file_docs + web_docs
+    bundled_docs = _load_bundled_knowledge_documents()
+    all_docs = bundled_docs + file_docs + web_docs
 
-    if not all_docs:
+    if not (file_docs or web_docs or bundled_docs):
         raise ValueError("No readable content found in the provided files or URLs.")
 
-    chunks = _split_documents(all_docs)
-    if not chunks:
+    chunks_indexed = _index_documents(all_docs, replace_existing=replace_existing)
+    if chunks_indexed == 0:
         raise ValueError("Could not split content into chunks.")
-
-    VECTOR_DIR.mkdir(parents=True, exist_ok=True)
-    client = _build_nvidia_client()
-    embeddings = NVIDIAEmbeddings(client=client, model=DEFAULT_EMBEDDING_MODEL)
-
-    with LOCK:
-        if replace_existing:
-            _clear_vector_store_files()
-
-        index_faiss = VECTOR_DIR / "index.faiss"
-        index_pkl = VECTOR_DIR / "index.pkl"
-        store_ready = index_faiss.exists() and index_pkl.exists()
-
-        if store_ready:
-            vector_store = _load_vector_store(embeddings)
-            vector_store.add_documents(chunks)
-        else:
-            # Clean up partial/old artifacts before building a fresh FAISS index.
-            for stale_path in (index_faiss, index_pkl):
-                if stale_path.exists():
-                    stale_path.unlink()
-
-            vector_store = FAISS.from_documents(chunks, embeddings)
-
-        vector_store.save_local(str(VECTOR_DIR))
 
     return {
         "message": "Knowledge base updated successfully.",
-        "documentsLoaded": len(all_docs),
-        "chunksIndexed": len(chunks),
+        "documentsLoaded": len(file_docs) + len(web_docs),
+        "bundledDocumentsLoaded": len(bundled_docs),
+        "chunksIndexed": chunks_indexed,
         "filesProcessed": len(file_paths),
         "urlsProcessed": len(urls),
     }
 
 
 def ask_knowledge_question(question: str, top_k: int = 3) -> dict:
-    client = _build_nvidia_client()
-    embeddings = NVIDIAEmbeddings(client=client, model=DEFAULT_EMBEDDING_MODEL)
+    _ensure_bundled_knowledge_index()
+    chat_client = _build_nvidia_chat_client()
+    embedding_client = _build_nvidia_embedding_client()
+    embeddings = NVIDIAEmbeddings(client=embedding_client, model=DEFAULT_EMBEDDING_MODEL)
 
-    with LOCK:
-        vector_store = _load_vector_store(embeddings)
-        retrieved_docs = vector_store.similarity_search(question, k=top_k)
+    retrieved_docs: list[Document] = []
+    sources = []
 
-    if not retrieved_docs:
-        return {
-            "answer": "I could not find relevant information in the current knowledge base.",
-            "sources": [],
-        }
+    try:
+        with LOCK:
+            vector_store = _load_vector_store(embeddings)
+            retrieved_docs = vector_store.similarity_search(question, k=top_k)
+    except ValueError:
+        # Allow general assistant behavior even if no vector index exists yet.
+        retrieved_docs = []
 
     context_blocks = []
-    sources = []
 
     for index, doc in enumerate(retrieved_docs, start=1):
         source = str(doc.metadata.get("source", "Unknown source"))
@@ -249,24 +310,36 @@ def ask_knowledge_question(question: str, top_k: int = 3) -> dict:
         sources.append({"source": source, "snippet": short_snippet})
 
     system_prompt = (
-        "You are Ethiopian Knowledge AI Assistant. "
-        "Answer using only the provided context. "
-        "If the answer is not in context, say 'I do not know based on the uploaded sources.' "
+        "You are an AI assistant for an Ethiopian AI platform. "
+        "You can answer any question clearly and helpfully. "
+        "You also know information about the platform and its developer. "
+        "Developer: Samuel Abera. Samuel Abera is a software engineering student "
+        "from Ethiopia building AI tools. "
+        "If the user asks about the developer or platform, prioritize provided context when available. "
+        "If retrieved context is empty, still answer normally using general knowledge. "
         "Style rules: respond in plain natural prose, no markdown, no JSON, no bullet symbols, "
-        "no asterisks, and keep the answer concise and readable."
+        "and keep answers concise and readable."
     )
-    user_prompt = f"Question: {question}\n\nRetrieved Context:\n{chr(10).join(context_blocks)}"
+
+    if context_blocks:
+        user_prompt = (
+            f"User Question: {question}\n\n"
+            f"Retrieved Context:\n{chr(10).join(context_blocks)}\n\n"
+            "Answer clearly. If context contains relevant platform details, use it."
+        )
+    else:
+        user_prompt = f"User Question: {question}\n\nAnswer clearly."
 
     try:
-        completion = client.chat.completions.create(
+        completion = chat_client.chat.completions.create(
             model=DEFAULT_CHAT_MODEL,
             messages=[
                 {"role": "system", "content": system_prompt},
                 {"role": "user", "content": user_prompt},
             ],
-            temperature=0.2,
-            top_p=1,
-            max_tokens=1500,
+            temperature=0.6,
+            top_p=0.95,
+            max_tokens=16384,
         )
     except Exception as exc:
         raise RuntimeError(f"NVIDIA chat request failed: {exc}") from exc

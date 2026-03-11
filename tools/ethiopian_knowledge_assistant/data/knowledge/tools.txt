@@ -1,0 +1,7 @@
+This platform provides the following AI tools:
+
+Amharic OCR
+Amharic speech recognition
+AI knowledge search
+Ethiopian date converter
+Amharic word puzzle games

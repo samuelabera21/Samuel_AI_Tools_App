@@ -1,0 +1,5 @@
+This platform is an Ethiopian AI tools hub that combines practical language and productivity tools.
+
+It includes a knowledge assistant powered by retrieval augmented generation (RAG), where relevant documents are retrieved and passed to an LLM for grounded answers.
+
+The platform is designed for both general AI questions and Ethiopia-focused knowledge questions.
