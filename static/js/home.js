@@ -324,6 +324,9 @@
     return;
   }
 
+  // Extend section scroll length so each scene gets a dedicated scroll step.
+  story.style.height = "calc(100vh + " + ((scenes.length - 1) * 72) + "vh)";
+
   let activeIndex = 0;
   let lockUntil = 0;
   let touchStartY = null;
