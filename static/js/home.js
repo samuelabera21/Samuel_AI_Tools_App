@@ -313,28 +313,68 @@
 })();
 
 (function () {
-  function initImmersiveStory(sectionId, progressId) {
+  function initProjectCarousel(sectionId, progressId) {
     const story = document.getElementById(sectionId);
     const progressHost = document.getElementById(progressId);
     if (!story || !progressHost) {
       return;
     }
 
+    const sticky = story.querySelector(".tools-story-sticky");
     const scenes = Array.from(story.querySelectorAll(".tool-scene"));
     if (scenes.length === 0) {
       return;
     }
 
-    story.style.height = "calc(100vh + " + ((scenes.length - 1) * 72) + "vh)";
-
     let activeIndex = 0;
-    let lockUntil = 0;
-    let touchStartY = null;
+    let autoPlayTimer = null;
+    let touchStartX = null;
+    const autoPlayDelay = 4500;
+
+    if (!sticky) {
+      return;
+    }
+
+    function normalize(index) {
+      const length = scenes.length;
+      return ((index % length) + length) % length;
+    }
+
+    function signedDistance(index) {
+      const raw = index - activeIndex;
+      const half = Math.floor(scenes.length / 2);
+
+      if (raw > half) {
+        return raw - scenes.length;
+      }
+
+      if (raw < -half) {
+        return raw + scenes.length;
+      }
+
+      return raw;
+    }
 
     function setScene(index) {
-      activeIndex = Math.max(0, Math.min(scenes.length - 1, index));
+      activeIndex = normalize(index);
+
       for (let i = 0; i < scenes.length; i += 1) {
-        scenes[i].classList.toggle("is-active", i === activeIndex);
+        const scene = scenes[i];
+        const distance = signedDistance(i);
+
+        scene.classList.remove("is-active", "is-prev", "is-next", "is-far-left", "is-far-right");
+
+        if (distance === 0) {
+          scene.classList.add("is-active");
+        } else if (distance === -1) {
+          scene.classList.add("is-prev");
+        } else if (distance === 1) {
+          scene.classList.add("is-next");
+        } else if (distance < 0) {
+          scene.classList.add("is-far-left");
+        } else {
+          scene.classList.add("is-far-right");
+        }
       }
 
       const dots = progressHost.querySelectorAll(".tools-story-dot");
@@ -349,101 +389,131 @@
         const dot = document.createElement("button");
         dot.type = "button";
         dot.className = "tools-story-dot";
-        dot.setAttribute("aria-label", "Go to scene " + (i + 1));
+        dot.setAttribute("aria-label", "Go to slide " + (i + 1));
         dot.addEventListener("click", function () {
           setScene(i);
+          restartAutoPlay();
         });
         progressHost.appendChild(dot);
       }
     }
 
-    function isStoryInControlZone() {
-      const rect = story.getBoundingClientRect();
-      return rect.top <= 16 && rect.bottom >= window.innerHeight - 16;
+    function buildControls() {
+      if (scenes.length <= 1 || sticky.querySelector(".tools-story-arrow")) {
+        return;
+      }
+
+      const prevBtn = document.createElement("button");
+      prevBtn.type = "button";
+      prevBtn.className = "tools-story-arrow prev";
+      prevBtn.setAttribute("aria-label", "Previous slide");
+      prevBtn.innerHTML = "&#10094;";
+
+      const nextBtn = document.createElement("button");
+      nextBtn.type = "button";
+      nextBtn.className = "tools-story-arrow next";
+      nextBtn.setAttribute("aria-label", "Next slide");
+      nextBtn.innerHTML = "&#10095;";
+
+      prevBtn.addEventListener("click", function () {
+        setScene(activeIndex - 1);
+        restartAutoPlay();
+      });
+
+      nextBtn.addEventListener("click", function () {
+        setScene(activeIndex + 1);
+        restartAutoPlay();
+      });
+
+      sticky.appendChild(prevBtn);
+      sticky.appendChild(nextBtn);
     }
 
-    function stepScene(direction) {
-      const now = Date.now();
-      if (now < lockUntil) {
-        return false;
+    function stopAutoPlay() {
+      if (autoPlayTimer !== null) {
+        window.clearInterval(autoPlayTimer);
+        autoPlayTimer = null;
       }
-
-      const next = activeIndex + direction;
-      if (next < 0 || next >= scenes.length) {
-        return false;
-      }
-
-      lockUntil = now + 650;
-      setScene(next);
-      return true;
     }
 
-    window.addEventListener("wheel", function (event) {
-      if (!isStoryInControlZone()) {
+    function startAutoPlay() {
+      stopAutoPlay();
+      if (scenes.length <= 1) {
         return;
       }
 
-      const direction = event.deltaY > 0 ? 1 : -1;
-      const changed = stepScene(direction);
-      if (changed) {
-        event.preventDefault();
-      }
-    }, { passive: false });
+      autoPlayTimer = window.setInterval(function () {
+        setScene(activeIndex + 1);
+      }, autoPlayDelay);
+    }
 
-    window.addEventListener("touchstart", function (event) {
-      if (event.touches.length === 1) {
-        touchStartY = event.touches[0].clientY;
-      }
-    }, { passive: true });
+    function restartAutoPlay() {
+      startAutoPlay();
+    }
 
-    window.addEventListener("touchmove", function (event) {
-      if (!isStoryInControlZone() || touchStartY === null || event.touches.length !== 1) {
-        return;
-      }
+    function bindTouchSwipe() {
+      sticky.addEventListener("touchstart", function (event) {
+        if (event.touches.length === 1) {
+          touchStartX = event.touches[0].clientX;
+        }
+      }, { passive: true });
 
-      const currentY = event.touches[0].clientY;
-      const delta = touchStartY - currentY;
-      if (Math.abs(delta) < 26) {
-        return;
-      }
+      sticky.addEventListener("touchend", function (event) {
+        if (touchStartX === null || event.changedTouches.length === 0) {
+          return;
+        }
 
-      const direction = delta > 0 ? 1 : -1;
-      const changed = stepScene(direction);
-      if (changed) {
-        touchStartY = currentY;
-        event.preventDefault();
-      }
-    }, { passive: false });
+        const delta = touchStartX - event.changedTouches[0].clientX;
+        touchStartX = null;
 
-    window.addEventListener("mousemove", function (event) {
-      const activeScene = scenes[activeIndex];
-      if (!activeScene) {
-        return;
-      }
+        if (Math.abs(delta) < 45) {
+          return;
+        }
 
-      const media = activeScene.querySelector(".tool-scene-media img");
-      if (!media) {
-        return;
-      }
+        setScene(activeIndex + (delta > 0 ? 1 : -1));
+        restartAutoPlay();
+      }, { passive: true });
+    }
 
-      const rect = activeScene.getBoundingClientRect();
-      const px = (event.clientX - rect.left) / Math.max(rect.width, 1) - 0.5;
-      const py = (event.clientY - rect.top) / Math.max(rect.height, 1) - 0.5;
-      media.style.transform = "scale(1.04) translate(" + (px * 10).toFixed(2) + "px," + (py * 8).toFixed(2) + "px)";
-    });
+    function bindHoverPause() {
+      sticky.addEventListener("mouseenter", stopAutoPlay);
+      sticky.addEventListener("mouseleave", startAutoPlay);
+      sticky.addEventListener("focusin", stopAutoPlay);
+      sticky.addEventListener("focusout", startAutoPlay);
+    }
 
-    story.addEventListener("mouseleave", function () {
-      const media = scenes[activeIndex] && scenes[activeIndex].querySelector(".tool-scene-media img");
-      if (media) {
-        media.style.transform = "scale(1.02) translate(0,0)";
+    function bindKeyboard() {
+      story.addEventListener("keydown", function (event) {
+        if (event.key === "ArrowLeft") {
+          setScene(activeIndex - 1);
+          restartAutoPlay();
+        } else if (event.key === "ArrowRight") {
+          setScene(activeIndex + 1);
+          restartAutoPlay();
+        }
+      });
+
+      story.setAttribute("tabindex", "0");
+    }
+
+    window.addEventListener("visibilitychange", function () {
+      if (document.hidden) {
+        stopAutoPlay();
+      } else {
+        startAutoPlay();
       }
     });
 
     buildProgress();
+    buildControls();
+    bindTouchSwipe();
+    bindHoverPause();
+    bindKeyboard();
     setScene(0);
+    startAutoPlay();
   }
 
-  initImmersiveStory("tools-grid", "tools-story-progress");
-  initImmersiveStory("games-grid", "games-story-progress");
-  initImmersiveStory("knowledge-grid", "knowledge-story-progress");
+  initProjectCarousel("tools-grid", "tools-story-progress");
+  initProjectCarousel("games-grid", "games-story-progress");
+  initProjectCarousel("knowledge-grid", "knowledge-story-progress");
 })();
