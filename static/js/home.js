@@ -311,3 +311,105 @@
   launcher.removeAttribute("hidden");
   setOpen(false);
 })();
+
+(function () {
+  const viewport = document.getElementById("tools-viewport");
+  const prevBtn = document.getElementById("tools-prev");
+  const nextBtn = document.getElementById("tools-next");
+  const dotsHost = document.getElementById("tools-dots");
+
+  if (!viewport || !prevBtn || !nextBtn || !dotsHost) {
+    return;
+  }
+
+  let pageCount = 1;
+  let currentPage = 0;
+  let autoplayId = null;
+
+  function maxScroll() {
+    return Math.max(0, viewport.scrollWidth - viewport.clientWidth);
+  }
+
+  function pageWidth() {
+    return Math.max(1, viewport.clientWidth);
+  }
+
+  function setPage(pageIndex) {
+    const bounded = Math.max(0, Math.min(pageCount - 1, pageIndex));
+    viewport.scrollTo({
+      left: bounded * pageWidth(),
+      behavior: "smooth",
+    });
+  }
+
+  function syncActiveDot() {
+    const width = pageWidth();
+    currentPage = Math.round(viewport.scrollLeft / width);
+    currentPage = Math.max(0, Math.min(pageCount - 1, currentPage));
+
+    const dots = dotsHost.querySelectorAll(".tools-dot");
+    for (let i = 0; i < dots.length; i += 1) {
+      dots[i].classList.toggle("active", i === currentPage);
+    }
+  }
+
+  function rebuildDots() {
+    const width = pageWidth();
+    pageCount = Math.max(1, Math.ceil((maxScroll() + width) / width));
+
+    dotsHost.innerHTML = "";
+    for (let i = 0; i < pageCount; i += 1) {
+      const dot = document.createElement("button");
+      dot.type = "button";
+      dot.className = "tools-dot";
+      dot.setAttribute("aria-label", "Go to tools page " + (i + 1));
+      dot.addEventListener("click", function () {
+        setPage(i);
+      });
+      dotsHost.appendChild(dot);
+    }
+
+    syncActiveDot();
+  }
+
+  function stopAutoplay() {
+    if (autoplayId) {
+      window.clearInterval(autoplayId);
+      autoplayId = null;
+    }
+  }
+
+  function startAutoplay() {
+    stopAutoplay();
+    autoplayId = window.setInterval(function () {
+      if (pageCount <= 1) {
+        return;
+      }
+
+      const nextPage = currentPage + 1 >= pageCount ? 0 : currentPage + 1;
+      setPage(nextPage);
+    }, 4200);
+  }
+
+  prevBtn.addEventListener("click", function () {
+    setPage(currentPage - 1);
+  });
+
+  nextBtn.addEventListener("click", function () {
+    setPage(currentPage + 1 >= pageCount ? 0 : currentPage + 1);
+  });
+
+  viewport.addEventListener("scroll", syncActiveDot, { passive: true });
+  viewport.addEventListener("mouseenter", stopAutoplay);
+  viewport.addEventListener("mouseleave", startAutoplay);
+  viewport.addEventListener("touchstart", stopAutoplay, { passive: true });
+  viewport.addEventListener("touchend", startAutoplay, { passive: true });
+
+  window.addEventListener("resize", function () {
+    rebuildDots();
+    setPage(currentPage);
+  });
+
+  rebuildDots();
+  startAutoplay();
+})();
