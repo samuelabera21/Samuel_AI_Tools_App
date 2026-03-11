@@ -1,11 +1,11 @@
 (function () {
-  const launcher = document.getElementById("global-chat-launcher");
-  const toggleBtn = document.getElementById("global-chat-toggle");
-  const closeBtn = document.getElementById("global-chat-close");
-  const panel = document.getElementById("global-chat-panel");
-  const form = document.getElementById("global-chat-form");
-  const input = document.getElementById("global-chat-input");
-  const messages = document.getElementById("global-chat-messages");
+  const launcher = document.getElementById("chatbot-launcher");
+  const toggleBtn = document.getElementById("chatbot-toggle");
+  const closeBtn = document.getElementById("chatbot-close");
+  const panel = document.getElementById("chatbot-panel");
+  const form = document.getElementById("chatbot-form");
+  const input = document.getElementById("chatbot-input");
+  const messages = document.getElementById("chatbot-messages");
 
   if (!launcher || !toggleBtn || !closeBtn || !panel || !form || !input || !messages) {
     return;
@@ -13,7 +13,7 @@
 
   function addMessage(role, text) {
     const message = document.createElement("article");
-    message.className = "global-chat-msg " + role;
+    message.className = "chatbot-msg " + role;
     message.textContent = text;
     messages.appendChild(message);
     messages.scrollTop = messages.scrollHeight;
@@ -23,17 +23,19 @@
     if (isOpen) {
       panel.removeAttribute("hidden");
       launcher.setAttribute("hidden", "hidden");
-      input.focus();
     } else {
       panel.setAttribute("hidden", "hidden");
       launcher.removeAttribute("hidden");
     }
 
     toggleBtn.setAttribute("aria-expanded", String(isOpen));
+    if (isOpen) {
+      input.focus();
+    }
   }
 
   toggleBtn.addEventListener("click", function () {
-    setOpen(true);
+    setOpen(panel.hidden);
   });
 
   closeBtn.addEventListener("click", function () {
@@ -58,7 +60,7 @@
     input.value = "";
 
     const waitingMsg = document.createElement("article");
-    waitingMsg.className = "global-chat-msg bot";
+    waitingMsg.className = "chatbot-msg bot";
     waitingMsg.textContent = "Thinking...";
     messages.appendChild(waitingMsg);
     messages.scrollTop = messages.scrollHeight;
@@ -96,5 +98,7 @@
     }
   });
 
+  panel.setAttribute("hidden", "hidden");
+  launcher.removeAttribute("hidden");
   setOpen(false);
 })();
