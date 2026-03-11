@@ -1,0 +1,68 @@
+<header class="hero-topbar">
+  <a class="brand-chip" href="/" aria-label="MetaAppz home">
+    <span class="brand-mark">MA</span>
+  </a>
+
+  <nav class="hero-nav" aria-label="Main">
+    <a class="{% if request.path == '/' %}active{% endif %}" href="/">Home</a>
+    <div class="hero-dropdown">
+      <button class="hero-drop-btn" type="button">Tools <span aria-hidden="true">▾</span></button>
+      <div class="hero-dropdown-menu">
+        <a href="/Tools/Amharic_OCR">Amharic OCR</a>
+        <a href="/Tools/Numbers_to_Amharic_Words_Converter">Amharic Numbers Converter</a>
+        <a href="/Tools/Geez_Numbers_Converter">Geez Numbers Converter</a>
+        <a href="/Tools/Ethiopia_Phone_Numbers">Phone Number Validator</a>
+        <a href="/Tools/Ethiopian_Name_Generator">Baby Name Generator</a>
+        <a href="/Tools/Amharic_Link_Shortner">Ethiopic Links</a>
+        <a href="/Tools/Ethiopian_Date_Converter">Date Converter</a>
+        <a href="/Tools/Amharic_to_Image">Prompt to Image</a>
+        <a href="/Tools/Free_Amharic_Keyboard">Amharic Keyboard</a>
+        <a href="/Tools/Amharic_Text_To_Speech">Text to Speech</a>
+        <a href="/Tools/Amharic_Words_Generator">Words Generator</a>
+      </div>
+    </div>
+    <div class="hero-dropdown">
+      <button class="hero-drop-btn" type="button">Games <span aria-hidden="true">▾</span></button>
+      <div class="hero-dropdown-menu">
+        <a href="/Games/Amharic_Fidel_Sliding_Puzzle_Game">Fidel Sliding Puzzle</a>
+        <a href="/Games/Amharic_Typing_Game">Amharic Typing Game</a>
+      </div>
+    </div>
+    <a class="{% if request.path == '/Resources' %}active{% endif %}" href="/Resources">Resources</a>
+  </nav>
+
+  <a class="contact-pill" href="/Resources/Ethiopian_Knowledge_AI_Assistant">Contact Us</a>
+</header>
+
+<div id="chatbot-launcher" class="chatbot-launcher">
+  <p class="chatbot-launcher-label">Ask me anything</p>
+  <button id="chatbot-toggle" class="chatbot-fab" type="button" aria-label="Open AI chat" aria-expanded="false" aria-controls="chatbot-panel">
+    <span class="chatbot-fab-core" aria-hidden="true">
+      <svg viewBox="0 0 24 24" focusable="false">
+        <path d="M12 3C6.48 3 2 6.94 2 11.8c0 2.69 1.37 5.1 3.53 6.72L4.5 22l4.08-2.24c1.08.3 2.23.46 3.42.46 5.52 0 10-3.94 10-8.8S17.52 3 12 3Zm-4 9.3a1.3 1.3 0 1 1 0-2.6 1.3 1.3 0 0 1 0 2.6Zm4 0a1.3 1.3 0 1 1 0-2.6 1.3 1.3 0 0 1 0 2.6Zm4 0a1.3 1.3 0 1 1 0-2.6 1.3 1.3 0 0 1 0 2.6Z" />
+      </svg>
+    </span>
+  </button>
+</div>
+
+<section id="chatbot-panel" class="chatbot-panel" aria-label="AI Chat Assistant" hidden>
+  <header class="chatbot-header">
+    <div class="chatbot-title-block">
+      <h2>MetaAppz AI</h2>
+      <p>Ask about the platform or anything else</p>
+    </div>
+    <button id="chatbot-close" class="chatbot-close" type="button" aria-label="Close chat">&times;</button>
+  </header>
+  <div id="chatbot-messages" class="chatbot-messages">
+    <article class="chatbot-msg bot">
+      Welcome. I can answer general questions and platform-specific questions using project knowledge.
+    </article>
+  </div>
+  <form id="chatbot-form" class="chatbot-form">
+    <input id="chatbot-input" type="text" placeholder="Ask anything..." maxlength="500" required>
+    <button type="submit" aria-label="Send message">&#10148;</button>
+  </form>
+  <p class="chatbot-footnote">AI can make mistakes. Verify important information.</p>
+</section>
+
+<script defer src="{{ url_for('static', filename='js/tool_chat.js') }}"></script>
