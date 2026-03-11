@@ -275,21 +275,18 @@
     messages.scrollTop = messages.scrollHeight;
 
     try {
-      const healthResponse = await fetch("/api/home-chat/health", {
-        method: "GET",
-      });
-
-      if (!healthResponse.ok) {
-        waitingMsg.remove();
-        addMessage("bot", "Chat service is not ready right now.");
-        return;
-      }
+      const controller = new AbortController();
+      const timeout = window.setTimeout(function () {
+        controller.abort();
+      }, 30000);
 
       const response = await fetch("/api/home-chat/ask", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ question: question }),
+        signal: controller.signal,
       });
+      window.clearTimeout(timeout);
 
       const payload = await response.json();
       waitingMsg.remove();
@@ -302,7 +299,11 @@
       addMessage("bot", payload.answer || "No answer generated.");
     } catch (error) {
       waitingMsg.remove();
-      addMessage("bot", "Network error. Please try again.");
+      if (error && error.name === "AbortError") {
+        addMessage("bot", "The response took too long. Please try a shorter question.");
+      } else {
+        addMessage("bot", "Network error. Please try again.");
+      }
     }
   });
 

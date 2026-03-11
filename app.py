@@ -571,8 +571,15 @@ def home_chat_ask_api():
         return jsonify({"error": "Question is required."}), 400
 
     try:
-        # Reuse the same knowledge assistant model/key setup for the home chat widget.
-        result = ask_knowledge_question(question=question, top_k=4)
+        # Fast profile for widget chat: fewer retrieved chunks + shorter generation.
+        fast_model = os.getenv("NVIDIA_HOME_CHAT_MODEL", "nvidia/nemotron-3-nano-30b-a3b")
+        result = ask_knowledge_question(
+            question=question,
+            top_k=2,
+            model=fast_model,
+            temperature=0.4,
+            max_tokens=420,
+        )
         return jsonify({"answer": result.get("answer", "No answer generated.")})
     except RuntimeError as exc:
         return jsonify({"error": str(exc)}), 500

@@ -282,7 +282,13 @@ def ingest_knowledge(file_paths: list[Path], urls: list[str], replace_existing: 
     }
 
 
-def ask_knowledge_question(question: str, top_k: int = 3) -> dict:
+def ask_knowledge_question(
+    question: str,
+    top_k: int = 3,
+    model: str | None = None,
+    temperature: float = 0.6,
+    max_tokens: int = 16384,
+) -> dict:
     _ensure_bundled_knowledge_index()
     chat_client = _build_nvidia_chat_client()
     embedding_client = _build_nvidia_embedding_client()
@@ -332,14 +338,14 @@ def ask_knowledge_question(question: str, top_k: int = 3) -> dict:
 
     try:
         completion = chat_client.chat.completions.create(
-            model=DEFAULT_CHAT_MODEL,
+            model=model or DEFAULT_CHAT_MODEL,
             messages=[
                 {"role": "system", "content": system_prompt},
                 {"role": "user", "content": user_prompt},
             ],
-            temperature=0.6,
+            temperature=temperature,
             top_p=0.95,
-            max_tokens=16384,
+            max_tokens=max_tokens,
         )
     except Exception as exc:
         raise RuntimeError(f"NVIDIA chat request failed: {exc}") from exc
