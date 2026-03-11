@@ -78,6 +78,10 @@ body {
 	align-items: center;
 	justify-content: space-between;
 	gap: 16px;
+	position: sticky;
+	top: 10px;
+	z-index: 90;
+	padding: 4px 0;
 }
 
 .brand-chip {
@@ -295,8 +299,8 @@ main {
 
 .tools-story-sticky {
 	position: sticky;
-	top: 0;
-	height: 100vh;
+	top: 104px;
+	height: calc(100vh - 112px);
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -884,6 +888,7 @@ main {
 	.hero-topbar {
 		flex-wrap: wrap;
 		justify-content: center;
+		top: 6px;
 	}
 
 	.hero-nav {
@@ -906,6 +911,11 @@ main {
 	.tool-scene {
 		inset: 28px;
 		gap: 20px;
+	}
+
+	.tools-story-sticky {
+		top: 132px;
+		height: calc(100vh - 140px);
 	}
 
 	.tools-track {
@@ -1011,6 +1021,8 @@ main {
 	}
 
 	.tools-story-sticky {
+		top: 134px;
+		height: calc(100svh - 144px);
 		border-radius: 18px;
 	}
 
