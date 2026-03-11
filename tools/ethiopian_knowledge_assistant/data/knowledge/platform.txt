@@ -1,5 +1,20 @@
-This platform is an Ethiopian AI tools hub that combines practical language and productivity tools.
+MetaAppz AI Hub is an Ethiopian AI tools platform built to make AI practical for everyday users, students, creators, and developers.
 
-It includes a knowledge assistant powered by retrieval augmented generation (RAG), where relevant documents are retrieved and passed to an LLM for grounded answers.
+The platform focuses on Ethiopian and Amharic-centered use cases while still supporting general AI assistance. It combines language tools, utility tools, and educational tools in one place.
 
-The platform is designed for both general AI questions and Ethiopia-focused knowledge questions.
+Core platform capabilities include:
+- Amharic OCR for extracting text from images and scanned documents.
+- Number conversion tools for Amharic and Geez formats.
+- Ethiopian phone number validation.
+- Ethiopian baby name generation.
+- Ethiopic link shortening.
+- Ethiopian and Gregorian date conversion.
+- Amharic prompt-to-image generation.
+- Free Amharic keyboard and writing support.
+- Amharic text-to-speech.
+- Random Amharic words generation.
+- Ethiopian Knowledge AI Assistant for source-grounded Q&A.
+
+The app includes a RAG-based knowledge system. For platform-specific questions, it retrieves relevant knowledge documents and combines them with model reasoning to provide accurate, grounded answers. For general questions, it can still respond as a normal AI assistant.
+
+The overall goal of the platform is to make Ethiopian-language AI tools accessible, useful, and reliable across language, productivity, learning, and creative workflows.
