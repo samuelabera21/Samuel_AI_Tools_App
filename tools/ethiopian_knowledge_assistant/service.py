@@ -327,11 +327,33 @@ def ask_knowledge_question(
         "and keep answers concise and readable."
     )
 
+    lower_question = question.lower()
+    is_identity_question = any(
+        keyword in lower_question
+        for keyword in (
+            "who built",
+            "who is the developer",
+            "developer",
+            "who created",
+            "about samuel",
+            "about the platform",
+        )
+    )
+
     if context_blocks:
+        answer_instruction = (
+            "Answer clearly. If context contains relevant platform details, use it."
+        )
+        if is_identity_question:
+            answer_instruction = (
+                "Answer in 3 to 5 sentences using the context, and include name, background, "
+                "AI focus, and what the platform provides."
+            )
+
         user_prompt = (
             f"User Question: {question}\n\n"
             f"Retrieved Context:\n{chr(10).join(context_blocks)}\n\n"
-            "Answer clearly. If context contains relevant platform details, use it."
+            f"{answer_instruction}"
         )
     else:
         user_prompt = f"User Question: {question}\n\nAnswer clearly."
