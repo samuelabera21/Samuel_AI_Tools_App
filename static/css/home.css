@@ -282,6 +282,17 @@ main {
 		repeating-linear-gradient(90deg, rgba(79, 134, 246, 0.08) 0 1px, transparent 1px 82px);
 }
 
+.knowledge-story {
+	margin-top: 16px;
+}
+
+.knowledge-story .tools-story-backdrop {
+	background:
+		radial-gradient(circle at 22% 24%, rgba(95, 159, 255, 0.2), transparent 42%),
+		radial-gradient(circle at 74% 20%, rgba(255, 138, 61, 0.18), transparent 38%),
+		repeating-linear-gradient(90deg, rgba(79, 134, 246, 0.08) 0 1px, transparent 1px 82px);
+}
+
 .tools-story-sticky {
 	position: sticky;
 	top: 0;

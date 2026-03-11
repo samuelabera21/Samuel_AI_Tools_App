@@ -445,4 +445,5 @@
 
   initImmersiveStory("tools-grid", "tools-story-progress");
   initImmersiveStory("games-grid", "games-story-progress");
+  initImmersiveStory("knowledge-grid", "knowledge-story-progress");
 })();
