@@ -562,6 +562,33 @@ def ethiopian_knowledge_ask_api():
         ), 500
 
 
+@app.route("/api/home-chat/ask", methods=["POST"])
+def home_chat_ask_api():
+    payload = request.get_json(silent=True) or {}
+    question = str(payload.get("question", "")).strip()
+
+    if not question:
+        return jsonify({"error": "Question is required."}), 400
+
+    try:
+        # Reuse the same knowledge assistant model/key setup for the home chat widget.
+        result = ask_knowledge_question(question=question, top_k=4)
+        return jsonify({"answer": result.get("answer", "No answer generated.")})
+    except RuntimeError as exc:
+        return jsonify({"error": str(exc)}), 500
+    except ValueError as exc:
+        return jsonify({"error": str(exc)}), 400
+    except Exception as exc:
+        trace_text = traceback.format_exc()
+        print(trace_text)
+        return jsonify(
+            {
+                "error": f"Unexpected server error while answering home chat question: {exc}",
+                "errorType": type(exc).__name__,
+            }
+        ), 500
+
+
 @app.route("/download", methods=["POST"])
 def download_text():
     text = request.form.get("text", "")
