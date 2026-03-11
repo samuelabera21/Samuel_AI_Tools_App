@@ -89,25 +89,24 @@ body {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 84px;
-  height: 84px;
+  width: 96px;
+  height: 96px;
   border-radius: 999px;
   text-decoration: none;
-  background: linear-gradient(160deg, rgba(41, 78, 176, 0.96), rgba(17, 37, 90, 0.96));
-  border: 2px solid rgba(255, 255, 255, 0.48);
-  box-shadow: 0 14px 34px rgba(4, 8, 25, 0.44);
+  background: transparent;
+  border: none;
+  box-shadow: none;
 }
 
 .brand-mark {
-  font-size: 26px;
-  font-weight: 800;
-  letter-spacing: 1px;
-  color: #f8fbff;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }
 
 .hero-nav {
   flex: 1;
-  max-width: 680px;
+  max-width: 760px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -123,15 +122,21 @@ body {
 .hero-nav > a,
 .hero-drop-btn {
   color: #f5f7ff;
-  font-size: 23px;
+  font-size: 21px;
   font-weight: 700;
   line-height: 1;
   border-radius: 999px;
   text-decoration: none;
-  padding: 13px 20px;
+  padding: 12px 16px;
   border: none;
   background: transparent;
   cursor: pointer;
+}
+
+.hero-actions-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
 .hero-nav > a.active,
@@ -179,9 +184,21 @@ body {
   color: #f5f7ff;
   text-decoration: none;
   border-radius: 999px;
-  padding: 15px 26px;
+  padding: 13px 26px;
   font-weight: 800;
-  font-size: 38px;
+  font-size: 18px;
+  line-height: 1;
+  border: 2px solid #ff8b2c;
+  background: rgba(14, 21, 44, 0.78);
+}
+
+.lang-pill {
+  color: #f5f7ff;
+  text-decoration: none;
+  border-radius: 999px;
+  padding: 11px 16px;
+  font-weight: 800;
+  font-size: 17px;
   line-height: 1;
   border: 2px solid #ff8b2c;
   background: rgba(14, 21, 44, 0.78);
@@ -440,24 +457,25 @@ body {
   }
 
   .contact-pill {
-    font-size: 26px;
+    font-size: 17px;
+  }
+
+  .lang-pill {
+    font-size: 16px;
+    padding: 10px 14px;
   }
 }
 
 @media (max-width: 700px) {
   .brand-chip {
-    width: 66px;
-    height: 66px;
-  }
-
-  .brand-mark {
-    font-size: 20px;
+    width: 72px;
+    height: 72px;
   }
 
   .hero-nav > a,
   .hero-drop-btn {
-    font-size: 17px;
-    padding: 10px 14px;
+    font-size: 16px;
+    padding: 10px 12px;
   }
 
   .hero-dropdown-menu {
@@ -465,8 +483,13 @@ body {
   }
 
   .contact-pill {
-    font-size: 21px;
-    padding: 12px 18px;
+    font-size: 16px;
+    padding: 10px 14px;
+  }
+
+  .lang-pill {
+    font-size: 15px;
+    padding: 9px 12px;
   }
 
   .chatbot-fab {

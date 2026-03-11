@@ -1,6 +1,6 @@
 <header class="hero-topbar">
   <a class="brand-chip" href="/" aria-label="MetaAppz home">
-    <span class="brand-mark">MA</span>
+    <img class="brand-mark" src="https://aii.et/public/logo.png" alt="MetaAppz logo">
   </a>
 
   <nav class="hero-nav" aria-label="Main">
@@ -29,9 +29,13 @@
       </div>
     </div>
     <a class="{% if request.path == '/Resources' %}active{% endif %}" href="/Resources">Resources</a>
+    <a class="{% if request.path == '/Resources/Ethiopian_Knowledge_AI_Assistant' %}active{% endif %}" href="/Resources/Ethiopian_Knowledge_AI_Assistant">AI Assistant</a>
   </nav>
 
-  <a class="contact-pill" href="/Resources/Ethiopian_Knowledge_AI_Assistant">Contact Us</a>
+  <div class="hero-actions-right">
+    <a class="contact-pill" href="/Resources/Ethiopian_Knowledge_AI_Assistant">Contact Us</a>
+    <a class="lang-pill" href="#" aria-label="Amharic language">አማ</a>
+  </div>
 </header>
 
 {% if request.path.startswith('/Tools') %}
