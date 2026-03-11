@@ -1,13 +1,11 @@
-<header class="hero-topbar">
-  <a class="brand-chip" href="/" aria-label="MetaAppz home">
-    <span class="brand-mark">MA</span>
-  </a>
+<header class="global-topbar">
+  <a class="global-brand" href="/">MetaAppz</a>
+  <nav class="global-nav" aria-label="Global">
+    <a href="/" {% if request.path == '/' %}aria-current="page"{% endif %}>Home</a>
 
-  <nav class="hero-nav" aria-label="Main">
-    <a class="{% if request.path == '/' %}active{% endif %}" href="/">Home</a>
-    <div class="hero-dropdown">
-      <button class="hero-drop-btn" type="button">Tools <span aria-hidden="true">▾</span></button>
-      <div class="hero-dropdown-menu">
+    <div class="global-dropdown">
+      <button class="global-drop-btn" type="button">Tools ▾</button>
+      <div class="global-dropdown-menu">
         <a href="/Tools/Amharic_OCR" {% if request.path == '/Tools/Amharic_OCR' %}aria-current="page"{% endif %}>Amharic OCR</a>
         <a href="/Tools/Numbers_to_Amharic_Words_Converter" {% if request.path == '/Tools/Numbers_to_Amharic_Words_Converter' %}aria-current="page"{% endif %}>Amharic Numbers Converter</a>
         <a href="/Tools/Geez_Numbers_Converter" {% if request.path == '/Tools/Geez_Numbers_Converter' %}aria-current="page"{% endif %}>Geez Numbers Converter</a>
@@ -21,49 +19,44 @@
         <a href="/Tools/Amharic_Words_Generator" {% if request.path == '/Tools/Amharic_Words_Generator' or request.path == '/Tools/Random_Amharic_Words_Generator' %}aria-current="page"{% endif %}>Words Generator</a>
       </div>
     </div>
-    <div class="hero-dropdown">
-      <button class="hero-drop-btn" type="button">Games <span aria-hidden="true">▾</span></button>
-      <div class="hero-dropdown-menu">
+
+    <div class="global-dropdown">
+      <button class="global-drop-btn" type="button">Games ▾</button>
+      <div class="global-dropdown-menu">
         <a href="/Games/Amharic_Fidel_Sliding_Puzzle_Game" {% if request.path == '/Games/Amharic_Fidel_Sliding_Puzzle_Game' %}aria-current="page"{% endif %}>Fidel Sliding Puzzle</a>
         <a href="/Games/Amharic_Typing_Game" {% if request.path == '/Games/Amharic_Typing_Game' %}aria-current="page"{% endif %}>Amharic Typing Game</a>
       </div>
     </div>
-    <a class="{% if request.path == '/Resources' %}active{% endif %}" href="/Resources">Resources</a>
-  </nav>
 
-  <a class="contact-pill" href="/Resources/Ethiopian_Knowledge_AI_Assistant">Contact Us</a>
+    <a href="/Resources" {% if request.path == '/Resources' %}aria-current="page"{% endif %}>Resources</a>
+    <a href="/Resources/Ethiopian_Knowledge_AI_Assistant" {% if request.path == '/Resources/Ethiopian_Knowledge_AI_Assistant' %}aria-current="page"{% endif %}>AI Assistant</a>
+  </nav>
 </header>
 
 {% if request.path.startswith('/Tools') %}
-<div id="chatbot-launcher" class="chatbot-launcher">
-  <p class="chatbot-launcher-label">Ask me anything</p>
-  <button id="chatbot-toggle" class="chatbot-fab" type="button" aria-label="Open AI chat" aria-expanded="false" aria-controls="chatbot-panel">
-    <span class="chatbot-fab-core" aria-hidden="true">
-      <svg viewBox="0 0 24 24" focusable="false">
-        <path d="M12 3C6.48 3 2 6.94 2 11.8c0 2.69 1.37 5.1 3.53 6.72L4.5 22l4.08-2.24c1.08.3 2.23.46 3.42.46 5.52 0 10-3.94 10-8.8S17.52 3 12 3Zm-4 9.3a1.3 1.3 0 1 1 0-2.6 1.3 1.3 0 0 1 0 2.6Zm4 0a1.3 1.3 0 1 1 0-2.6 1.3 1.3 0 0 1 0 2.6Zm4 0a1.3 1.3 0 1 1 0-2.6 1.3 1.3 0 0 1 0 2.6Z" />
-      </svg>
-    </span>
-  </button>
+<div id="global-chat-launcher" class="global-chat-launcher">
+  <p class="global-chat-launcher-label">Ask AI</p>
+  <button id="global-chat-toggle" class="global-chat-fab" type="button" aria-label="Open AI chat" aria-expanded="false" aria-controls="global-chat-panel">AI</button>
 </div>
 
-<section id="chatbot-panel" class="chatbot-panel" aria-label="AI Chat Assistant" hidden>
-  <header class="chatbot-header">
-    <div class="chatbot-title-block">
+<section id="global-chat-panel" class="global-chat-panel" aria-label="AI Chat Assistant" hidden>
+  <header class="global-chat-header">
+    <div class="global-chat-title">
       <h2>MetaAppz AI</h2>
-      <p>Ask about the platform or anything else</p>
+      <p>Tool help and general questions</p>
     </div>
-    <button id="chatbot-close" class="chatbot-close" type="button" aria-label="Close chat">&times;</button>
+    <button id="global-chat-close" class="global-chat-close" type="button" aria-label="Close chat">&times;</button>
   </header>
-  <div id="chatbot-messages" class="chatbot-messages">
-    <article class="chatbot-msg bot">
-      Welcome. I can answer general questions and platform-specific questions using project knowledge.
+  <div id="global-chat-messages" class="global-chat-messages">
+    <article class="global-chat-msg bot">
+      Welcome. Ask about this tool or any platform feature.
     </article>
   </div>
-  <form id="chatbot-form" class="chatbot-form">
-    <input id="chatbot-input" type="text" placeholder="Ask anything..." maxlength="500" required>
+  <form id="global-chat-form" class="global-chat-form">
+    <input id="global-chat-input" type="text" placeholder="Ask anything..." maxlength="500" required>
     <button type="submit" aria-label="Send message">&#10148;</button>
   </form>
-  <p class="chatbot-footnote">AI can make mistakes. Verify important information.</p>
+  <p class="global-chat-footnote">AI can make mistakes. Verify important information.</p>
 </section>
 {% endif %}
 
