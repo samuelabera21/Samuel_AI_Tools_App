@@ -208,6 +208,7 @@
 })();
 
 (function () {
+  const launcher = document.getElementById("chatbot-launcher");
   const toggleBtn = document.getElementById("chatbot-toggle");
   const closeBtn = document.getElementById("chatbot-close");
   const panel = document.getElementById("chatbot-panel");
@@ -215,7 +216,7 @@
   const input = document.getElementById("chatbot-input");
   const messages = document.getElementById("chatbot-messages");
 
-  if (!toggleBtn || !closeBtn || !panel || !form || !input || !messages) {
+  if (!launcher || !toggleBtn || !closeBtn || !panel || !form || !input || !messages) {
     return;
   }
 
@@ -229,6 +230,7 @@
 
   function setOpen(isOpen) {
     panel.hidden = !isOpen;
+    launcher.hidden = isOpen;
     toggleBtn.setAttribute("aria-expanded", String(isOpen));
     if (isOpen) {
       input.focus();
@@ -287,4 +289,6 @@
       addMessage("bot", "Network error. Please try again.");
     }
   });
+
+  setOpen(false);
 })();
