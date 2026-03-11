@@ -740,9 +740,11 @@ main {
 .chatbot-panel {
 	position: fixed;
 	right: 24px;
+	top: 112px;
 	bottom: 100px;
 	width: min(414px, calc(100vw - 28px));
-	height: min(580px, calc(100vh - 130px));
+	height: auto;
+	max-height: calc(100vh - 220px);
 	z-index: 65;
 	display: flex;
 	flex-direction: column;
@@ -1002,9 +1004,11 @@ main {
 
 	.chatbot-panel {
 		right: 14px;
+		top: 126px;
 		bottom: 88px;
 		width: calc(100vw - 20px);
-		height: min(68vh, 520px);
+		height: auto;
+		max-height: calc(100svh - 230px);
 		border-radius: 22px;
 	}
 
