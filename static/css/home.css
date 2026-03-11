@@ -271,6 +271,17 @@ main {
 	margin-bottom: 22px;
 }
 
+.games-story {
+	margin-top: 16px;
+}
+
+.games-story .tools-story-backdrop {
+	background:
+		radial-gradient(circle at 24% 30%, rgba(255, 138, 61, 0.2), transparent 40%),
+		radial-gradient(circle at 80% 22%, rgba(75, 137, 255, 0.24), transparent 38%),
+		repeating-linear-gradient(90deg, rgba(79, 134, 246, 0.08) 0 1px, transparent 1px 82px);
+}
+
 .tools-story-sticky {
 	position: sticky;
 	top: 0;
@@ -611,6 +622,11 @@ main {
 	border-radius: 20px;
 	background: rgba(8, 15, 36, 0.66);
 	padding: 16px;
+}
+
+.knowledge-pane {
+	max-width: 760px;
+	margin: 0 auto;
 }
 
 .grid.compact {
