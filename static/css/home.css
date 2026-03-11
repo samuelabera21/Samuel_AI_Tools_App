@@ -41,12 +41,44 @@ body {
 		linear-gradient(var(--line) 1px, transparent 1px) 0 0 / 100% 58px,
 		linear-gradient(90deg, var(--line) 1px, transparent 1px) 0 0 / 58px 100%;
 	opacity: 0.42;
+	animation: grid-shift 18s linear infinite;
 }
 
 .ai-home::after {
 	background:
+		repeating-linear-gradient(
+			-32deg,
+			transparent 0 120px,
+			rgba(82, 157, 255, 0.18) 120px 123px,
+			transparent 123px 182px
+		),
+		repeating-linear-gradient(
+			148deg,
+			transparent 0 160px,
+			rgba(82, 157, 255, 0.12) 160px 162px,
+			transparent 162px 236px
+		),
 		radial-gradient(circle at 16% 80%, rgba(81, 155, 255, 0.22) 0%, transparent 26%),
 		radial-gradient(circle at 80% 42%, rgba(19, 107, 255, 0.14) 0%, transparent 30%);
+	animation: circuit-flow 14s linear infinite;
+}
+
+@keyframes grid-shift {
+	0% {
+		background-position: 0 0, 0 0;
+	}
+	100% {
+		background-position: 0 58px, 58px 0;
+	}
+}
+
+@keyframes circuit-flow {
+	0% {
+		background-position: 0 0, 0 0, 0 0, 0 0;
+	}
+	100% {
+		background-position: -280px 220px, 260px -180px, 0 0, 0 0;
+	}
 }
 
 .hero-topbar {
@@ -363,5 +395,12 @@ main {
 
 	.card p {
 		font-size: 15px;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.ai-home::before,
+	.ai-home::after {
+		animation: none;
 	}
 }
