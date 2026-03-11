@@ -229,8 +229,14 @@
   }
 
   function setOpen(isOpen) {
-    panel.hidden = !isOpen;
-    launcher.hidden = isOpen;
+    if (isOpen) {
+      panel.removeAttribute("hidden");
+      launcher.setAttribute("hidden", "hidden");
+    } else {
+      panel.setAttribute("hidden", "hidden");
+      launcher.removeAttribute("hidden");
+    }
+
     toggleBtn.setAttribute("aria-expanded", String(isOpen));
     if (isOpen) {
       input.focus();
@@ -269,6 +275,16 @@
     messages.scrollTop = messages.scrollHeight;
 
     try {
+      const healthResponse = await fetch("/api/home-chat/health", {
+        method: "GET",
+      });
+
+      if (!healthResponse.ok) {
+        waitingMsg.remove();
+        addMessage("bot", "Chat service is not ready right now.");
+        return;
+      }
+
       const response = await fetch("/api/home-chat/ask", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -290,5 +306,7 @@
     }
   });
 
+  panel.setAttribute("hidden", "hidden");
+  launcher.removeAttribute("hidden");
   setOpen(false);
 })();

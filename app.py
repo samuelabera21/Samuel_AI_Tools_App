@@ -589,6 +589,17 @@ def home_chat_ask_api():
         ), 500
 
 
+@app.route("/api/home-chat/health", methods=["GET"])
+def home_chat_health_api():
+    return jsonify(
+        {
+            "status": "ok",
+            "chatConfigured": bool(os.getenv("NVIDIA_CHAT_API_KEY") or os.getenv("NVIDIA_API_KEY")),
+            "embeddingConfigured": bool(os.getenv("NVIDIA_API_KEY")),
+        }
+    )
+
+
 @app.route("/download", methods=["POST"])
 def download_text():
     text = request.form.get("text", "")

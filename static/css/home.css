@@ -337,21 +337,22 @@ main {
 	letter-spacing: 0.02em;
 	padding: 8px 12px;
 	border-radius: 14px;
-	color: #eff5ff;
-	background: rgba(18, 52, 114, 0.88);
+	color: #f5f7ff;
+	background: rgba(16, 23, 46, 0.86);
+	border: 1px solid rgba(255, 138, 61, 0.28);
 	box-shadow: 0 10px 25px rgba(5, 16, 45, 0.28);
 }
 
 .chatbot-fab {
 	position: relative;
-	border: none;
-	background: linear-gradient(180deg, #1f4f99, #153f7f);
+	border: 1px solid rgba(255, 138, 61, 0.7);
+	background: linear-gradient(180deg, #18386f, #102856);
 	color: #ffffff;
 	border-radius: 999px;
 	width: 62px;
 	height: 62px;
 	cursor: pointer;
-	box-shadow: 0 14px 30px rgba(5, 16, 45, 0.34);
+	box-shadow: 0 14px 30px rgba(5, 16, 45, 0.34), 0 0 18px rgba(255, 138, 61, 0.18);
 	transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
 }
 
@@ -361,13 +362,13 @@ main {
 	position: absolute;
 	inset: -6px;
 	border-radius: 999px;
-	border: 1px solid rgba(109, 160, 245, 0.28);
+	border: 1px solid rgba(255, 138, 61, 0.22);
 	animation: launcher-pulse 2.8s ease-out infinite;
 }
 
 .chatbot-fab::after {
 	inset: -12px;
-	border-color: rgba(109, 160, 245, 0.16);
+	border-color: rgba(120, 180, 255, 0.18);
 	animation-delay: 1.2s;
 }
 
@@ -388,8 +389,8 @@ main {
 
 .chatbot-fab:hover {
 	transform: translateY(-2px);
-	background: linear-gradient(180deg, #245aaa, #18498f);
-	box-shadow: 0 18px 36px rgba(5, 16, 45, 0.42);
+	background: linear-gradient(180deg, #204785, #143364);
+	box-shadow: 0 18px 36px rgba(5, 16, 45, 0.42), 0 0 20px rgba(255, 138, 61, 0.28);
 }
 
 @keyframes launcher-pulse {
@@ -417,10 +418,15 @@ main {
 	display: flex;
 	flex-direction: column;
 	border-radius: 28px;
-	background: #eef2f7;
-	border: 1px solid rgba(47, 78, 132, 0.14);
+	background: rgba(12, 20, 43, 0.96);
+	border: 1px solid rgba(96, 138, 226, 0.24);
 	overflow: hidden;
-	box-shadow: 0 28px 60px rgba(5, 16, 45, 0.28);
+	box-shadow: 0 28px 60px rgba(5, 16, 45, 0.36);
+}
+
+.chatbot-panel[hidden],
+.chatbot-launcher[hidden] {
+	display: none !important;
 }
 
 .chatbot-header {
@@ -428,7 +434,7 @@ main {
 	align-items: center;
 	justify-content: space-between;
 	padding: 18px 18px 16px;
-	background: linear-gradient(180deg, #295299, #234988);
+	background: linear-gradient(180deg, #24498a, #193767);
 }
 
 .chatbot-title-block h2 {
@@ -467,8 +473,8 @@ main {
 	flex-direction: column;
 	gap: 12px;
 	background:
-		radial-gradient(circle at top left, rgba(89, 126, 205, 0.08), transparent 36%),
-		#eef2f7;
+		radial-gradient(circle at top left, rgba(89, 126, 205, 0.12), transparent 36%),
+		rgba(12, 20, 43, 0.96);
 }
 
 .chatbot-msg {
@@ -484,46 +490,46 @@ main {
 
 .chatbot-msg.bot {
 	align-self: flex-start;
-	background: #ffffff;
-	border: 1px solid rgba(189, 201, 227, 0.72);
-	color: #48526a;
+	background: rgba(39, 70, 135, 0.44);
+	border: 1px solid rgba(126, 166, 255, 0.28);
+	color: #edf3ff;
 }
 
 .chatbot-msg.user {
 	align-self: flex-end;
-	background: #f2e2d8;
-	border: 1px solid rgba(198, 145, 117, 0.38);
-	color: #5d4032;
+	background: rgba(255, 138, 61, 0.18);
+	border: 1px solid rgba(255, 138, 61, 0.38);
+	color: #fff1e5;
 }
 
 .chatbot-form {
 	display: flex;
 	gap: 8px;
 	padding: 14px 18px 8px;
-	border-top: 1px solid rgba(185, 197, 221, 0.65);
-	background: #eef2f7;
+	border-top: 1px solid rgba(96, 138, 226, 0.18);
+	background: rgba(12, 20, 43, 0.96);
 }
 
 .chatbot-form input {
 	flex: 1;
 	min-width: 0;
 	border-radius: 999px;
-	border: 1px solid #d5dce8;
-	background: #ffffff;
-	color: #32415d;
+	border: 1px solid rgba(96, 138, 226, 0.24);
+	background: rgba(6, 12, 28, 0.84);
+	color: #edf3ff;
 	padding: 13px 16px;
 	font-size: 14px;
 	outline: none;
 }
 
 .chatbot-form input:focus {
-	border-color: #9ab1dd;
-	box-shadow: 0 0 0 3px rgba(71, 112, 182, 0.14);
+	border-color: rgba(255, 138, 61, 0.55);
+	box-shadow: 0 0 0 3px rgba(255, 138, 61, 0.12);
 }
 
 .chatbot-form button {
 	border: none;
-	background: #bfc6cf;
+	background: rgba(255, 138, 61, 0.86);
 	color: #ffffff;
 	border-radius: 999px;
 	width: 48px;
@@ -536,7 +542,7 @@ main {
 }
 
 .chatbot-form button:hover {
-	background: #a7b1bc;
+	background: rgba(255, 138, 61, 1);
 	transform: translateY(-1px);
 }
 
@@ -546,7 +552,7 @@ main {
 	font-size: 12px;
 	text-align: center;
 	color: #8c96aa;
-	background: #eef2f7;
+	background: rgba(12, 20, 43, 0.96);
 }
 
 @media (max-width: 1100px) {
