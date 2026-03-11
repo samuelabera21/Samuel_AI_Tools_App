@@ -1,65 +1,198 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap");
+
+:root {
+    --line: rgba(80, 150, 255, 0.22);
+    --panel: rgba(16, 24, 54, 0.78);
+    --soft-border: rgba(132, 177, 255, 0.28);
+    --text: #f5f7ff;
+    --muted: #b5c4e8;
+    --accent: #ff8b2c;
+}
+
 body {
-    background: #f2f4f7;
-    color: #1f2937;
+    font-family: "Poppins", sans-serif;
+    color: var(--text);
+    min-height: 100vh;
+    background: radial-gradient(circle at center, #0a1a35 0%, #071022 50%, #020617 100%);
+}
+
+body::before,
+body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+}
+
+body::before {
+    z-index: -2;
+    background:
+        linear-gradient(var(--line) 1px, transparent 1px) 0 0 / 100% 64px,
+        linear-gradient(90deg, var(--line) 1px, transparent 1px) 0 0 / 64px 100%;
+    opacity: 0.15;
+}
+
+body::after {
+    z-index: -1;
+    background:
+        radial-gradient(circle at 18% 20%, rgba(65, 118, 255, 0.22) 0%, transparent 34%),
+        radial-gradient(circle at 86% 16%, rgba(255, 139, 44, 0.14) 0%, transparent 34%),
+        radial-gradient(circle at 50% 82%, rgba(40, 155, 255, 0.12) 0%, transparent 40%);
+}
+
+.topbar {
+    max-width: 1260px;
+    margin: 10px auto 0;
+    padding: 8px;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 167, 109, 0.24);
+    background: rgba(30, 40, 70, 0.5);
+    backdrop-filter: blur(12px);
+    box-shadow: 0 0 22px rgba(255, 150, 60, 0.2);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    position: sticky;
+    top: 10px;
+    z-index: 30;
 }
 
 .brand {
-    font-size: 20px;
+    font-size: 24px;
+    font-weight: 800;
+    letter-spacing: 0.02em;
+    line-height: 1;
+    color: #ffffff;
+    text-decoration: none;
+    padding: 10px 14px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.08);
 }
 
 .nav {
-    font-size: 20px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    overflow-x: auto;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.nav::-webkit-scrollbar {
+    display: none;
 }
 
 .nav a,
 .drop-btn {
-    opacity: 0.96;
-    font-size: 20px;
+    color: var(--text);
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 1;
+    border-radius: 999px;
+    text-decoration: none;
+    padding: 12px 14px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.nav a:hover,
+.drop-btn:hover {
+    background: rgba(255, 255, 255, 0.12);
+    box-shadow: 0 0 15px rgba(255, 150, 60, 0.26);
+}
+
+.dropdown {
+    position: relative;
+}
+
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    top: calc(100% + 10px);
+    left: 0;
+    min-width: 320px;
+    background: rgba(16, 22, 45, 0.96);
+    border: 1px solid var(--soft-border);
+    border-radius: 16px;
+    overflow: hidden;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 30px 45px rgba(5, 10, 28, 0.56);
+    z-index: 40;
+}
+
+.dropdown-menu a {
+    display: block;
+    padding: 12px 14px;
+    color: var(--text);
+    text-decoration: none;
+    font-size: 15px;
+    border-radius: 0;
+}
+
+.dropdown-menu a:hover {
+    background: rgba(255, 255, 255, 0.08);
+    box-shadow: none;
+}
+
+.dropdown:hover .dropdown-menu {
+    display: block;
 }
 
 .page {
-    max-width: 1240px;
-    margin: 36px auto;
-    padding: 0 16px;
+    max-width: 1160px;
+    margin: 32px auto;
+    padding: 0 18px 24px;
 }
 
 .title {
     text-align: center;
-    font-size: 20px;
-    font-weight: 700;
-    margin-bottom: 12px;
+    font-size: clamp(30px, 4vw, 44px);
+    font-weight: 800;
+    line-height: 1.12;
+    margin-bottom: 14px;
 }
 
 .subtitle {
     text-align: center;
-    max-width: 1180px;
-    margin: 0 auto 26px;
-    color: #374151;
-    font-size: 20px;
-    line-height: 1.45;
+    max-width: 980px;
+    margin: 0 auto 28px;
+    color: var(--muted);
+    font-size: clamp(16px, 2vw, 20px);
+    line-height: 1.6;
 }
 
 .card {
-    background: #fff;
-    border: 1px solid #d1d5db;
-    border-radius: 10px;
-    padding: 24px 18px;
+    background: var(--panel);
+    border: 1px solid var(--soft-border);
+    border-radius: 22px;
+    padding: 24px 20px;
+    box-shadow: 0 20px 40px rgba(5, 14, 38, 0.34);
 }
 
 #input-text {
     width: 100%;
-    min-height: 160px;
+    min-height: 190px;
     resize: vertical;
-    border: 1px solid #d1d5db;
-    border-radius: 10px;
+    border: 1px solid rgba(126, 166, 255, 0.26);
+    border-radius: 14px;
     padding: 14px;
-    font-size: 20px;
-    line-height: 1.45;
+    font-size: 21px;
+    line-height: 1.5;
     font-family: "Noto Sans Ethiopic", "Abyssinica SIL", sans-serif;
+    color: #edf3ff;
+    background: rgba(7, 14, 34, 0.86);
+    outline: none;
+}
+
+#input-text:focus {
+    border-color: rgba(255, 138, 61, 0.68);
+    box-shadow: 0 0 0 3px rgba(255, 138, 61, 0.14);
 }
 
 .actions {
-    margin-top: 12px;
+    margin-top: 14px;
     display: flex;
     gap: 10px;
     flex-wrap: wrap;
@@ -67,29 +200,45 @@ body {
 
 .actions button,
 .download-btn {
-    border: 1px solid #2563eb;
-    background: #2563eb;
-    color: #fff;
-    border-radius: 8px;
-    padding: 9px 14px;
-    font-size: 20px;
+    border-radius: 999px;
+    border: 1px solid rgba(122, 166, 248, 0.34);
+    padding: 10px 16px;
+    font-size: 14px;
+    font-weight: 700;
     cursor: pointer;
     text-decoration: none;
+    background: rgba(255, 255, 255, 0.06);
+    color: #e7efff;
+    transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
 }
 
 .actions button:hover,
 .download-btn:hover {
-    background: #1d4ed8;
+    background: rgba(255, 255, 255, 0.12);
+    transform: translateY(-1px);
+}
+
+#convert-btn,
+#ai-improve-btn {
+    border-color: #ff8a3d;
+    color: #ffb27a;
+}
+
+#convert-btn:hover,
+#ai-improve-btn:hover {
+    background: #ff8a3d;
+    color: #ffffff;
+    box-shadow: 0 0 18px rgba(255, 140, 70, 0.38);
 }
 
 .status {
-    margin-top: 10px;
-    padding: 8px 10px;
-    border-radius: 8px;
-    border: 1px solid #fecaca;
-    background: #fef2f2;
-    color: #b91c1c;
-    font-size: 20px;
+    margin-top: 12px;
+    padding: 10px 12px;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 152, 152, 0.45);
+    background: rgba(127, 29, 29, 0.26);
+    color: #ffd9d9;
+    font-size: 14px;
 }
 
 .image-result {
@@ -103,10 +252,10 @@ body {
 
 .preview-shell {
     display: inline-flex;
-    padding: 10px 14px;
-    border-radius: 8px;
-    background: #fff;
-    box-shadow: 0 1px 7px rgba(0, 0, 0, 0.08);
+    padding: 12px;
+    border-radius: 14px;
+    background: rgba(9, 18, 46, 0.72);
+    border: 1px solid rgba(107, 151, 255, 0.22);
     max-width: 100%;
     overflow: auto;
 }
@@ -116,51 +265,74 @@ body {
     width: auto;
     height: auto;
     max-width: min(100%, 820px);
+    border-radius: 10px;
 }
 
 .download-btn {
-    background: #1f9d55;
-    border-color: #1f9d55;
+    border-color: #ff8a3d;
+    color: #ffb27a;
 }
 
 .download-btn:hover {
-    background: #168147;
+    background: #ff8a3d;
+    color: #ffffff;
+    box-shadow: 0 0 18px rgba(255, 140, 70, 0.38);
 }
 
 .hidden {
     display: none;
 }
 
-@media (max-width: 860px) {
-    .brand {
-        font-size: 20px;
+@media (max-width: 980px) {
+    .topbar {
+        margin: 8px 14px 0;
+        border-radius: 20px;
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 8px;
     }
 
-    .nav {
-        font-size: 16px;
-        gap: 10px;
+    .brand {
+        font-size: 22px;
     }
 
     .nav a,
     .drop-btn {
-        font-size: 16px;
+        font-size: 15px;
+        padding: 10px 12px;
+    }
+
+    .dropdown-menu {
+        min-width: 250px;
+    }
+}
+
+@media (max-width: 700px) {
+    .page {
+        padding: 0 12px 18px;
     }
 
     .title {
-        font-size: 20px;
+        font-size: clamp(24px, 8.5vw, 32px);
     }
 
     .subtitle {
-        font-size: 20px;
+        font-size: 15px;
+    }
+
+    .card {
+        border-radius: 16px;
+        padding: 16px 12px;
     }
 
     #input-text {
-        font-size: 20px;
+        min-height: 160px;
+        font-size: 18px;
     }
 
     .actions button,
     .download-btn,
     .status {
-        font-size: 20px;
+        font-size: 13px;
     }
 }
