@@ -1,10 +1,9 @@
-@import url("https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap");
 
 :root {
 	--bg-1: #050f2c;
 	--bg-2: #08163f;
-	--line: rgba(86, 154, 255, 0.5);
-	--line-hot: rgba(117, 192, 255, 0.78);
+	--line: rgba(80, 150, 255, 0.25);
 	--panel: rgba(16, 24, 54, 0.78);
 	--soft-border: rgba(132, 177, 255, 0.28);
 	--text: #f5f7ff;
@@ -13,14 +12,21 @@
 }
 
 body {
-	font-family: "Manrope", sans-serif;
+	font-family: "Poppins", sans-serif;
 	color: var(--text);
 	min-height: 100vh;
 	background:
-		radial-gradient(circle at 20% 20%, rgba(59, 130, 246, 0.2) 0%, transparent 36%),
-		radial-gradient(circle at 80% 10%, rgba(255, 139, 44, 0.13) 0%, transparent 34%),
-		linear-gradient(120deg, var(--bg-1), var(--bg-2));
+		radial-gradient(circle at center, #0a1a35 0%, #071022 50%, #020617 100%);
 	overflow-x: hidden;
+}
+
+#ai-network {
+	position: fixed;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	z-index: -4;
+	pointer-events: none;
 }
 
 .ai-home {
@@ -39,57 +45,29 @@ body {
 
 .ai-home::before {
 	background:
-		linear-gradient(var(--line) 2px, transparent 2px) 0 0 / 100% 52px,
-		linear-gradient(90deg, var(--line) 2px, transparent 2px) 0 0 / 52px 100%;
-	opacity: 0.68;
-	animation: grid-shift 9s linear infinite, line-pulse 2.4s ease-in-out infinite;
+		linear-gradient(var(--line) 1px, transparent 1px) 0 0 / 100% 64px,
+		linear-gradient(90deg, var(--line) 1px, transparent 1px) 0 0 / 64px 100%;
+	opacity: 0.18;
+	z-index: -3;
 }
 
 .ai-home::after {
 	background:
-		repeating-linear-gradient(
-			-32deg,
-			transparent 0 90px,
-			var(--line-hot) 90px 94px,
-			transparent 94px 152px
-		),
-		repeating-linear-gradient(
-			148deg,
-			transparent 0 120px,
-			rgba(82, 157, 255, 0.3) 120px 123px,
-			transparent 123px 190px
-		),
-		radial-gradient(circle at 16% 80%, rgba(81, 155, 255, 0.22) 0%, transparent 26%),
-		radial-gradient(circle at 80% 42%, rgba(19, 107, 255, 0.14) 0%, transparent 30%);
-	opacity: 0.88;
-	animation: circuit-flow 7s linear infinite, line-pulse 2s ease-in-out infinite;
+		radial-gradient(circle at 18% 20%, rgba(65, 118, 255, 0.25) 0%, transparent 34%),
+		radial-gradient(circle at 86% 16%, rgba(255, 139, 44, 0.16) 0%, transparent 34%),
+		radial-gradient(circle at 50% 82%, rgba(40, 155, 255, 0.14) 0%, transparent 40%);
+	animation: glow-drift 14s ease-in-out infinite alternate;
+	z-index: -2;
 }
 
-@keyframes grid-shift {
+@keyframes glow-drift {
 	0% {
-		background-position: 0 0, 0 0;
+		transform: translate3d(0, 0, 0);
+		filter: brightness(1);
 	}
 	100% {
-		background-position: 0 52px, 52px 0;
-	}
-}
-
-@keyframes circuit-flow {
-	0% {
-		background-position: 0 0, 0 0, 0 0, 0 0;
-	}
-	100% {
-		background-position: -280px 220px, 260px -180px, 0 0, 0 0;
-	}
-}
-
-@keyframes line-pulse {
-	0%,
-	100% {
-		filter: brightness(0.95);
-	}
-	50% {
-		filter: brightness(1.4);
+		transform: translate3d(0, -18px, 0);
+		filter: brightness(1.12);
 	}
 }
 
@@ -132,8 +110,9 @@ body {
 	padding: 8px;
 	border-radius: 999px;
 	border: 1px solid rgba(255, 167, 109, 0.24);
-	background: rgba(26, 31, 53, 0.74);
-	box-shadow: 0 0 40px rgba(255, 139, 44, 0.08);
+	background: rgba(30, 40, 70, 0.5);
+	backdrop-filter: blur(12px);
+	box-shadow: 0 0 22px rgba(255, 150, 60, 0.24);
 }
 
 .hero-nav > a,
@@ -154,6 +133,7 @@ body {
 .hero-nav > a:hover,
 .hero-drop-btn:hover {
 	background: rgba(255, 255, 255, 0.12);
+	box-shadow: 0 0 15px rgba(255, 150, 60, 0.38);
 }
 
 .hero-dropdown {
@@ -257,18 +237,27 @@ main {
 
 .hero-cta {
 	text-decoration: none;
-	color: var(--text);
+	color: var(--accent);
 	font-weight: 800;
 	font-size: 22px;
 	padding: 14px 30px;
 	border-radius: 999px;
-	border: 1px solid var(--accent);
-	background: rgba(255, 139, 44, 0.12);
+	border: 1px solid #ff8a3d;
+	background: transparent;
+	transition: background 0.3s ease, color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
 }
 
 .hero-cta.ghost {
 	background: rgba(255, 255, 255, 0.08);
 	border-color: rgba(255, 255, 255, 0.25);
+	color: var(--text);
+}
+
+.hero-cta:hover {
+	background: #ff8a3d;
+	color: #ffffff;
+	box-shadow: 0 0 20px rgba(255, 140, 70, 0.5);
+	transform: translateY(-2px);
 }
 
 .content-block {

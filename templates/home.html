@@ -8,6 +8,7 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
 </head>
 <body>
+  <canvas id="ai-network" aria-hidden="true"></canvas>
   <div class="ai-home">
     <header class="hero-topbar">
       <a class="brand-chip" href="/" aria-label="MetaAppz home">
@@ -97,5 +98,6 @@
       </section>
     </main>
   </div>
+  <script src="{{ url_for('static', filename='js/home.js') }}"></script>
 </body>
 </html>
