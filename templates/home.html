@@ -3,71 +3,99 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AI Tools App</title>
+  <title>MetaAppz AI Hub</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
 </head>
 <body>
-  <header class="topbar">
-    <div class="brand">MetaAppz</div>
-    <nav class="nav">
-      <a href="/">Home</a>
-      <div class="dropdown">
-        <button class="drop-btn" type="button">Tools ▾</button>
-        <div class="dropdown-menu">
-          <a href="/Tools/Amharic_OCR">Amharic OCR</a>
-          <a href="/Tools/Numbers_to_Amharic_Words_Converter">Amharic Numbers Converter</a>
-          <a href="/Tools/Geez_Numbers_Converter">Geez Numbers Converter</a>
-          <a href="/Tools/Ethiopia_Phone_Numbers">Ethiopian Phone Number Validator</a>
-          <a href="/Tools/Ethiopian_Name_Generator">Ethiopian Baby Name Generator</a>
-          <a href="/Tools/Amharic_Link_Shortner">Amharic Link Shortner</a>
-          <a href="/Tools/Ethiopian_Date_Converter">Ethiopian Date Converter</a>
-          <a href="/Tools/Amharic_to_Image">Amharic AI Prompt to Image Generator</a>
-          <a href="/Tools/Free_Amharic_Keyboard">Amharic Keyboard</a>
-          <a href="/Tools/Amharic_Text_To_Speech">Amharic Text-to-Speech</a>
-          <a href="/Tools/Amharic_Words_Generator">Random Amharic Words Generator</a>
-        </div>
-      </div>
-      <div class="dropdown">
-        <button class="drop-btn" type="button">Games ▾</button>
-        <div class="dropdown-menu">
-          <a href="/Games/Amharic_Fidel_Sliding_Puzzle_Game">Amharic Fidel Sliding Puzzle</a>
-          <a href="/Games/Amharic_Typing_Game">Amharic Typing Game</a>
-        </div>
-      </div>
-      <a href="/Resources">Resources</a>
-      <a href="#">Videos</a>
-      <a href="#">Shop</a>
-      <a href="#">Contact</a>
-    </nav>
-  </header>
-  <main class="wrap">
-    <h1>Tools</h1>
-    <p class="sub">Project structure ready for step-by-step development. Start with OCR, then build the next tools one by one.</p>
-    <section class="grid">
-      <a class="card" href="/Tools/Amharic_OCR"><div class="live">LIVE</div><h3>Amharic OCR</h3><p>Convert Amharic images/PDFs to text.</p></a>
-      <a class="card" href="/Tools/Numbers_to_Amharic_Words_Converter"><div class="live">LIVE</div><h3>Amharic Numbers Converter</h3><p>Convert western numbers to Amharic words.</p></a>
-      <a class="card" href="/Tools/Geez_Numbers_Converter"><div class="live">LIVE</div><h3>Geez Numbers Converter</h3><p>Convert western numbers to Geez word and numeric.</p></a>
-      <a class="card" href="/Tools/Ethiopia_Phone_Numbers"><div class="live">LIVE</div><h3>Ethiopian Phone Number Validator</h3><p>Validate Ethiopian numbers and get format details.</p></a>
-      <a class="card" href="/Tools/Ethiopian_Name_Generator"><div class="live">LIVE</div><h3>Ethiopian Baby Name Generator</h3><p>Generate random Ethiopian baby names with pronunciation audio.</p></a>
-      <a class="card" href="/Tools/Free_Amharic_Keyboard"><div class="live">LIVE</div><h3>Amharic Keyboard</h3><p>Type Amharic, convert text to image, and use speech-to-text.</p></a>
-      <a class="card" href="/Tools/Amharic_Text_To_Speech"><div class="live">LIVE</div><h3>Amharic Text-to-Speech</h3><p>Convert Amharic text into male/female voice audio.</p></a>
-      <a class="card" href="/Tools/Amharic_to_Image"><div class="live">LIVE</div><h3>Amharic AI Prompt to Image Generator</h3><p>Generate a new AI image from an Amharic prompt.</p></a>
-      <a class="card" href="/Tools/Amharic_Words_Generator"><div class="live">LIVE</div><h3>Random Amharic Words Generator</h3><p>Generate random Amharic words with filter and output styles.</p></a>
-      <a class="card" href="/Tools/Amharic_Link_Shortner"><div class="live">LIVE</div><h3>Ethiopic Links</h3><p>Short links using Ethiopic characters.</p></a>
-      <a class="card" href="/Tools/Ethiopian_Date_Converter"><div class="live">LIVE</div><h3>Ethiopian Date Converter</h3><p>Convert Ethiopian and Gregorian dates, plus add/subtract date calculator.</p></a>
-    </section>
+  <div class="ai-home">
+    <header class="hero-topbar">
+      <a class="brand-chip" href="/" aria-label="MetaAppz home">
+        <span class="brand-mark">MA</span>
+      </a>
 
-    <h2>Games</h2>
-    <section class="grid">
-      <a class="card" href="/Games/Amharic_Fidel_Sliding_Puzzle_Game"><div class="live">LIVE</div><h3>Amharic Fidel Sliding Puzzle</h3><p>Slide Amharic fidel and Geez numerals into correct order before moves run out.</p></a>
-      <a class="card" href="/Games/Amharic_Typing_Game"><div class="live">LIVE</div><h3>Amharic Typing Game</h3><p>Improve typing speed and accuracy with timed Amharic phrase levels.</p></a>
-    </section>
+      <nav class="hero-nav" aria-label="Main">
+        <a class="active" href="/">Home</a>
+        <div class="hero-dropdown">
+          <button class="hero-drop-btn" type="button">Tools <span aria-hidden="true">▾</span></button>
+          <div class="hero-dropdown-menu">
+            <a href="/Tools/Amharic_OCR">Amharic OCR</a>
+            <a href="/Tools/Numbers_to_Amharic_Words_Converter">Amharic Numbers Converter</a>
+            <a href="/Tools/Geez_Numbers_Converter">Geez Numbers Converter</a>
+            <a href="/Tools/Ethiopia_Phone_Numbers">Phone Number Validator</a>
+            <a href="/Tools/Ethiopian_Name_Generator">Baby Name Generator</a>
+            <a href="/Tools/Amharic_Link_Shortner">Ethiopic Links</a>
+            <a href="/Tools/Ethiopian_Date_Converter">Date Converter</a>
+            <a href="/Tools/Amharic_to_Image">Prompt to Image</a>
+            <a href="/Tools/Free_Amharic_Keyboard">Amharic Keyboard</a>
+            <a href="/Tools/Amharic_Text_To_Speech">Text to Speech</a>
+            <a href="/Tools/Amharic_Words_Generator">Words Generator</a>
+          </div>
+        </div>
+        <div class="hero-dropdown">
+          <button class="hero-drop-btn" type="button">Games <span aria-hidden="true">▾</span></button>
+          <div class="hero-dropdown-menu">
+            <a href="/Games/Amharic_Fidel_Sliding_Puzzle_Game">Fidel Sliding Puzzle</a>
+            <a href="/Games/Amharic_Typing_Game">Amharic Typing Game</a>
+          </div>
+        </div>
+        <a href="/Resources">Resources</a>
+      </nav>
 
-    <h2>Resources</h2>
-    <section class="grid">
-      <a class="card" href="/Resources/Ethiopian_Knowledge_AI_Assistant"><div class="live">NEW</div><h3>Ethiopian Knowledge AI Assistant</h3><p>Ask Ethiopian-focused questions using your indexed PDFs, articles, and language guides.</p></a>
-    </section>
-  </main>
+      <a class="contact-pill" href="/Resources/Ethiopian_Knowledge_AI_Assistant">Contact Us</a>
+    </header>
+
+    <main>
+      <section class="hero">
+        <p class="eyebrow">MetaAppz AI Platform</p>
+        <h1>
+          Ethiopian Artificial
+          <span>Intelligence Hub</span>
+        </h1>
+        <p class="hero-copy">
+          Build, learn, and experiment with practical Ethiopian AI tools for language,
+          education, productivity, and creative workflows.
+        </p>
+        <div class="hero-actions">
+          <a class="hero-cta" href="#tools-grid">Explore Tools</a>
+          <a class="hero-cta ghost" href="/Resources">View Resources</a>
+        </div>
+      </section>
+
+      <section class="content-block" id="tools-grid">
+        <h2>Tools</h2>
+        <div class="grid">
+          <a class="card" href="/Tools/Amharic_OCR"><h3>Amharic OCR</h3><p>Extract Amharic text from images and scanned files.</p></a>
+          <a class="card" href="/Tools/Numbers_to_Amharic_Words_Converter"><h3>Amharic Numbers Converter</h3><p>Convert western numbers to natural Amharic words.</p></a>
+          <a class="card" href="/Tools/Geez_Numbers_Converter"><h3>Geez Numbers Converter</h3><p>Convert numerals to Geez symbols and back.</p></a>
+          <a class="card" href="/Tools/Ethiopia_Phone_Numbers"><h3>Phone Number Validator</h3><p>Validate Ethiopian phone formats and details.</p></a>
+          <a class="card" href="/Tools/Ethiopian_Name_Generator"><h3>Baby Name Generator</h3><p>Generate Ethiopian names with pronunciation audio.</p></a>
+          <a class="card" href="/Tools/Amharic_Link_Shortner"><h3>Ethiopic Links</h3><p>Create short links using Ethiopic characters.</p></a>
+          <a class="card" href="/Tools/Ethiopian_Date_Converter"><h3>Date Converter</h3><p>Convert between Ethiopian and Gregorian calendars.</p></a>
+          <a class="card" href="/Tools/Amharic_to_Image"><h3>Prompt to Image</h3><p>Generate AI images from Amharic prompts.</p></a>
+          <a class="card" href="/Tools/Free_Amharic_Keyboard"><h3>Amharic Keyboard</h3><p>Type, convert, and compose Amharic text easily.</p></a>
+          <a class="card" href="/Tools/Amharic_Text_To_Speech"><h3>Text to Speech</h3><p>Turn Amharic text into clear voice output.</p></a>
+          <a class="card" href="/Tools/Amharic_Words_Generator"><h3>Words Generator</h3><p>Create random Amharic words with filters.</p></a>
+        </div>
+      </section>
+
+      <section class="content-block split-grid">
+        <article class="pane">
+          <h2>Games</h2>
+          <div class="grid compact">
+            <a class="card" href="/Games/Amharic_Fidel_Sliding_Puzzle_Game"><h3>Fidel Sliding Puzzle</h3><p>Arrange fidel and Geez numerals under move limits.</p></a>
+            <a class="card" href="/Games/Amharic_Typing_Game"><h3>Amharic Typing Game</h3><p>Practice speed and accuracy with timed levels.</p></a>
+          </div>
+        </article>
+        <article class="pane">
+          <h2>Knowledge</h2>
+          <a class="card" href="/Resources/Ethiopian_Knowledge_AI_Assistant">
+            <h3>Ethiopian Knowledge AI Assistant</h3>
+            <p>Ask Ethiopia-focused questions from indexed learning material and resources.</p>
+          </a>
+        </article>
+      </section>
+    </main>
+  </div>
 </body>
 </html>
