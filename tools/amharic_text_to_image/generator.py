@@ -50,15 +50,24 @@ def mentions_people(prompt_text: str):
     return any(token in normalized for token in people_markers)
 
 
-def build_generation_prompt(prompt: str, style: str | None = None):
-    """Create a bilingual prompt with constraints to reduce semantic drift."""
-    english_prompt = translate_amharic_to_english(prompt) if contains_ethiopic_text(prompt) else prompt
+def build_generation_prompt(
+    prompt: str,
+    style: str | None = None,
+    english_prompt: str | None = None,
+    include_original_prompt: bool = True,
+):
+    """Create a generation prompt with constraints to reduce semantic drift."""
+    english_prompt = english_prompt or (
+        translate_amharic_to_english(prompt) if contains_ethiopic_text(prompt) else prompt
+    )
 
     prompt_parts = [
         "Generate a photorealistic, semantically accurate image that follows the user's prompt exactly.",
         f"Primary prompt in English: {english_prompt}",
-        f"Original user prompt: {prompt}",
     ]
+
+    if include_original_prompt:
+        prompt_parts.append(f"Original user prompt: {prompt}")
 
     subject_text = f"{prompt} {english_prompt}".lower()
     if "አንበሳ" in prompt or "lion" in subject_text:
@@ -78,15 +87,7 @@ def build_generation_prompt(prompt: str, style: str | None = None):
     return " ".join(prompt_parts)
 
 
-def generate_image_from_prompt(prompt: str, size: str = "1024x1024", style: str | None = None):
-    """Call NVIDIA's OpenAI-compatible image endpoint and return image URL/base64."""
-    api_key = os.getenv("NVIDIA_API_KEY", "").strip()
-    if not api_key:
-        raise RuntimeError("NVIDIA_API_KEY is missing")
-
-    width, height = parse_size(size)
-    full_prompt = build_generation_prompt(prompt=prompt, style=style)
-
+def request_image_generation(full_prompt: str, width: int, height: int, api_key: str):
     payload = {
         "prompt": full_prompt,
         "width": width,
@@ -109,28 +110,89 @@ def generate_image_from_prompt(prompt: str, size: str = "1024x1024", style: str 
         },
     )
 
-    try:
-        with url_request.urlopen(api_request, timeout=120) as response:
-            parsed = json.loads(response.read().decode("utf-8"))
-    except url_error.HTTPError as exc:
-        error_text = exc.read().decode("utf-8", errors="ignore")
-        try:
-            error_json = json.loads(error_text)
-            message = error_json.get("error", {}).get("message") or error_text
-        except json.JSONDecodeError:
-            message = error_text or str(exc)
-        raise ValueError(f"Image generation API error: {message}") from exc
-    except url_error.URLError as exc:
-        raise ValueError("Could not reach image generation service.") from exc
+    with url_request.urlopen(api_request, timeout=120) as response:
+        return json.loads(response.read().decode("utf-8"))
 
+
+def parse_error_message(exc: url_error.HTTPError):
+    error_text = exc.read().decode("utf-8", errors="ignore")
+    try:
+        error_json = json.loads(error_text)
+        return error_json.get("error", {}).get("message") or error_text or str(exc)
+    except json.JSONDecodeError:
+        return error_text or str(exc)
+
+
+def extract_image_url(parsed: dict):
     artifacts = parsed.get("artifacts") or []
     if artifacts and artifacts[0].get("base64"):
-        return {"image_url": f"data:image/jpeg;base64,{artifacts[0]['base64']}"}
+        return f"data:image/jpeg;base64,{artifacts[0]['base64']}"
 
     image_data = (parsed.get("data") or [{}])[0]
     if image_data.get("url"):
-        return {"image_url": image_data["url"]}
+        return image_data["url"]
     if image_data.get("b64_json"):
-        return {"image_url": f"data:image/png;base64,{image_data['b64_json']}"}
+        return f"data:image/png;base64,{image_data['b64_json']}"
+
+    raise ValueError("Image generation API did not return image content.")
+
+
+def generate_image_from_prompt(prompt: str, size: str = "1024x1024", style: str | None = None):
+    """Call NVIDIA's OpenAI-compatible image endpoint and return image URL/base64."""
+    api_key = os.getenv("NVIDIA_API_KEY", "").strip()
+    if not api_key:
+        raise RuntimeError("NVIDIA_API_KEY is missing")
+
+    width, height = parse_size(size)
+    has_ethiopic_text = contains_ethiopic_text(prompt)
+    english_prompt = translate_amharic_to_english(prompt) if has_ethiopic_text else prompt
+    prompt_variants = [
+        build_generation_prompt(
+            prompt=prompt,
+            style=style,
+            english_prompt=english_prompt,
+            include_original_prompt=True,
+        )
+    ]
+    if has_ethiopic_text and english_prompt.strip() and english_prompt.strip() != prompt.strip():
+        prompt_variants.append(
+            build_generation_prompt(
+                prompt=prompt,
+                style=style,
+                english_prompt=english_prompt,
+                include_original_prompt=False,
+            )
+        )
+
+    try:
+        last_http_error_message = None
+        for index, full_prompt in enumerate(prompt_variants):
+            try:
+                parsed = request_image_generation(
+                    full_prompt=full_prompt,
+                    width=width,
+                    height=height,
+                    api_key=api_key,
+                )
+                return {"image_url": extract_image_url(parsed)}
+            except url_error.HTTPError as exc:
+                last_http_error_message = parse_error_message(exc)
+                should_retry = (
+                    exc.code >= 500
+                    and index < len(prompt_variants) - 1
+                )
+                if should_retry:
+                    continue
+                raise ValueError(f"Image generation API error: {last_http_error_message}") from exc
+    except url_error.HTTPError as exc:
+        message = parse_error_message(exc)
+        raise ValueError(f"Image generation API error: {message}") from exc
+    except url_error.URLError as exc:
+        raise ValueError("Could not reach image generation service.") from exc
+    except ValueError:
+        raise
+
+    if last_http_error_message:
+        raise ValueError(f"Image generation API error: {last_http_error_message}")
 
     raise ValueError("Image generation API did not return image content.")

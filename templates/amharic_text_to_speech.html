@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Amharic Text-to-Speech - AI Tools App</title>
+    <title>Amharic Text-to-Speech - ፍኖት Ethiopian AI HUB</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/amharic_text_to_speech.css') }}">
 </head>
@@ -13,8 +13,8 @@
     <main class="page">
         <h1 class="title">Amharic Text-to-Speech</h1>
         <p class="subtitle">
-            Experience the power of Amharic Text-to-Speech technology with our free tool. Simply enter your Amharic text in the textbox below,
-            and it will be converted into natural-sounding Amharic voice in seconds. You can play the audio live or download it for future use.
+            Convert your Amharic text into natural voice in seconds. Type your content, choose a voice,
+            then play or download the generated audio.
         </p>
 
         <section class="card">
@@ -42,7 +42,7 @@
 
         <section id="audio-result" class="audio-result hidden" aria-live="polite">
             <audio id="audio-player" controls></audio>
-            <a id="download-audio" class="download-btn" href="#" download="amharic_tts.mp3">⬇</a>
+            <a id="download-audio" class="download-btn" href="#" download="amharic_tts.mp3" aria-label="Download generated audio">⬇</a>
         </section>
     </main>
 
