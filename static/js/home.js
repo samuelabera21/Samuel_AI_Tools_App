@@ -560,9 +560,7 @@
     startAutoPlay();
   }
 
-  initProjectCarousel("tools-grid", "tools-story-progress", {
-    lockWheelToSlides: true,
-  });
+  initProjectCarousel("tools-grid", "tools-story-progress");
   initProjectCarousel("games-grid", "games-story-progress");
   initProjectCarousel("knowledge-grid", "knowledge-story-progress");
 })();
