@@ -313,12 +313,16 @@
 })();
 
 (function () {
-  function initProjectCarousel(sectionId, progressId) {
+  function initProjectCarousel(sectionId, progressId, options) {
     const story = document.getElementById(sectionId);
     const progressHost = document.getElementById(progressId);
     if (!story || !progressHost) {
       return;
     }
+
+    const settings = Object.assign({
+      lockWheelToSlides: false,
+    }, options || {});
 
     const sticky = story.querySelector(".tools-story-sticky");
     const scenes = Array.from(story.querySelectorAll(".tool-scene"));
@@ -329,7 +333,9 @@
     let activeIndex = 0;
     let autoPlayTimer = null;
     let touchStartX = null;
+    let lastWheelChangeAt = 0;
     const autoPlayDelay = 4500;
+    const wheelCooldown = 420;
 
     if (!sticky) {
       return;
@@ -496,6 +502,46 @@
       story.setAttribute("tabindex", "0");
     }
 
+    function bindWheelNavigation() {
+      if (!settings.lockWheelToSlides || scenes.length <= 1) {
+        return;
+      }
+
+      story.addEventListener("wheel", function (event) {
+        if (event.ctrlKey) {
+          return;
+        }
+
+        const deltaY = event.deltaY;
+        if (Math.abs(deltaY) < 10) {
+          return;
+        }
+
+        if (Math.abs(event.deltaX) > Math.abs(deltaY)) {
+          return;
+        }
+
+        const direction = deltaY > 0 ? 1 : -1;
+        const atStart = activeIndex === 0;
+        const atEnd = activeIndex === scenes.length - 1;
+
+        if ((direction > 0 && atEnd) || (direction < 0 && atStart)) {
+          return;
+        }
+
+        const now = Date.now();
+        if (now - lastWheelChangeAt < wheelCooldown) {
+          event.preventDefault();
+          return;
+        }
+
+        event.preventDefault();
+        setScene(activeIndex + direction);
+        restartAutoPlay();
+        lastWheelChangeAt = now;
+      }, { passive: false });
+    }
+
     window.addEventListener("visibilitychange", function () {
       if (document.hidden) {
         stopAutoPlay();
@@ -509,11 +555,14 @@
     bindTouchSwipe();
     bindHoverPause();
     bindKeyboard();
+    bindWheelNavigation();
     setScene(0);
     startAutoPlay();
   }
 
-  initProjectCarousel("tools-grid", "tools-story-progress");
+  initProjectCarousel("tools-grid", "tools-story-progress", {
+    lockWheelToSlides: true,
+  });
   initProjectCarousel("games-grid", "games-story-progress");
   initProjectCarousel("knowledge-grid", "knowledge-story-progress");
 })();
