@@ -9,6 +9,49 @@ body {
   margin: 0;
 }
 
+/* Normalize content typography app-wide (scoped to main content only). */
+main :where(h1) {
+  font-size: clamp(2rem, 3.6vw, 3.1rem) !important;
+  line-height: 1.15;
+}
+
+main :where(h2) {
+  font-size: clamp(1.55rem, 2.6vw, 2.2rem) !important;
+  line-height: 1.2;
+}
+
+main :where(h3) {
+  font-size: clamp(1.2rem, 2vw, 1.65rem) !important;
+  line-height: 1.25;
+}
+
+main :where(p, li, label, legend, figcaption, .subtitle, .hero-copy) {
+  font-size: clamp(1rem, 1.25vw, 1.35rem) !important;
+  line-height: 1.45;
+}
+
+main :where(button, input, select, textarea, .btn-primary, .hero-cta, .scene-cta) {
+  font-size: clamp(0.95rem, 1.05vw, 1.05rem) !important;
+}
+
+@media (max-width: 700px) {
+  main :where(h1) {
+    font-size: clamp(1.65rem, 8.2vw, 2.25rem) !important;
+  }
+
+  main :where(h2) {
+    font-size: clamp(1.35rem, 6.2vw, 1.8rem) !important;
+  }
+
+  main :where(h3) {
+    font-size: clamp(1.08rem, 4.8vw, 1.35rem) !important;
+  }
+
+  main :where(p, li, label, legend, figcaption, .subtitle, .hero-copy) {
+    font-size: clamp(0.95rem, 3.6vw, 1.08rem) !important;
+  }
+}
+
 .topbar {
   background: linear-gradient(90deg, #1d4ed8, #3b82f6);
   color: #fff;
