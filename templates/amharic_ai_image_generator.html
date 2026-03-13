@@ -18,6 +18,32 @@
         </p>
 
         <section class="card">
+            <section id="chat-thread" class="chat-thread" aria-live="polite">
+                <article id="user-message" class="chat-message user hidden">
+                    <div class="chat-bubble">
+                        <p class="chat-label">You</p>
+                        <p id="user-prompt-text" class="chat-text"></p>
+                    </div>
+                </article>
+
+                <article id="assistant-message" class="chat-message assistant hidden">
+                    <div class="chat-bubble image-bubble">
+                        <div class="assistant-head">
+                            <p class="chat-label">ፍኖት AI Image</p>
+                            <a id="download-link" class="btn-secondary" href="#" download="amharic-ai-image.png">Download</a>
+                        </div>
+                        <img id="generated-image" alt="Generated image from Amharic prompt">
+                    </div>
+                </article>
+
+                <article id="loading-message" class="chat-message assistant hidden">
+                    <div class="chat-bubble status-bubble">
+                        <p class="chat-label">ፍኖት AI Image</p>
+                        <span id="loading" class="loading">Generating image, please wait...</span>
+                    </div>
+                </article>
+            </section>
+
             <div class="form-grid">
                 <label class="field">
                     <span>Amharic Prompt</span>
@@ -40,19 +66,10 @@
 
                 <div class="actions">
                     <button id="generate-btn" class="btn-primary" type="button">Generate Image</button>
-                    <span id="loading" class="loading hidden">Generating image, please wait...</span>
                 </div>
 
                 <p id="error" class="error hidden"></p>
             </div>
-
-            <section id="result" class="result hidden" aria-live="polite">
-                <h2>Generated Image</h2>
-                <img id="generated-image" alt="Generated image from Amharic prompt">
-                <div class="result-actions">
-                    <a id="download-link" class="btn-secondary" href="#" download="amharic-ai-image.png">Download Image</a>
-                </div>
-            </section>
         </section>
     </main>
 
@@ -63,13 +80,17 @@
         const generateButton = document.getElementById("generate-btn");
         const loadingEl = document.getElementById("loading");
         const errorEl = document.getElementById("error");
-        const resultEl = document.getElementById("result");
+        const userMessageEl = document.getElementById("user-message");
+        const userPromptTextEl = document.getElementById("user-prompt-text");
+        const assistantMessageEl = document.getElementById("assistant-message");
+        const loadingMessageEl = document.getElementById("loading-message");
+        const chatThreadEl = document.getElementById("chat-thread");
         const imageEl = document.getElementById("generated-image");
         const downloadLink = document.getElementById("download-link");
 
         function setLoading(isLoading) {
             generateButton.disabled = isLoading;
-            loadingEl.classList.toggle("hidden", !isLoading);
+            loadingMessageEl.classList.toggle("hidden", !isLoading);
             if (isLoading) {
                 errorEl.classList.add("hidden");
             }
@@ -80,6 +101,10 @@
             errorEl.classList.remove("hidden");
         }
 
+        function scrollChatToBottom() {
+            chatThreadEl.scrollTop = chatThreadEl.scrollHeight;
+        }
+
         async function generateImage() {
             const prompt = promptEl.value.trim();
             if (!prompt) {
@@ -87,8 +112,11 @@
                 return;
             }
 
+            userPromptTextEl.textContent = prompt;
+            userMessageEl.classList.remove("hidden");
+            assistantMessageEl.classList.add("hidden");
             setLoading(true);
-            resultEl.classList.add("hidden");
+            scrollChatToBottom();
 
             try {
                 const response = await fetch("/api/amharic-ai-image", {
@@ -108,8 +136,9 @@
 
                 imageEl.src = data.imageUrl;
                 downloadLink.href = data.imageUrl;
-                resultEl.classList.remove("hidden");
+                assistantMessageEl.classList.remove("hidden");
                 errorEl.classList.add("hidden");
+                scrollChatToBottom();
             } catch (error) {
                 showError(error.message || "Unable to generate image right now.");
             } finally {
