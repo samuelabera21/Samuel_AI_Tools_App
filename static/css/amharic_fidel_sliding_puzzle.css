@@ -43,7 +43,7 @@ body::after {
   position: relative;
   z-index: 1;
   max-width: 980px;
-  margin: 34px auto;
+  margin: 24px auto;
   padding: 0 18px 20px;
 }
 
@@ -56,7 +56,7 @@ body::after {
 }
 
 .subtitle {
-  margin: 0 auto 22px;
+  margin: 0 auto 14px;
   max-width: 860px;
   text-align: center;
   color: var(--af-muted);
@@ -68,7 +68,7 @@ body::after {
   background: var(--af-panel);
   border: 1px solid var(--af-border);
   border-radius: 18px;
-  padding: clamp(16px, 2.3vw, 24px);
+  padding: clamp(12px, 2vw, 18px);
   box-shadow:
     0 22px 52px rgba(0, 0, 0, 0.45),
     inset 0 1px 0 rgba(255, 255, 255, 0.06);
@@ -91,7 +91,7 @@ body::after {
 }
 
 .status-line {
-  margin: 0 auto 14px;
+  margin: 0 auto 10px;
   width: fit-content;
   text-align: center;
   font-size: 0.95rem;
@@ -105,7 +105,7 @@ body::after {
 .sliding-puzzle-figure {
   box-sizing: border-box;
   margin: 0 auto;
-  width: min(100%, 540px);
+  width: min(100%, 500px, calc(100vh - 300px));
   aspect-ratio: 1 / 1;
   position: relative;
   font-family: "Noto Sans Ethiopic", "Abyssinica SIL", sans-serif;
@@ -119,7 +119,7 @@ body::after {
   height: 100%;
   margin: 0;
   padding: 0;
-  border: 14px solid rgba(6, 10, 19, 0.95);
+  border: 11px solid rgba(6, 10, 19, 0.95);
   border-radius: 16px;
   background:
     linear-gradient(145deg, rgba(18, 24, 39, 0.96), rgba(7, 11, 22, 0.94));
@@ -139,7 +139,7 @@ body::after {
   background: linear-gradient(145deg, #67e8f9, #38bdf8);
   color: #062333;
   cursor: pointer;
-  font-size: clamp(1.8rem, 8.2vw, 3rem);
+  font-size: clamp(1.5rem, 7.2vw, 2.5rem);
   transition: transform 0.5s ease;
   user-select: none;
   box-shadow:
@@ -155,14 +155,19 @@ body::after {
 @media only screen and (max-width: 650px) {
   .page-wrap {
     margin-top: 24px;
+    padding: 0 12px 18px;
   }
 
   .status-line {
     font-size: 0.9rem;
   }
 
+  .sliding-puzzle-figure {
+    width: min(100%, 420px, calc(100vh - 280px));
+  }
+
   .sliding-puzzle {
-    border-width: 10px;
+    border-width: 8px;
     border-radius: 14px;
   }
 }
