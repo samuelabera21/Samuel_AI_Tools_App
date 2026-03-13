@@ -43,32 +43,32 @@ body::after {
   position: relative;
   z-index: 1;
   max-width: 980px;
-  margin: 24px auto;
+  margin: 18px auto;
   padding: 0 18px 20px;
 }
 
 .title {
-  margin: 0 0 10px;
+  margin: 0 0 8px;
   text-align: center;
-  font-size: clamp(1.45rem, 2.6vw, 2rem);
+  font-size: clamp(1.95rem, 3.6vw, 2.55rem) !important;
   line-height: 1.18;
   letter-spacing: 0.01em;
 }
 
 .subtitle {
-  margin: 0 auto 14px;
-  max-width: 860px;
+  margin: 0 auto 12px;
+  max-width: 930px;
   text-align: center;
   color: var(--af-muted);
-  font-size: clamp(0.95rem, 1.4vw, 1.05rem);
-  line-height: 1.62;
+  font-size: clamp(0.95rem, 1.45vw, 1.12rem) !important;
+  line-height: 1.48;
 }
 
 .game-shell {
   background: var(--af-panel);
   border: 1px solid var(--af-border);
   border-radius: 18px;
-  padding: clamp(12px, 2vw, 18px);
+  padding: clamp(10px, 1.8vw, 16px);
   box-shadow:
     0 22px 52px rgba(0, 0, 0, 0.45),
     inset 0 1px 0 rgba(255, 255, 255, 0.06);
@@ -82,19 +82,19 @@ body::after {
 
 .level-complete {
   min-height: 30px;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
   text-align: center;
   white-space: pre-line;
   color: #ffd27a;
   font-weight: 700;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
 }
 
 .status-line {
-  margin: 0 auto 10px;
+  margin: 0 auto 8px;
   width: fit-content;
   text-align: center;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   color: var(--af-muted);
   padding: 7px 12px;
   border-radius: 999px;
@@ -154,12 +154,21 @@ body::after {
 
 @media only screen and (max-width: 650px) {
   .page-wrap {
-    margin-top: 24px;
+    margin-top: 16px;
     padding: 0 12px 18px;
   }
 
+  .title {
+    font-size: clamp(1.55rem, 7.2vw, 2.05rem) !important;
+  }
+
+  .subtitle {
+    font-size: clamp(0.9rem, 3.6vw, 1rem) !important;
+    line-height: 1.42;
+  }
+
   .status-line {
-    font-size: 0.9rem;
+    font-size: 0.84rem;
   }
 
   .sliding-puzzle-figure {
