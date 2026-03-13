@@ -89,8 +89,8 @@ body {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 84px;
-  height: 84px;
+  width: 66px;
+  height: 66px;
   border-radius: 999px;
   text-decoration: none;
   background: linear-gradient(160deg, rgba(41, 78, 176, 0.96), rgba(17, 37, 90, 0.96));
@@ -131,12 +131,12 @@ body {
 .hero-nav > a,
 .hero-drop-btn {
   color: #f5f7ff;
-  font-size: 23px;
+  font-size: 16px;
   font-weight: 700;
   line-height: 1;
   border-radius: 999px;
   text-decoration: none;
-  padding: 13px 20px;
+  padding: 11px 16px;
   border: none;
   background: transparent;
   cursor: pointer;
@@ -187,9 +187,9 @@ body {
   color: #f5f7ff;
   text-decoration: none;
   border-radius: 999px;
-  padding: 15px 26px;
+  padding: 12px 20px;
   font-weight: 800;
-  font-size: 38px;
+  font-size: 16px;
   line-height: 1;
   border: 2px solid #ff8b2c;
   background: rgba(14, 21, 44, 0.78);
@@ -448,7 +448,8 @@ body {
   }
 
   .contact-pill {
-    font-size: 26px;
+    font-size: 15px;
+    padding: 11px 18px;
   }
 }
 
@@ -464,7 +465,7 @@ body {
 
   .hero-nav > a,
   .hero-drop-btn {
-    font-size: 17px;
+    font-size: 14px;
     padding: 10px 14px;
   }
 
@@ -473,8 +474,8 @@ body {
   }
 
   .contact-pill {
-    font-size: 21px;
-    padding: 12px 18px;
+    font-size: 14px;
+    padding: 10px 14px;
   }
 
   .chatbot-fab {
