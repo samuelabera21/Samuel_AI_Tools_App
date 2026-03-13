@@ -1,57 +1,100 @@
+:root {
+    --line: rgba(80, 150, 255, 0.2);
+    --panel: rgba(11, 21, 48, 0.86);
+    --soft-border: rgba(122, 165, 245, 0.28);
+    --text: #f5f7ff;
+    --muted: #b5c4e8;
+    --accent: #ff8b2c;
+}
+
 body {
-    background: #eef0f3;
-    color: #1f2937;
+    color: var(--text);
+    min-height: 100vh;
+    background: radial-gradient(circle at center, #0a1a35 0%, #071022 52%, #020617 100%);
+    overflow-x: hidden;
+}
+
+body::before,
+body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+}
+
+body::before {
+    z-index: -2;
+    background:
+        linear-gradient(var(--line) 1px, transparent 1px) 0 0 / 100% 64px,
+        linear-gradient(90deg, var(--line) 1px, transparent 1px) 0 0 / 64px 100%;
+    opacity: 0.2;
+}
+
+body::after {
+    z-index: -1;
+    background:
+        radial-gradient(circle at 16% 18%, rgba(65, 118, 255, 0.22), transparent 34%),
+        radial-gradient(circle at 86% 14%, rgba(255, 139, 44, 0.16), transparent 34%),
+        radial-gradient(circle at 50% 84%, rgba(40, 155, 255, 0.14), transparent 42%);
 }
 
 .page {
-    max-width: 1180px;
-    margin: 28px auto;
+    max-width: 1120px;
+    margin: 26px auto 36px;
     padding: 0 16px;
 }
 
 .title {
     text-align: center;
-    font-size: 50px;
-    margin: 20px 0 12px;
+    font-size: clamp(2rem, 3.5vw, 2.9rem);
+    margin: 18px 0 10px;
+    color: #edf3ff;
+    font-weight: 800;
+    letter-spacing: 0.01em;
 }
 
 .subtitle {
     text-align: center;
-    max-width: 1100px;
+    max-width: 860px;
     margin: 0 auto 24px;
-    line-height: 1.45;
-    font-size: 20px;
-    color: #374151;
+    line-height: 1.55;
+    font-size: 1.05rem;
+    color: var(--muted);
 }
 
 .card {
-    border: 1px solid #d1d5db;
-    border-radius: 8px;
-    background: #f2f4f6;
-    padding: 28px 24px;
+    max-width: 760px;
+    margin: 0 auto;
+    border: 1px solid var(--soft-border);
+    border-radius: 18px;
+    background: var(--panel);
+    padding: 24px 20px;
+    box-shadow: 0 18px 36px rgba(5, 12, 32, 0.36);
 }
 
 .label {
     display: block;
     text-align: center;
-    margin: 0 0 8px;
+    margin: 0 0 10px;
     font-weight: 700;
-    font-size: 20px;
+    font-size: 1.05rem;
+    color: #eaf1ff;
 }
 
 #long-url-input {
     width: 100%;
-    border: 1px solid #d1d5db;
-    border-radius: 10px;
-    padding: 12px 14px;
-    font-size: 20px;
-    color: #1f2937;
-    background: #ffffff;
+    border: 1px solid rgba(122, 165, 245, 0.42);
+    border-radius: 12px;
+    padding: 13px 15px;
+    font-size: 1rem;
+    color: #f4f8ff;
+    background: rgba(6, 13, 30, 0.84);
 }
 
 #long-url-input:focus {
-    outline: 3px solid #bfdbfe;
-    border-color: #2563eb;
+    outline: none;
+    border-color: rgba(255, 138, 61, 0.72);
+    box-shadow: 0 0 0 3px rgba(255, 138, 61, 0.12);
 }
 
 .actions {
@@ -61,13 +104,18 @@ body {
 }
 
 #generate-btn {
-    border: 1px solid #2563eb;
-    background: #2563eb;
-    color: #fff;
-    border-radius: 10px;
-    padding: 10px 26px;
-    font-size: 20px;
+    border: 1px solid var(--accent);
+    background: rgba(255, 138, 61, 0.08);
+    color: #ffd4b2;
+    border-radius: 999px;
+    padding: 10px 24px;
+    font-size: 1rem;
+    font-weight: 700;
     cursor: pointer;
+}
+
+#generate-btn:hover {
+    background: rgba(255, 138, 61, 0.2);
 }
 
 #generate-btn:disabled {
@@ -78,21 +126,21 @@ body {
 .error {
     margin: 14px auto 0;
     max-width: 620px;
-    border: 1px solid #fecaca;
-    background: #fef2f2;
-    color: #b91c1c;
-    border-radius: 8px;
+    border: 1px solid rgba(255, 123, 123, 0.45);
+    background: rgba(95, 22, 22, 0.3);
+    color: #ffb4b4;
+    border-radius: 10px;
     padding: 8px 12px;
-    font-size: 20px;
+    font-size: 0.95rem;
 }
 
 .result-card {
-    width: 520px;
+    width: 560px;
     max-width: 100%;
-    margin: 26px auto 0;
-    background: #cfe0f7;
-    border: 1px solid #b5ccee;
-    border-radius: 8px;
+    margin: 24px auto 0;
+    background: rgba(16, 35, 74, 0.95);
+    border: 1px solid rgba(122, 165, 245, 0.34);
+    border-radius: 14px;
     padding: 14px;
     display: flex;
     align-items: center;
@@ -101,23 +149,27 @@ body {
 }
 
 .short-url {
-    color: #0f3a80;
+    color: #eef3ff;
     text-decoration: none;
-    font-size: 32px;
-    line-height: 1.2;
+    font-size: 1.15rem;
+    line-height: 1.35;
     overflow-wrap: anywhere;
     font-family: "Abyssinica SIL", "Noto Sans Ethiopic", sans-serif;
 }
 
 .copy-btn {
-    border: 1px solid #2563eb;
-    background: #eff6ff;
-    color: #1d4ed8;
-    border-radius: 8px;
+    border: 1px solid rgba(255, 138, 61, 0.9);
+    background: rgba(255, 138, 61, 0.12);
+    color: #ffe4cf;
+    border-radius: 10px;
     padding: 8px 12px;
-    font-size: 18px;
+    font-size: 0.95rem;
     cursor: pointer;
     flex-shrink: 0;
+}
+
+.copy-btn:hover {
+    background: rgba(255, 138, 61, 0.24);
 }
 
 .hidden {
@@ -125,21 +177,34 @@ body {
 }
 
 @media (max-width: 860px) {
+    .page {
+        margin-top: 18px;
+        padding: 0 12px;
+    }
+
     .title {
-        font-size: 40px;
+        font-size: clamp(1.65rem, 8vw, 2.15rem);
     }
 
-    .subtitle {
-        font-size: 18px;
-    }
-
+    .subtitle,
     #long-url-input,
     #generate-btn,
-    .error {
-        font-size: 18px;
+    .error,
+    .copy-btn {
+        font-size: 0.95rem;
+    }
+
+    .result-card {
+        flex-direction: column;
+        align-items: stretch;
     }
 
     .short-url {
-        font-size: 26px;
+        font-size: 1rem;
+        text-align: center;
+    }
+
+    .copy-btn {
+        align-self: center;
     }
 }
