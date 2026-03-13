@@ -1,58 +1,99 @@
+:root {
+    --line: rgba(80, 150, 255, 0.2);
+    --panel: rgba(11, 21, 48, 0.86);
+    --soft-border: rgba(122, 165, 245, 0.28);
+    --text: #f5f7ff;
+    --muted: #b5c4e8;
+    --accent: #ff8b2c;
+}
+
 body {
-    background: #eef0f3;
-    color: #1f2937;
+    color: var(--text);
+    min-height: 100vh;
+    background: radial-gradient(circle at center, #0a1a35 0%, #071022 52%, #020617 100%);
+    overflow-x: hidden;
+}
+
+body::before,
+body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+}
+
+body::before {
+    z-index: -2;
+    background:
+        linear-gradient(var(--line) 1px, transparent 1px) 0 0 / 100% 64px,
+        linear-gradient(90deg, var(--line) 1px, transparent 1px) 0 0 / 64px 100%;
+    opacity: 0.2;
+}
+
+body::after {
+    z-index: -1;
+    background:
+        radial-gradient(circle at 16% 18%, rgba(65, 118, 255, 0.22), transparent 34%),
+        radial-gradient(circle at 86% 14%, rgba(255, 139, 44, 0.16), transparent 34%),
+        radial-gradient(circle at 50% 84%, rgba(40, 155, 255, 0.14), transparent 42%);
 }
 
 .page {
-    max-width: 1180px;
-    margin: 28px auto;
+    max-width: 1120px;
+    margin: 26px auto 36px;
     padding: 0 16px;
 }
 
 .title {
     text-align: center;
-    font-size: 50px;
-    margin: 20px 0 12px;
+    font-size: clamp(2rem, 3.5vw, 2.9rem);
+    margin: 18px 0 10px;
+    color: #edf3ff;
+    font-weight: 800;
+    letter-spacing: 0.01em;
 }
 
 .subtitle {
     text-align: center;
-    max-width: 1060px;
+    max-width: 860px;
     margin: 0 auto 22px;
-    line-height: 1.45;
-    font-size: 20px;
-    color: #374151;
+    line-height: 1.55;
+    font-size: 1.05rem;
+    color: var(--muted);
 }
 
 .card {
-    border: 1px solid #d1d5db;
-    border-radius: 8px;
-    background: #f2f4f6;
+    max-width: 900px;
+    margin: 0 auto;
+    border: 1px solid var(--soft-border);
+    border-radius: 18px;
+    background: var(--panel);
     padding: 18px;
+    box-shadow: 0 18px 36px rgba(5, 12, 32, 0.36);
 }
 
 .tabs {
     display: flex;
-    gap: 0;
-    border-bottom: 1px solid #d1d5db;
+    gap: 8px;
+    flex-wrap: wrap;
+    border-bottom: 1px solid rgba(122, 165, 245, 0.26);
+    padding-bottom: 10px;
 }
 
 .tab {
-    border: 1px solid transparent;
-    border-bottom: none;
-    background: transparent;
-    color: #2563eb;
+    border: 1px solid rgba(122, 165, 245, 0.32);
+    background: rgba(10, 22, 50, 0.78);
+    color: #d8e6ff;
     cursor: pointer;
-    padding: 10px 14px;
-    border-top-left-radius: 6px;
-    border-top-right-radius: 6px;
-    font-size: 18px;
+    padding: 9px 14px;
+    border-radius: 999px;
+    font-size: 0.96rem;
 }
 
 .tab.active {
-    background: #fff;
-    border-color: #d1d5db;
-    color: #111827;
+    background: rgba(255, 138, 61, 0.14);
+    border-color: rgba(255, 138, 61, 0.72);
+    color: #ffe1cc;
 }
 
 .panel {
@@ -70,8 +111,9 @@ body {
 
 .converter-block h2 {
     text-align: center;
-    font-size: 46px;
-    margin: 14px 0;
+    font-size: clamp(1.35rem, 2.4vw, 1.85rem);
+    margin: 12px 0;
+    color: #edf3ff;
 }
 
 .controls-row {
@@ -84,12 +126,19 @@ body {
 
 .controls-row select,
 .controls-row input {
-    border: 1px solid #cbd5e1;
-    border-radius: 8px;
-    padding: 8px 10px;
-    font-size: 18px;
-    background: #fff;
-    color: #1f2937;
+    border: 1px solid rgba(122, 165, 245, 0.42);
+    border-radius: 10px;
+    padding: 9px 10px;
+    font-size: 0.98rem;
+    background: rgba(6, 13, 30, 0.84);
+    color: #f4f8ff;
+}
+
+.controls-row select:focus,
+.controls-row input:focus {
+    outline: none;
+    border-color: rgba(255, 138, 61, 0.72);
+    box-shadow: 0 0 0 3px rgba(255, 138, 61, 0.12);
 }
 
 #to-gregorian-month,
@@ -104,24 +153,25 @@ body {
 
 .input-group {
     display: inline-flex;
-    border: 1px solid #cbd5e1;
-    border-radius: 8px;
+    border: 1px solid rgba(122, 165, 245, 0.42);
+    border-radius: 10px;
     overflow: hidden;
-    background: #fff;
+    background: rgba(6, 13, 30, 0.84);
 }
 
 .input-group input {
     width: 74px;
     border: none;
-    border-right: 1px solid #cbd5e1;
+    border-right: 1px solid rgba(122, 165, 245, 0.32);
     border-radius: 0;
     text-align: center;
+    box-shadow: none;
 }
 
 .input-group span {
     padding: 8px 10px;
-    font-size: 17px;
-    color: #374151;
+    font-size: 0.95rem;
+    color: #d5e3ff;
 }
 
 .action-row {
@@ -131,28 +181,33 @@ body {
 }
 
 .action-row button {
-    border: 1px solid #2563eb;
-    background: #2563eb;
-    color: #fff;
-    border-radius: 8px;
-    padding: 8px 22px;
-    font-size: 20px;
+    border: 1px solid var(--accent);
+    background: rgba(255, 138, 61, 0.08);
+    color: #ffd4b2;
+    border-radius: 999px;
+    padding: 10px 22px;
+    font-size: 1rem;
+    font-weight: 700;
     cursor: pointer;
+}
+
+.action-row button:hover {
+    background: rgba(255, 138, 61, 0.2);
 }
 
 hr {
     border: none;
-    border-top: 1px solid #d1d5db;
+    border-top: 1px solid rgba(122, 165, 245, 0.26);
     margin: 14px 0;
 }
 
 .result-card {
     max-width: 100%;
     margin: 14px auto 0;
-    background: #bdd0ec;
-    border: 1px solid #a3bfdf;
-    border-radius: 8px;
-    padding: 10px 12px;
+    background: rgba(16, 35, 74, 0.95);
+    border: 1px solid rgba(122, 165, 245, 0.34);
+    border-radius: 12px;
+    padding: 12px 14px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -162,8 +217,9 @@ hr {
 .result-card span {
     flex: 1;
     text-align: center;
-    font-size: 40px;
-    color: #123d7d;
+    font-size: 1.08rem;
+    color: #edf3ff;
+    line-height: 1.35;
 }
 
 .result-lines {
@@ -172,15 +228,17 @@ hr {
 }
 
 .line-am {
-    font-size: 38px;
-    color: #123d7d;
+    font-size: 1.05rem;
+    color: #edf3ff;
+    line-height: 1.35;
     font-family: "Abyssinica SIL", "Noto Sans Ethiopic", sans-serif;
 }
 
 .line-en {
-    font-size: 36px;
-    color: #123d7d;
-    margin-top: 2px;
+    font-size: 1rem;
+    color: #bdd2f8;
+    margin-top: 4px;
+    line-height: 1.35;
 }
 
 .result-actions {
@@ -191,22 +249,26 @@ hr {
 .icon-btn {
     width: 42px;
     height: 42px;
-    border: 1px solid #3b82f6;
-    border-radius: 8px;
-    background: #e5f0ff;
-    color: #1d4ed8;
+    border: 1px solid rgba(255, 138, 61, 0.9);
+    border-radius: 10px;
+    background: rgba(255, 138, 61, 0.12);
+    color: #ffe4cf;
     cursor: pointer;
-    font-size: 22px;
+    font-size: 1rem;
+}
+
+.icon-btn:hover {
+    background: rgba(255, 138, 61, 0.24);
 }
 
 .error {
     margin-top: 12px;
-    border: 1px solid #fecaca;
-    background: #fef2f2;
-    color: #b91c1c;
-    border-radius: 8px;
+    border: 1px solid rgba(255, 123, 123, 0.45);
+    background: rgba(95, 22, 22, 0.3);
+    color: #ffb4b4;
+    border-radius: 10px;
     padding: 8px 10px;
-    font-size: 18px;
+    font-size: 0.95rem;
 }
 
 .hidden {
@@ -214,31 +276,40 @@ hr {
 }
 
 @media (max-width: 860px) {
+    .page {
+        margin-top: 18px;
+        padding: 0 12px;
+    }
+
     .title {
-        font-size: 40px;
+        font-size: clamp(1.65rem, 8vw, 2.15rem);
     }
 
-    .subtitle {
-        font-size: 18px;
-    }
-
-    .tab {
-        font-size: 17px;
+    .subtitle,
+    .tab,
+    .controls-row select,
+    .controls-row input,
+    .action-row button,
+    .error {
+        font-size: 0.95rem;
     }
 
     .converter-block h2 {
-        font-size: 34px;
+        font-size: 1.2rem;
     }
 
-    .controls-row select,
-    .controls-row input,
-    .action-row button {
-        font-size: 17px;
+    .result-card {
+        flex-direction: column;
+        align-items: stretch;
     }
 
     .result-card span,
     .line-am,
     .line-en {
-        font-size: 30px;
+        font-size: 0.98rem;
+    }
+
+    .result-actions {
+        justify-content: center;
     }
 }
