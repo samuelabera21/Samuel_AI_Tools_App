@@ -302,8 +302,8 @@ def ask_knowledge_question(
             vector_store = _load_vector_store(embeddings)
             retrieved_docs = vector_store.similarity_search(question, k=top_k)
     except ValueError:
-        # Allow general assistant behavior even if no vector index exists yet.
-        retrieved_docs = []
+        # If vector index is missing, return error instead of chat fallback.
+        raise ValueError("Knowledge base is empty. Please ingest PDF or URL first.")
 
     context_blocks = []
 
