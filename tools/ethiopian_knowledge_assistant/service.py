@@ -315,58 +315,30 @@ def ask_knowledge_question(
         vector_store = _load_vector_store(embeddings)
         retrieved_docs = vector_store.similarity_search(question, k=top_k)
 
+    # Only answer if retrieved_docs are non-empty and all sources are user-uploaded or user-provided URLs
     context_blocks = []
-
     for index, doc in enumerate(retrieved_docs, start=1):
         source = str(doc.metadata.get("source", "Unknown source"))
+        source_type = doc.metadata.get("source_type", "")
         cleaned_snippet = " ".join(doc.page_content.split())
         short_snippet = cleaned_snippet[:360]
-
         context_blocks.append(f"[{index}] Source: {source}\nContent: {cleaned_snippet}")
-        sources.append({"source": source, "snippet": short_snippet})
+        sources.append({"source": source, "snippet": short_snippet, "source_type": source_type})
 
+    # If no docs or all docs are bundled, return error
+    if not sources or all(s.get("source_type") == "bundled" for s in sources):
+        raise ValueError("No data available. Please ingest PDF or URL.")
+
+    # Build prompt as before, but only for user sources
     system_prompt = (
-        "You are an AI assistant for an Ethiopian AI platform. "
-        "You can answer any question clearly and helpfully. "
-        "You also know information about the platform and its developer. "
-        "Developer: Samuel Abera. Samuel Abera is a software engineering student "
-        "from Ethiopia building AI tools. "
-        "If the user asks about the developer or platform, prioritize provided context when available. "
-        "If retrieved context is empty, still answer normally using general knowledge. "
-        "Style rules: respond in plain natural prose, no markdown, no JSON, no bullet symbols, "
-        "and keep answers concise and readable."
+        "You are an Ethiopian Knowledge Assistant. Answer ONLY using the provided context from user-uploaded files or URLs. "
+        "If context is missing, do not answer. Respond in plain natural prose, no markdown, no JSON, no bullet symbols, and keep answers concise and readable."
     )
 
-    lower_question = question.lower()
-    is_identity_question = any(
-        keyword in lower_question
-        for keyword in (
-            "who built",
-            "who is the developer",
-            "developer",
-            "who created",
-            "about samuel",
-            "about the platform",
-        )
+    user_prompt = (
+        f"User Question: {question}\n\n"
+        f"Retrieved Context:\n{chr(10).join(context_blocks)}"
     )
-
-    if context_blocks:
-        answer_instruction = (
-            "Answer clearly. If context contains relevant platform details, use it."
-        )
-        if is_identity_question:
-            answer_instruction = (
-                "Answer in 3 to 5 sentences using the context, and include name, background, "
-                "AI focus, and what the platform provides."
-            )
-
-        user_prompt = (
-            f"User Question: {question}\n\n"
-            f"Retrieved Context:\n{chr(10).join(context_blocks)}\n\n"
-            f"{answer_instruction}"
-        )
-    else:
-        user_prompt = f"User Question: {question}\n\nAnswer clearly."
 
     try:
         completion = chat_client.chat.completions.create(
