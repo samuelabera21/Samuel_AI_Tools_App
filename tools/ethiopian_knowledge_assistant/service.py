@@ -289,21 +289,31 @@ def ask_knowledge_question(
     temperature: float = 0.6,
     max_tokens: int = 16384,
 ) -> dict:
-    _ensure_bundled_knowledge_index()
     chat_client = _build_nvidia_chat_client()
     embedding_client = _build_nvidia_embedding_client()
     embeddings = NVIDIAEmbeddings(client=embedding_client, model=DEFAULT_EMBEDDING_MODEL)
 
+    # Check if vector index exists and contains ONLY user-uploaded docs (not bundled knowledge)
+    index_faiss = VECTOR_DIR / "index.faiss"
+    index_pkl = VECTOR_DIR / "index.pkl"
+    if not (index_faiss.exists() and index_pkl.exists()):
+        raise ValueError("Knowledge base is empty. Please ingest PDF or URL first.")
+
+    # Check if index was built from only bundled docs (no user files/urls)
+    # If so, treat as empty for knowledge assistant
+    user_uploads_dir = UPLOADS_DIR
+    has_user_uploads = user_uploads_dir.exists() and any(user_uploads_dir.iterdir())
+    # Optionally, check for web ingested URLs (could track in a file or metadata)
+    # For now, if no uploads, treat as empty
+    if not has_user_uploads:
+        raise ValueError("Knowledge base is empty. Please ingest PDF or URL first.")
+
     retrieved_docs: list[Document] = []
     sources = []
 
-    try:
-        with LOCK:
-            vector_store = _load_vector_store(embeddings)
-            retrieved_docs = vector_store.similarity_search(question, k=top_k)
-    except ValueError:
-        # If vector index is missing, return error instead of chat fallback.
-        raise ValueError("Knowledge base is empty. Please ingest PDF or URL first.")
+    with LOCK:
+        vector_store = _load_vector_store(embeddings)
+        retrieved_docs = vector_store.similarity_search(question, k=top_k)
 
     context_blocks = []
 
