@@ -361,3 +361,101 @@ def ask_knowledge_question(
         "answer": answer_text.strip(),
         "sources": sources,
     }
+
+
+def _load_home_chat_knowledge_text() -> str:
+    """Load bundled platform docs used by the floating site-wide chat."""
+    if not KNOWLEDGE_DIR.exists():
+        return ""
+
+    preferred_files = ["developer.txt", "platform.txt", "tools.txt"]
+    sections: list[str] = []
+
+    for file_name in preferred_files:
+        path = KNOWLEDGE_DIR / file_name
+        if not path.exists():
+            continue
+
+        try:
+            content = path.read_text(encoding="utf-8").strip()
+        except OSError:
+            continue
+
+        if content:
+            sections.append(f"[{file_name}]\n{content}")
+
+    return "\n\n".join(sections)
+
+
+def _tokenize_for_match(text: str) -> set[str]:
+    # Simple lexical matching keeps home chat fast and independent from vector ingest state.
+    return {
+        token
+        for token in re.findall(r"[a-zA-Z0-9_\u1200-\u137F]+", (text or "").lower())
+        if len(token) > 2
+    }
+
+
+def _build_home_chat_context(question: str, max_blocks: int = 6) -> str:
+    knowledge_text = _load_home_chat_knowledge_text()
+    if not knowledge_text:
+        return ""
+
+    blocks = [block.strip() for block in re.split(r"\n\s*\n", knowledge_text) if block.strip()]
+    if not blocks:
+        return ""
+
+    question_tokens = _tokenize_for_match(question)
+    scored: list[tuple[int, str]] = []
+
+    for block in blocks:
+        block_tokens = _tokenize_for_match(block)
+        overlap = len(question_tokens & block_tokens)
+        scored.append((overlap, block))
+
+    scored.sort(key=lambda item: item[0], reverse=True)
+    picked_blocks = [block for _, block in scored[:max_blocks]]
+    return "\n\n".join(picked_blocks)
+
+
+def ask_home_chat_question(
+    question: str,
+    model: str | None = None,
+    temperature: float = 0.4,
+    max_tokens: int = 420,
+) -> dict:
+    """Answer from bundled platform/developer docs and still support general chat."""
+    chat_client = _build_nvidia_chat_client()
+    context_text = _build_home_chat_context(question)
+
+    system_prompt = (
+        "You are the site-wide assistant for ፍኖት Ethiopian AI HUB. "
+        "When a question is about the platform or developer, treat the provided context as the source of truth. "
+        "If the question is general and not covered by context, answer normally in a concise and friendly way. "
+        "Never claim missing PDF/URL ingestion because that applies only to a different tool."
+    )
+
+    user_prompt = (
+        f"Question: {question}\n\n"
+        "Platform Context (use when relevant):\n"
+        f"{context_text or 'No platform context available.'}"
+    )
+
+    try:
+        completion = chat_client.chat.completions.create(
+            model=model or DEFAULT_CHAT_MODEL,
+            messages=[
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": user_prompt},
+            ],
+            temperature=temperature,
+            top_p=0.95,
+            max_tokens=max_tokens,
+        )
+    except Exception as exc:
+        raise RuntimeError(f"NVIDIA chat request failed: {exc}") from exc
+
+    answer_text = completion.choices[0].message.content or "No answer generated."
+    answer_text = _clean_answer_text(answer_text)
+
+    return {"answer": answer_text.strip()}

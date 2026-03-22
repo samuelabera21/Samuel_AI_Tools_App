@@ -39,6 +39,7 @@ from tools.ethiopian_knowledge_assistant.service import (
     get_uploads_dir,
     ingest_knowledge,
     ask_knowledge_question,
+    ask_home_chat_question,
 )
 from tools.amharic_music_generator.generator import generate_music, MusicGenerationError
 
@@ -601,11 +602,10 @@ def home_chat_ask_api():
         return jsonify({"error": "Question is required."}), 400
 
     try:
-        # Fast profile for widget chat: fewer retrieved chunks + shorter generation.
+        # Floating chat is platform-aware + general assistant, independent from PDF/URL ingest state.
         fast_model = os.getenv("NVIDIA_HOME_CHAT_MODEL", "nvidia/nemotron-3-nano-30b-a3b")
-        result = ask_knowledge_question(
+        result = ask_home_chat_question(
             question=question,
-            top_k=2,
             model=fast_model,
             temperature=0.4,
             max_tokens=420,
