@@ -387,6 +387,17 @@ def _load_home_chat_knowledge_text() -> str:
     return "\n\n".join(sections)
 
 
+def _load_knowledge_file_text(file_name: str) -> str:
+    path = KNOWLEDGE_DIR / file_name
+    if not path.exists():
+        return ""
+
+    try:
+        return path.read_text(encoding="utf-8").strip()
+    except OSError:
+        return ""
+
+
 def _tokenize_for_match(text: str) -> set[str]:
     # Simple lexical matching keeps home chat fast and independent from vector ingest state.
     return {
@@ -418,6 +429,34 @@ def _build_home_chat_context(question: str, max_blocks: int = 6) -> str:
     return "\n\n".join(picked_blocks)
 
 
+def _is_developer_profile_question(question: str) -> bool:
+    normalized = (question or "").strip().lower()
+    if not normalized:
+        return False
+
+    direct_phrases = (
+        "who is the developer",
+        "who developed",
+        "who built",
+        "who made",
+        "who is the creator",
+        "who is the founder",
+        "about the developer",
+        "developer of this app",
+        "about me",
+        "who am i",
+    )
+    if any(phrase in normalized for phrase in direct_phrases):
+        return True
+
+    keyword_hits = sum(
+        1
+        for keyword in ("developer", "creator", "founder", "owner", "built", "made")
+        if keyword in normalized
+    )
+    return keyword_hits >= 1
+
+
 def ask_home_chat_question(
     question: str,
     model: str | None = None,
@@ -425,6 +464,11 @@ def ask_home_chat_question(
     max_tokens: int = 420,
 ) -> dict:
     """Answer from bundled platform/developer docs and still support general chat."""
+    if _is_developer_profile_question(question):
+        developer_profile = _load_knowledge_file_text("developer.txt")
+        if developer_profile:
+            return {"answer": _clean_answer_text(developer_profile)}
+
     chat_client = _build_nvidia_chat_client()
     context_text = _build_home_chat_context(question)
 
