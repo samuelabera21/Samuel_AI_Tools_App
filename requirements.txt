@@ -14,3 +14,7 @@ tiktoken
 openai
 python-dotenv
 gunicorn
+torch
+torchaudio
+audiocraft
+transformers
