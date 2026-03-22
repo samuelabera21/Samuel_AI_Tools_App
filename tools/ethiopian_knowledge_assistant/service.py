@@ -457,6 +457,28 @@ def _is_developer_profile_question(question: str) -> bool:
     return keyword_hits >= 1
 
 
+def _is_app_name_question(question: str) -> bool:
+    normalized = (question or "").strip().lower()
+    if not normalized:
+        return False
+
+    direct_phrases = (
+        "name of this app",
+        "what is the app name",
+        "what is this app called",
+        "app name",
+        "platform name",
+        "what is the name of this platform",
+    )
+
+    if any(phrase in normalized for phrase in direct_phrases):
+        return True
+
+    has_name_term = any(term in normalized for term in ("name", "called", "title"))
+    has_target_term = any(term in normalized for term in ("app", "platform", "website", "site"))
+    return has_name_term and has_target_term
+
+
 def ask_home_chat_question(
     question: str,
     model: str | None = None,
@@ -464,6 +486,9 @@ def ask_home_chat_question(
     max_tokens: int = 420,
 ) -> dict:
     """Answer from bundled platform/developer docs and still support general chat."""
+    if _is_app_name_question(question):
+        return {"answer": "ፍኖት Ethiopian AI HUB"}
+
     if _is_developer_profile_question(question):
         developer_profile = _load_knowledge_file_text("developer.txt")
         if developer_profile:
