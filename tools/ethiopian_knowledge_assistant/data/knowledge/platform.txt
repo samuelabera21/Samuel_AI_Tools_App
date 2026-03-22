@@ -1,4 +1,4 @@
-MetaAppz AI Hub is an Ethiopian AI tools platform built to make AI practical for everyday users, students, creators, and developers.
+ፍኖት Ethiopian AI HUB is an Ethiopian AI tools platform built to make AI practical for everyday users, students, creators, and developers.
 
 The platform focuses on Ethiopian and Amharic-centered use cases while still supporting general AI assistance. It combines language tools, utility tools, and educational tools in one place.
 

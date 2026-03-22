@@ -4,7 +4,7 @@ Samuel Abera Mekonn is a 3rd year Software Engineering student in Ethiopia.
 
 He focuses on AI projects and is building AI technologies focused on the Amharic language.
 
-He built MetaAppz AI Hub to make practical AI tools accessible for Ethiopian users, students, and developers.
+He built ፍኖት Ethiopian AI HUB to make practical AI tools accessible for Ethiopian users, students, and developers.
 
 His work combines language technology and productivity tools, including Amharic OCR, speech-related AI features, and a knowledge assistant powered by retrieval-augmented generation.
 
