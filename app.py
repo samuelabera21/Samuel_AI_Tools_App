@@ -40,6 +40,7 @@ from tools.ethiopian_knowledge_assistant.service import (
     ingest_knowledge,
     ask_knowledge_question,
 )
+from tools.amharic_music_generator.generator import generate_music, MusicGenerationError
 
 load_dotenv()
 
@@ -128,6 +129,35 @@ def amharic_ocr():
             image_url = f"data:{mime_type};base64,{encoded}"
 
     return render_template("ocr.html", text=text, image_url=image_url)
+
+
+@app.route("/generate-music", methods=["GET", "POST"])
+def generate_music_page():
+    if request.method == "GET":
+        return render_template("music.html")
+
+    payload = request.get_json(silent=True) or request.form
+    prompt = str(payload.get("prompt", "")).strip()
+    style = str(payload.get("style", "traditional_ethiopian")).strip() or "traditional_ethiopian"
+    duration_raw = payload.get("duration", 10)
+
+    try:
+        duration = int(duration_raw)
+    except (TypeError, ValueError):
+        return jsonify({"error": "Duration must be a number (5, 10, or 20)."}), 400
+
+    if not prompt:
+        return jsonify({"error": "Please enter a prompt before generating music."}), 400
+
+    try:
+        result = generate_music(prompt=prompt, style_key=style, duration_seconds=duration)
+        return jsonify(result)
+    except ValueError as exc:
+        return jsonify({"error": str(exc)}), 400
+    except MusicGenerationError as exc:
+        return jsonify({"error": str(exc)}), 503
+    except Exception:
+        return jsonify({"error": "Unexpected server error while generating music."}), 500
 
 
 @app.route("/Tools/Numbers_to_Amharic_Words_Converter", methods=["GET", "POST"])
