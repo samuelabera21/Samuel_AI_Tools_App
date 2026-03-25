@@ -2,6 +2,8 @@ import re
 import threading
 import uuid
 import importlib
+import os
+import shutil
 import numpy as np
 from pathlib import Path
 from typing import Dict, Tuple
@@ -37,6 +39,33 @@ _AMHARIC_KEYWORD_MAP = {
 
 class MusicGenerationError(RuntimeError):
     """Raised when music generation fails in a user-facing way."""
+
+
+def _describe_dependency_issue(error: Exception) -> str:
+    """Create a stable, user-facing dependency message from an import/init error."""
+    if isinstance(error, ModuleNotFoundError):
+        missing_module = getattr(error, "name", None) or "unknown module"
+        return (
+            f"Missing Python package: {missing_module}. "
+            "Install music dependencies with: "
+            "pip install torch torchaudio audiocraft transformers soundfile sentencepiece"
+        )
+
+    error_text = str(error)
+    if "ffmpeg" in error_text.lower() or "av" in error_text.lower():
+        ffmpeg_in_path = shutil.which("ffmpeg")
+        ffmpeg_env = os.environ.get("FFMPEG_BINARY")
+        if ffmpeg_in_path or ffmpeg_env:
+            return (
+                "Audio backend could not initialize (ffmpeg/av issue). "
+                "FFmpeg appears configured, so restart the server/terminal and try again."
+            )
+        return (
+            "Audio backend needs FFmpeg in PATH. "
+            "On Windows, add your ffmpeg bin directory to PATH, restart terminal/server, then retry."
+        )
+
+    return f"Music backend initialization failed: {error_text or error.__class__.__name__}"
 
 
 def _contains_amharic(text: str) -> bool:
@@ -79,6 +108,9 @@ def _load_music_model():
         if _MODEL is not None and _BACKEND is not None:
             return _BACKEND, _MODEL, _PROCESSOR
 
+        audiocraft_error = None
+        transformers_error = None
+
         try:
             # Import lazily so the Flask app can still start even if dependency
             # installation is still pending.
@@ -88,7 +120,8 @@ def _load_music_model():
             _PROCESSOR = None
             _BACKEND = "audiocraft"
             return _BACKEND, _MODEL, _PROCESSOR
-        except Exception:
+        except Exception as exc:
+            audiocraft_error = exc
             # Windows environments often fail to load audiocraft because of
             # native AV/FFmpeg dependencies. Fall back to transformers model.
             pass
@@ -105,10 +138,21 @@ def _load_music_model():
             _BACKEND = "transformers"
             return _BACKEND, _MODEL, _PROCESSOR
         except Exception as exc:
-            raise MusicGenerationError(
-                "Music dependencies are not fully installed. "
-                "Run: pip install torch torchaudio audiocraft transformers"
-            ) from exc
+            transformers_error = exc
+
+        dependency_errors = [
+            _describe_dependency_issue(err)
+            for err in (audiocraft_error, transformers_error)
+            if err is not None
+        ]
+
+        unique_errors = list(dict.fromkeys(dependency_errors))
+        if not unique_errors:
+            unique_errors = [
+                "Music backend could not initialize."
+            ]
+
+        raise MusicGenerationError(" | ".join(unique_errors))
 
     return _BACKEND, _MODEL, _PROCESSOR
 
