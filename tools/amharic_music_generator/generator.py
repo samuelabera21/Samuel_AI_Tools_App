@@ -16,7 +16,8 @@ _PROCESSOR = None
 _BACKEND = None
 _MODEL_LOCK = threading.Lock()
 
-_DEFAULT_AUDIO_STORAGE_DIR = str(Path("static") / "audio")
+_PROJECT_ROOT = Path(__file__).resolve().parents[2]
+_DEFAULT_AUDIO_STORAGE_DIR = str(_PROJECT_ROOT / "static" / "audio")
 _AUDIO_RETENTION_HOURS = int(os.getenv("AUDIO_RETENTION_HOURS", "168") or "168")
 
 # Supported style labels from the UI and their richer text descriptions.

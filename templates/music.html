@@ -81,6 +81,25 @@
     const downloadLink = document.getElementById('download-link');
     const enhancedPromptEl = document.getElementById('enhanced-prompt');
     const generateBtn = document.getElementById('generate-btn');
+    let audioFallbackTried = false;
+
+    audioPlayer.addEventListener('error', () => {
+      if (audioFallbackTried) {
+        return;
+      }
+
+      const fallbackFile = downloadLink.getAttribute('data-filename');
+      if (!fallbackFile) {
+        return;
+      }
+
+      audioFallbackTried = true;
+      const fallbackUrl = `/static/audio/${fallbackFile}`;
+      audioPlayer.src = fallbackUrl;
+      audioPlayer.load();
+      downloadLink.href = fallbackUrl;
+      statusEl.textContent = 'Switched to compatibility audio path.';
+    });
 
     function resetMessages() {
       statusEl.textContent = '';
@@ -120,10 +139,12 @@
           throw new Error(data.error || 'Music generation failed.');
         }
 
+        audioFallbackTried = false;
         audioPlayer.src = data.audioUrl;
         audioPlayer.load();
         downloadLink.href = data.audioUrl;
         downloadLink.setAttribute('download', data.filename || 'generated_music.wav');
+        downloadLink.setAttribute('data-filename', data.filename || '');
         enhancedPromptEl.textContent = data.enhancedPrompt || '';
         resultEl.hidden = false;
         statusEl.textContent = 'Music generated successfully.';
