@@ -11,19 +11,29 @@
 <body>
       {% include "_tools_nav_chat.html" %}
 
-    <main class="page">
-        <h1 class="title">Amharic AI Prompt to Image Generator</h1>
-        <p class="subtitle">
-            Enter an Amharic prompt and generate a brand-new AI image from meaning, not text rendering.
-            Example: "በጫካ ውስጥ ያለ ትልቅ አንበሳ".
-        </p>
+    <main class="image-chat-page">
+        <section class="hero-block">
+            <h1 class="title">Amharic AI Prompt to Image Generator</h1>
+            <p class="subtitle">Create images from Amharic meaning, not text rendering.</p>
+        </section>
 
-        <section class="card">
+        <section class="chat-workspace">
             <section id="chat-thread" class="chat-thread" aria-live="polite">
+                <article class="assistant-intro">
+                    <p>Describe your image in Amharic or English and I will generate it.</p>
+                </article>
+
                 <article id="user-message" class="chat-message user hidden">
-                    <div class="chat-bubble">
+                    <div class="chat-bubble prompt-bubble">
                         <p class="chat-label">You</p>
                         <p id="user-prompt-text" class="chat-text"></p>
+                    </div>
+                </article>
+
+                <article id="loading-message" class="chat-message assistant hidden">
+                    <div class="chat-bubble status-bubble">
+                        <p class="chat-label">ፍኖት AI Image</p>
+                        <span id="loading" class="loading">Creating your image...</span>
                     </div>
                 </article>
 
@@ -36,39 +46,33 @@
                         <img id="generated-image" alt="Generated image from Amharic prompt">
                     </div>
                 </article>
-
-                <article id="loading-message" class="chat-message assistant hidden">
-                    <div class="chat-bubble status-bubble">
-                        <p class="chat-label">ፍኖት AI Image</p>
-                        <span id="loading" class="loading">Generating image, please wait...</span>
-                    </div>
-                </article>
             </section>
 
-            <div class="form-grid">
-                <label class="field">
-                    <span>Amharic Prompt</span>
-                    <textarea id="prompt" rows="5" placeholder="Type your Amharic image prompt here..."></textarea>
-                </label>
-
-                <div class="row">
-                    <label class="field">
-                        <span>Image Size</span>
-                        <select id="size">
-                            <option value="1024x1024" selected>1024 x 1024 (Recommended)</option>
-                        </select>
-                    </label>
-
-                    <label class="field">
-                        <span>Style (Optional)</span>
-                        <input id="style" type="text" placeholder="e.g. cinematic, watercolor, photorealistic">
-                    </label>
+            <div class="composer">
+                <div class="composer-actions">
+                    <button id="toggle-settings" class="settings-btn" type="button" aria-expanded="false" aria-controls="advanced-settings">Settings</button>
                 </div>
 
-                <div class="actions">
-                    <button id="generate-btn" class="btn-primary" type="button">Generate Image</button>
+                <div id="advanced-settings" class="advanced-settings hidden">
+                    <div class="row">
+                        <label class="field">
+                            <span>Image Size</span>
+                            <select id="size">
+                                <option value="1024x1024" selected>1024 x 1024 (Recommended)</option>
+                            </select>
+                        </label>
+
+                        <label class="field">
+                            <span>Style (Optional)</span>
+                            <input id="style" type="text" placeholder="cinematic, watercolor, photorealistic">
+                        </label>
+                    </div>
                 </div>
 
+                <div class="prompt-row">
+                    <textarea id="prompt" rows="2" placeholder="Describe your image..."></textarea>
+                    <button id="generate-btn" class="btn-primary" type="button">Generate</button>
+                </div>
                 <p id="error" class="error hidden"></p>
             </div>
         </section>
@@ -88,6 +92,14 @@
         const chatThreadEl = document.getElementById("chat-thread");
         const imageEl = document.getElementById("generated-image");
         const downloadLink = document.getElementById("download-link");
+        const toggleSettingsBtn = document.getElementById("toggle-settings");
+        const advancedSettingsEl = document.getElementById("advanced-settings");
+
+        toggleSettingsBtn.addEventListener("click", () => {
+            const isHidden = advancedSettingsEl.classList.contains("hidden");
+            advancedSettingsEl.classList.toggle("hidden", !isHidden);
+            toggleSettingsBtn.setAttribute("aria-expanded", String(isHidden));
+        });
 
         function setLoading(isLoading) {
             generateButton.disabled = isLoading;
