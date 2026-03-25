@@ -12,51 +12,64 @@
   {% include "_tools_nav_chat.html" %}
 
   <main class="music-page">
-    <section class="music-card">
-      <h1>Amharic Music Generator</h1>
-      <p class="subtitle">
-        Describe your idea in Amharic or English, then generate instrumental music with AI.
-      </p>
+    <div class="studio-shell">
+      <aside class="studio-rail">
+        <h1>Create Music</h1>
+        <p>Compose Ethiopian-inspired instrumental tracks from text prompts.</p>
+        <ul class="rail-list">
+          <li class="active">Prompt Composer</li>
+          <li>Generation Settings</li>
+          <li>Output Preview</li>
+        </ul>
+      </aside>
 
-      <form id="music-form" class="music-form" novalidate>
-        <label for="prompt">Music Idea</label>
-        <textarea id="prompt" name="prompt" rows="4" placeholder="Example: ፍቅር ዘፈን or Emotional Ethiopian sunset jazz" required></textarea>
+      <section class="studio-main">
+        <header class="composer-bar">
+          <p>Describe your music idea in Amharic or English.</p>
+        </header>
 
-        <div class="form-row">
-          <div class="field">
-            <label for="style">Style</label>
-            <select id="style" name="style">
-              <option value="traditional_ethiopian">Traditional Ethiopian</option>
-              <option value="jazz">Jazz</option>
-              <option value="hip_hop">Hip Hop</option>
-              <option value="gospel">Gospel</option>
-            </select>
-          </div>
+        <section class="music-card">
+          <form id="music-form" class="music-form" novalidate>
+            <label for="prompt">Music Idea</label>
+            <textarea id="prompt" name="prompt" rows="4" placeholder="Example: ፍቅር ዘፈን or Emotional Ethiopian sunset jazz" required></textarea>
 
-          <div class="field">
-            <label for="duration">Duration</label>
-            <select id="duration" name="duration">
-              <option value="5">5 seconds</option>
-              <option value="10" selected>10 seconds</option>
-              <option value="20">20 seconds</option>
-            </select>
-          </div>
-        </div>
+            <div class="form-row">
+              <div class="field">
+                <label for="style">Style</label>
+                <select id="style" name="style">
+                  <option value="traditional_ethiopian">Traditional Ethiopian</option>
+                  <option value="jazz">Jazz</option>
+                  <option value="hip_hop">Hip Hop</option>
+                  <option value="gospel">Gospel</option>
+                </select>
+              </div>
 
-        <button id="generate-btn" type="submit">Generate Music</button>
-      </form>
+              <div class="field">
+                <label for="duration">Duration</label>
+                <select id="duration" name="duration">
+                  <option value="5">5 seconds</option>
+                  <option value="10" selected>10 seconds</option>
+                  <option value="20">20 seconds</option>
+                </select>
+              </div>
+            </div>
 
-      <p id="status" class="status" role="status" aria-live="polite"></p>
-      <p id="error" class="error" role="alert" hidden></p>
+            <button id="generate-btn" type="submit">Generate Music</button>
+          </form>
 
-      <section id="result" class="result" hidden>
-        <h2>Your Generated Track</h2>
-        <audio id="audio-player" controls></audio>
-        <a id="download-link" class="download-btn" href="#" download>Download Audio</a>
-        <p class="enhanced-label">AI Prompt Used:</p>
-        <p id="enhanced-prompt" class="enhanced-prompt"></p>
+          <p id="status" class="status" role="status" aria-live="polite"></p>
+          <p id="error" class="error" role="alert" hidden></p>
+
+          <section id="result" class="result" hidden>
+            <h2>Your Generated Track</h2>
+            <audio id="audio-player" controls></audio>
+            <a id="download-link" class="download-btn" href="#" download>Download Audio</a>
+            <p class="enhanced-label">AI Prompt Used:</p>
+            <p id="enhanced-prompt" class="enhanced-prompt"></p>
+          </section>
+        </section>
       </section>
-    </section>
+    </div>
   </main>
 
   <script>
