@@ -23,8 +23,15 @@ services:
         value: 150
       - key: FRONTEND_ORIGINS
         value: https://YOUR_VERCEL_DOMAIN.vercel.app
+      - key: AUDIO_STORAGE_DIR
+        value: /opt/render/project/src/data/generated_audio
+      - key: AUDIO_RETENTION_HOURS
+        value: 168
 
 disks:
   - name: ai-tools-rag-data
     mountPath: /opt/render/project/src/tools/ethiopian_knowledge_assistant/data
     sizeGB: 1
+  - name: ai-tools-audio-data
+    mountPath: /opt/render/project/src/data/generated_audio
+    sizeGB: 2

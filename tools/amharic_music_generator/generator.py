@@ -4,9 +4,10 @@ import uuid
 import importlib
 import os
 import shutil
+import time
 import numpy as np
 from pathlib import Path
-from typing import Dict, Tuple
+from typing import Dict
 
 # Keep one shared model instance for all requests.
 # This avoids reloading MusicGen on every generation call.
@@ -14,6 +15,9 @@ _MODEL = None
 _PROCESSOR = None
 _BACKEND = None
 _MODEL_LOCK = threading.Lock()
+
+_DEFAULT_AUDIO_STORAGE_DIR = str(Path("static") / "audio")
+_AUDIO_RETENTION_HOURS = int(os.getenv("AUDIO_RETENTION_HOURS", "168") or "168")
 
 # Supported style labels from the UI and their richer text descriptions.
 _STYLE_PROMPTS = {
@@ -39,6 +43,28 @@ _AMHARIC_KEYWORD_MAP = {
 
 class MusicGenerationError(RuntimeError):
     """Raised when music generation fails in a user-facing way."""
+
+
+def get_audio_storage_dir() -> Path:
+    """Return configured storage directory for generated music files."""
+    storage_dir = os.getenv("AUDIO_STORAGE_DIR", _DEFAULT_AUDIO_STORAGE_DIR).strip()
+    return Path(storage_dir)
+
+
+def _cleanup_old_audio_files(storage_dir: Path) -> None:
+    """Best-effort cleanup to keep disk usage bounded in production."""
+    if _AUDIO_RETENTION_HOURS <= 0:
+        return
+
+    cutoff_ts = time.time() - (_AUDIO_RETENTION_HOURS * 3600)
+
+    for audio_file in storage_dir.glob("output_*.wav"):
+        try:
+            if audio_file.is_file() and audio_file.stat().st_mtime < cutoff_ts:
+                audio_file.unlink(missing_ok=True)
+        except Exception:
+            # Cleanup should never fail the user request.
+            continue
 
 
 def _describe_dependency_issue(error: Exception) -> str:
@@ -231,9 +257,10 @@ def generate_music(prompt: str, style_key: str = "traditional_ethiopian", durati
             "Please try again with a shorter prompt."
         ) from exc
 
-    # Save under static/audio so Flask can serve it directly.
-    output_dir = Path("static") / "audio"
+    output_dir = get_audio_storage_dir()
     output_dir.mkdir(parents=True, exist_ok=True)
+
+    _cleanup_old_audio_files(output_dir)
 
     filename = f"output_{uuid.uuid4().hex}.wav"
     output_path = output_dir / filename
@@ -246,5 +273,5 @@ def generate_music(prompt: str, style_key: str = "traditional_ethiopian", durati
     return {
         "enhancedPrompt": enhanced_prompt,
         "filename": filename,
-        "audioUrl": f"/static/audio/{filename}",
+        "audioUrl": f"/media/audio/{filename}",
     }

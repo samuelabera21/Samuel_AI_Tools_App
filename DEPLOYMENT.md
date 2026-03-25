@@ -101,3 +101,14 @@ The assistant stores vector index and uploads under:
 - tools/ethiopian_knowledge_assistant/data
 
 render.yaml mounts a persistent disk there, so indexed knowledge survives restarts/redeploys.
+
+## Persistence Note (Generated Audio)
+
+Generated music files are configured for production persistence:
+
+- Storage directory is controlled by `AUDIO_STORAGE_DIR`.
+- Render blueprint mounts a dedicated persistent disk at that path.
+- Files are served from `/media/audio/<filename>`.
+- Automatic cleanup is controlled by `AUDIO_RETENTION_HOURS` (default 168 hours = 7 days).
+
+This means generated audio survives restarts and redeploys, while old files are cleaned automatically.

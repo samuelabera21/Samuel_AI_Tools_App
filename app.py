@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template, send_file, jsonify, redirect, abort
+from flask import Flask, request, render_template, send_file, jsonify, redirect, abort, send_from_directory
 import io
 import base64
 import os
@@ -41,7 +41,11 @@ from tools.ethiopian_knowledge_assistant.service import (
     ask_knowledge_question,
     ask_home_chat_question,
 )
-from tools.amharic_music_generator.generator import generate_music, MusicGenerationError
+from tools.amharic_music_generator.generator import (
+    generate_music,
+    MusicGenerationError,
+    get_audio_storage_dir,
+)
 
 load_dotenv()
 
@@ -159,6 +163,12 @@ def generate_music_page():
         return jsonify({"error": str(exc)}), 503
     except Exception:
         return jsonify({"error": "Unexpected server error while generating music."}), 500
+
+
+@app.route("/media/audio/<path:filename>")
+def generated_audio_file(filename):
+    audio_dir = get_audio_storage_dir()
+    return send_from_directory(audio_dir, filename)
 
 
 @app.route("/Tools/Numbers_to_Amharic_Words_Converter", methods=["GET", "POST"])
