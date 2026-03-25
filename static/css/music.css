@@ -49,16 +49,29 @@ body {
 }
 
 .rail-list li {
+  margin: 0;
+  padding: 0;
+}
+
+.rail-step {
+  width: 100%;
   border-radius: 14px;
   padding: 12px 14px;
   color: #d8dff7;
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.08);
+  text-align: left;
+  font-size: 1rem;
+  cursor: pointer;
 }
 
-.rail-list li.active {
+.rail-step.active {
   background: linear-gradient(120deg, rgba(215, 161, 255, 0.28), rgba(150, 171, 255, 0.22));
   border-color: rgba(224, 196, 255, 0.56);
+}
+
+.field-block {
+  scroll-margin-top: 118px;
 }
 
 .studio-main {
