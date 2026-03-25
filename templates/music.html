@@ -17,9 +17,15 @@
         <h1>Create Music</h1>
         <p>Compose Ethiopian-inspired instrumental tracks from text prompts.</p>
         <ul class="rail-list">
-          <li class="active">Prompt Composer</li>
-          <li>Generation Settings</li>
-          <li>Output Preview</li>
+          <li>
+            <button type="button" class="rail-step active" data-step="prompt" data-target="prompt-section">Prompt Composer</button>
+          </li>
+          <li>
+            <button type="button" class="rail-step" data-step="settings" data-target="settings-section">Generation Settings</button>
+          </li>
+          <li>
+            <button type="button" class="rail-step" data-step="preview" data-target="result">Output Preview</button>
+          </li>
         </ul>
       </aside>
 
@@ -30,10 +36,12 @@
 
         <section class="music-card">
           <form id="music-form" class="music-form" novalidate>
-            <label for="prompt">Music Idea</label>
-            <textarea id="prompt" name="prompt" rows="4" placeholder="Example: ፍቅር ዘፈን or Emotional Ethiopian sunset jazz" required></textarea>
+            <div id="prompt-section" class="field-block">
+              <label for="prompt">Music Idea</label>
+              <textarea id="prompt" name="prompt" rows="4" placeholder="Example: ፍቅር ዘፈን or Emotional Ethiopian sunset jazz" required></textarea>
+            </div>
 
-            <div class="form-row">
+            <div id="settings-section" class="form-row field-block">
               <div class="field">
                 <label for="style">Style</label>
                 <select id="style" name="style">
@@ -81,7 +89,37 @@
     const downloadLink = document.getElementById('download-link');
     const enhancedPromptEl = document.getElementById('enhanced-prompt');
     const generateBtn = document.getElementById('generate-btn');
+    const railSteps = document.querySelectorAll('.rail-step');
     let audioFallbackTried = false;
+
+    function setActiveStep(stepName) {
+      railSteps.forEach((stepBtn) => {
+        stepBtn.classList.toggle('active', stepBtn.dataset.step === stepName);
+      });
+    }
+
+    railSteps.forEach((stepBtn) => {
+      stepBtn.addEventListener('click', () => {
+        const targetId = stepBtn.dataset.target;
+        const targetEl = document.getElementById(targetId);
+
+        if (stepBtn.dataset.step === 'preview' && resultEl.hidden) {
+          statusEl.textContent = 'Generate music first to preview output.';
+          errorEl.hidden = true;
+          return;
+        }
+
+        if (targetEl) {
+          targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        setActiveStep(stepBtn.dataset.step);
+      });
+    });
+
+    document.getElementById('prompt').addEventListener('focus', () => setActiveStep('prompt'));
+    document.getElementById('style').addEventListener('focus', () => setActiveStep('settings'));
+    document.getElementById('duration').addEventListener('focus', () => setActiveStep('settings'));
 
     audioPlayer.addEventListener('error', () => {
       if (audioFallbackTried) {
@@ -148,6 +186,8 @@
         enhancedPromptEl.textContent = data.enhancedPrompt || '';
         resultEl.hidden = false;
         statusEl.textContent = 'Music generated successfully.';
+        setActiveStep('preview');
+        resultEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
       } catch (error) {
         errorEl.hidden = false;
         errorEl.textContent = error.message || 'Something went wrong. Please try again.';
