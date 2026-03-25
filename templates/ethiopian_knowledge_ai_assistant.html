@@ -9,54 +9,57 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='css/ethiopian_knowledge_ai_assistant.css') }}">
 </head>
 <body>
-  <canvas id="ai-network" aria-hidden="true"></canvas>
   {% include "_tools_nav_chat.html" %}
 
-  <main class="page">
-    <section class="hero">
-      <h1>Ethiopian Knowledge AI Assistant</h1>
-      <p>Build a searchable knowledge base from Ethiopian PDF documents, text files, and trusted web pages. Ask questions and get grounded answers with sources.</p>
-    </section>
+  <main class="knowledge-chat-page">
+    <section class="assistant-shell">
+      <header class="assistant-header">
+        <h1>Ethiopian Knowledge AI Assistant</h1>
+        <p>Hi i am ፍኖት Ethiopian AI HUB knowledge assistant</p>
+      </header>
 
-    <section class="panel">
-      <h2>1. Ingest Knowledge Sources</h2>
-      <form id="ingest-form" class="stack" enctype="multipart/form-data">
-        <label>
-          Upload files (.pdf, .txt, .md)
-          <input type="file" name="files" id="files" multiple accept=".pdf,.txt,.md">
-        </label>
-        <label>
-          Add URLs (one per line: Wikipedia, culture articles, language guides)
-          <textarea id="urls" name="urls" rows="5" placeholder="https://en.wikipedia.org/wiki/Ethiopian_calendar"></textarea>
-        </label>
-        <button type="submit" class="btn">Index Knowledge Base</button>
-      </form>
-      <p id="ingest-status" class="status"></p>
-    </section>
+      <section class="knowledge-tools">
+        <button id="toggle-ingest" class="tool-toggle" type="button" aria-expanded="false" aria-controls="ingest-drawer">
+          Add PDF or URL Sources
+        </button>
 
-    <section class="panel">
-      <h2>2. Ask Questions</h2>
-      <form id="ask-form" class="ask-row">
-        <input type="text" id="question" placeholder="What is the Ethiopian calendar?" required>
-        <button type="submit" class="btn">Ask</button>
-      </form>
+        <div id="ingest-drawer" class="ingest-drawer" hidden>
+          <form id="ingest-form" class="ingest-form" enctype="multipart/form-data">
+            <label for="files">Upload files (.pdf, .txt, .md)</label>
+            <input type="file" name="files" id="files" multiple accept=".pdf,.txt,.md">
 
-      <div class="examples">
-        <button type="button" class="chip" data-q="What is the Ethiopian calendar?">What is the Ethiopian calendar?</button>
-        <button type="button" class="chip" data-q="Explain Ethiopian coffee ceremony">Explain Ethiopian coffee ceremony</button>
-        <button type="button" class="chip" data-q="How does Ethiopian phone numbering work?">How does Ethiopian phone numbering work?</button>
-        <button type="button" class="chip" data-q="Translate common Amharic cultural phrases">Translate common Amharic cultural phrases</button>
-      </div>
+            <label for="urls">Add URLs (one per line)</label>
+            <textarea id="urls" name="urls" rows="4" placeholder="https://en.wikipedia.org/wiki/Ethiopian_calendar"></textarea>
 
-      <article class="result">
-        <h3>Answer</h3>
-        <p id="answer">No answer yet. Ingest sources, then ask a question.</p>
-      </article>
+            <button type="submit" class="btn">Index Knowledge</button>
+          </form>
+          <p id="ingest-status" class="status"></p>
+        </div>
+      </section>
 
-      <article class="result">
-        <h3>Source Snippets</h3>
-        <div id="sources" class="sources"></div>
-      </article>
+      <section class="chat-area" aria-label="Knowledge chat conversation">
+        <div id="chat-log" class="chat-log">
+          <article class="chat-msg assistant">
+            Hi i am ፍኖት Ethiopian AI HUB knowledge assistant. Add a URL or PDF if you want, then ask any question.
+          </article>
+        </div>
+
+        <div class="examples">
+          <button type="button" class="chip" data-q="What is the Ethiopian calendar?">Ethiopian calendar</button>
+          <button type="button" class="chip" data-q="Explain Ethiopian coffee ceremony">Coffee ceremony</button>
+          <button type="button" class="chip" data-q="How does Ethiopian phone numbering work?">Phone numbering</button>
+        </div>
+
+        <form id="ask-form" class="ask-row" autocomplete="off">
+          <input type="text" id="question" placeholder="Ask your question..." required>
+          <button type="submit" class="btn">Send</button>
+        </form>
+
+        <details id="sources-details" class="sources-details" hidden>
+          <summary>View source references (optional)</summary>
+          <div id="sources" class="sources"></div>
+        </details>
+      </section>
     </section>
   </main>
 
