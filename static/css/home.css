@@ -89,6 +89,10 @@ body {
 	overflow-x: hidden;
 }
 
+html {
+	scroll-behavior: smooth;
+}
+
 #ai-network {
 	position: fixed;
 	inset: 0;
@@ -1002,6 +1006,173 @@ main {
 	background: rgba(12, 20, 43, 0.96);
 }
 
+.home-footer {
+	margin-top: 54px;
+	padding: 26px 24px 16px;
+	border-radius: 20px;
+	border: 1px solid rgba(107, 151, 255, 0.22);
+	background:
+		linear-gradient(135deg, rgba(13, 23, 54, 0.96) 0%, rgba(10, 18, 42, 0.96) 52%, rgba(16, 20, 40, 0.98) 100%),
+		radial-gradient(circle at 82% -15%, rgba(255, 138, 61, 0.22), transparent 40%);
+	box-shadow: inset 0 0 36px rgba(9, 17, 42, 0.48), 0 20px 32px rgba(6, 12, 29, 0.4);
+	scroll-margin-top: 112px;
+}
+
+.home-footer-main {
+	display: flex;
+	justify-content: space-between;
+	align-items: flex-start;
+	gap: 24px;
+	padding-bottom: 20px;
+	border-bottom: 1px solid rgba(109, 153, 255, 0.2);
+}
+
+.home-footer-brand h2 {
+	margin: 0;
+	font-size: clamp(24px, 2.8vw, 34px);
+	line-height: 1.15;
+}
+
+.home-footer-brand p {
+	max-width: 620px;
+	margin: 10px 0 0;
+	font-size: 16px;
+	line-height: 1.5;
+	color: #c4d2ef;
+}
+
+.home-footer-contact {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	flex-wrap: wrap;
+	position: relative;
+}
+
+.home-social-link {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 46px;
+	height: 46px;
+	border-radius: 999px;
+	border: 1px solid rgba(109, 153, 255, 0.38);
+	background: rgba(13, 24, 53, 0.82);
+	text-decoration: none;
+	color: #ebf2ff;
+	transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.home-social-link svg {
+	width: 22px;
+	height: 22px;
+	fill: currentColor;
+}
+
+.contact-link-label {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	white-space: nowrap;
+	border: 0;
+}
+
+.home-social-link:hover {
+	transform: translateY(-2px);
+	border-color: rgba(255, 138, 61, 0.9);
+	box-shadow: 0 10px 20px rgba(8, 18, 46, 0.38);
+	color: #ffba88;
+}
+
+.home-social-copy {
+	cursor: pointer;
+}
+
+.home-copy-popover {
+	position: absolute;
+	top: calc(100% + 12px);
+	right: 0;
+	display: inline-flex;
+	align-items: center;
+	gap: 10px;
+	padding: 10px 12px;
+	border-radius: 12px;
+	border: 1px solid rgba(109, 153, 255, 0.34);
+	background: rgba(8, 17, 41, 0.98);
+	box-shadow: 0 14px 24px rgba(5, 10, 25, 0.46);
+	z-index: 8;
+	white-space: nowrap;
+	opacity: 0;
+	visibility: hidden;
+	pointer-events: none;
+	transform: translateY(-6px);
+	transition: opacity 0.18s ease, transform 0.18s ease, visibility 0s linear 0.18s;
+}
+
+.home-copy-popover.is-open {
+	opacity: 1;
+	visibility: visible;
+	pointer-events: auto;
+	transform: translateY(0);
+	transition-delay: 0s;
+}
+
+.home-copy-popover::before {
+	content: "";
+	position: absolute;
+	top: -7px;
+	right: 20px;
+	width: 12px;
+	height: 12px;
+	background: rgba(8, 17, 41, 0.98);
+	border-top: 1px solid rgba(109, 153, 255, 0.34);
+	border-left: 1px solid rgba(109, 153, 255, 0.34);
+	transform: rotate(45deg);
+}
+
+.home-copy-value {
+	margin: 0;
+	font-size: 14px;
+	letter-spacing: 0.02em;
+	color: #ebf2ff;
+}
+
+.home-copy-btn {
+	border: 1px solid rgba(255, 138, 61, 0.8);
+	background: rgba(255, 138, 61, 0.14);
+	color: #ffd3b3;
+	border-radius: 999px;
+	padding: 5px 11px;
+	font-weight: 700;
+	font-size: 12px;
+	cursor: pointer;
+	transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+
+.home-copy-btn:hover {
+	background: rgba(255, 138, 61, 0.22);
+	color: #ffe5cf;
+	transform: translateY(-1px);
+}
+
+.home-footer-bottom {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	gap: 14px;
+	padding-top: 14px;
+}
+
+.home-footer-bottom p {
+	margin: 0;
+	font-size: 13px;
+	color: #9fb1d4;
+}
+
 @media (max-width: 1100px) {
 	.hero-topbar {
 		flex-wrap: wrap;
@@ -1157,6 +1328,39 @@ main {
 
 	.chatbot-title-block h2 {
 		font-size: 18px;
+	}
+
+	.home-footer {
+		margin-top: 36px;
+		padding: 20px 14px 14px;
+		border-radius: 20px;
+		scroll-margin-top: 96px;
+	}
+
+	.home-footer-main {
+		flex-direction: column;
+		gap: 16px;
+	}
+
+	.home-footer-contact {
+		gap: 8px;
+	}
+
+	.home-phone-popover {
+		left: 0;
+		right: auto;
+	}
+
+	.home-social-link {
+		width: 44px;
+		height: 44px;
+	}
+
+	.home-footer-bottom {
+		flex-direction: column;
+		align-items: flex-start;
+		padding-top: 12px;
+		gap: 6px;
 	}
 
 	.tools-story-sticky {

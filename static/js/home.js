@@ -313,6 +313,96 @@
 })();
 
 (function () {
+  function initCopyPopover(config) {
+    const trigger = document.getElementById(config.triggerId);
+    const popover = document.getElementById(config.popoverId);
+    const copyBtn = document.getElementById(config.copyBtnId);
+    const valueText = popover ? popover.querySelector(".home-copy-value") : null;
+    const defaultCopyLabel = copyBtn ? copyBtn.textContent : "Copy";
+    let autoCloseTimer = null;
+
+    if (!trigger || !popover || !copyBtn || !valueText) {
+      return;
+    }
+
+    function isOpen() {
+      return popover.classList.contains("is-open");
+    }
+
+    function setOpen(openState) {
+      if (autoCloseTimer) {
+        window.clearTimeout(autoCloseTimer);
+        autoCloseTimer = null;
+      }
+
+      popover.classList.toggle("is-open", openState);
+      popover.setAttribute("aria-hidden", String(!openState));
+      trigger.setAttribute("aria-expanded", String(openState));
+
+      if (openState) {
+        autoCloseTimer = window.setTimeout(function () {
+          setOpen(false);
+        }, 3000);
+      }
+    }
+
+    async function copyValue() {
+      const value = valueText.textContent ? valueText.textContent.trim() : "";
+      if (!value) {
+        copyBtn.textContent = "Unavailable";
+        window.setTimeout(function () {
+          copyBtn.textContent = defaultCopyLabel;
+        }, 1200);
+        return;
+      }
+
+      try {
+        await navigator.clipboard.writeText(value);
+        copyBtn.textContent = "Copied";
+      } catch (error) {
+        copyBtn.textContent = "Failed";
+      }
+
+      window.setTimeout(function () {
+        copyBtn.textContent = defaultCopyLabel;
+        setOpen(false);
+      }, 900);
+    }
+
+    trigger.addEventListener("click", function () {
+      setOpen(!isOpen());
+      copyBtn.textContent = defaultCopyLabel;
+    });
+
+    copyBtn.addEventListener("click", copyValue);
+
+    document.addEventListener("click", function (event) {
+      if (isOpen() && !popover.contains(event.target) && !trigger.contains(event.target)) {
+        setOpen(false);
+      }
+    });
+
+    document.addEventListener("keydown", function (event) {
+      if (event.key === "Escape") {
+        setOpen(false);
+      }
+    });
+  }
+
+  initCopyPopover({
+    triggerId: "home-email-trigger",
+    popoverId: "home-email-popover",
+    copyBtnId: "home-email-copy",
+  });
+
+  initCopyPopover({
+    triggerId: "home-phone-trigger",
+    popoverId: "home-phone-popover",
+    copyBtnId: "home-phone-copy",
+  });
+})();
+
+(function () {
   function initProjectCarousel(sectionId, progressId, options) {
     const story = document.getElementById(sectionId);
     const progressHost = document.getElementById(progressId);
