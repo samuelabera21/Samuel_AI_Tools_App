@@ -1,6 +1,7 @@
 import os
 import re
 import threading
+import hashlib
 from pathlib import Path
 from typing import Iterable
 
@@ -22,10 +23,89 @@ VECTOR_DIR = DATA_DIR / "vector_store"
 LOCK = threading.Lock()
 
 DEFAULT_CHAT_MODEL = os.getenv("NVIDIA_CHAT_MODEL", "qwen/qwen3.5-397b-a17b")
+DEFAULT_HOME_CHAT_MODEL = os.getenv("NVIDIA_HOME_CHAT_MODEL", "nvidia/nemotron-3-nano-30b-a3b")
 DEFAULT_EMBEDDING_MODEL = os.getenv("NVIDIA_EMBEDDING_MODEL", "nvidia/nv-embedqa-e5-v5")
 DEFAULT_NVIDIA_BASE_URL = os.getenv("NVIDIA_BASE_URL", "https://integrate.api.nvidia.com/v1")
 DEFAULT_CHUNK_SIZE = int(os.getenv("RAG_CHUNK_SIZE", "900"))
 DEFAULT_CHUNK_OVERLAP = int(os.getenv("RAG_CHUNK_OVERLAP", "150"))
+
+
+def _chat_model_candidates(preferred_model: str | None = None) -> list[str]:
+    candidates = [
+        preferred_model,
+        DEFAULT_CHAT_MODEL,
+        DEFAULT_HOME_CHAT_MODEL,
+        os.getenv("NVIDIA_FALLBACK_CHAT_MODEL", "").strip() or None,
+    ]
+
+    seen: set[str] = set()
+    ordered: list[str] = []
+    for candidate in candidates:
+        if not candidate:
+            continue
+        normalized = candidate.strip()
+        if not normalized or normalized in seen:
+            continue
+        seen.add(normalized)
+        ordered.append(normalized)
+
+    return ordered
+
+
+def _is_retryable_chat_error(error: Exception) -> bool:
+    message = str(error).lower()
+    return (
+        "degraded" in message
+        or "cannot be invoked" in message
+        or "authorization failed" in message
+        or "forbidden" in message
+        or "status: 400" in message
+        or "status: 401" in message
+        or "status: 403" in message
+    )
+
+
+def _create_chat_completion_with_fallback(
+    chat_client: OpenAI,
+    preferred_model: str | None,
+    messages: list[dict[str, str]],
+    temperature: float,
+    max_tokens: int,
+):
+    last_error: Exception | None = None
+    for model_name in _chat_model_candidates(preferred_model):
+        try:
+            return chat_client.chat.completions.create(
+                model=model_name,
+                messages=messages,
+                temperature=temperature,
+                top_p=0.95,
+                max_tokens=max_tokens,
+            )
+        except Exception as exc:
+            last_error = exc
+            if _is_retryable_chat_error(exc):
+                continue
+            raise RuntimeError(f"NVIDIA chat request failed: {exc}") from exc
+
+    if last_error:
+        raise RuntimeError(f"NVIDIA chat request failed: {last_error}") from last_error
+    raise RuntimeError("NVIDIA chat request failed: no valid chat model candidate configured.")
+
+
+def _build_retrieval_only_answer(question: str, sources: list[dict]) -> str:
+    snippets = [
+        (source.get("snippet") or "").strip()
+        for source in sources
+        if (source.get("snippet") or "").strip()
+    ]
+    if not snippets:
+        return "I could not find relevant indexed content to answer this question yet. Please index more sources."
+
+    short_context = " ".join(snippets[:3])
+    return (
+        f"I could not use the AI chat model right now, so this is a retrieval-based reply from indexed sources: {short_context}"
+    )
 
 
 def _sanitize_ssl_env_vars() -> None:
@@ -84,8 +164,8 @@ class NVIDIAEmbeddings(Embeddings):
                 extra_body={"input_type": "passage"},
             )
             return [item.embedding for item in response.data]
-        except Exception as exc:
-            raise RuntimeError(f"NVIDIA embedding request failed: {exc}") from exc
+        except Exception:
+            return _local_hash_embed_documents(texts)
 
     def embed_query(self, text: str) -> list[float]:
         try:
@@ -95,8 +175,35 @@ class NVIDIAEmbeddings(Embeddings):
                 extra_body={"input_type": "query"},
             )
             return response.data[0].embedding
-        except Exception as exc:
-            raise RuntimeError(f"NVIDIA query embedding failed: {exc}") from exc
+        except Exception:
+            return _local_hash_embed_query(text)
+
+
+def _local_hash_embed_query(text: str, dim: int = 384) -> list[float]:
+    return _local_hash_embed_documents([text], dim=dim)[0]
+
+
+def _local_hash_embed_documents(texts: list[str], dim: int = 384) -> list[list[float]]:
+    vectors: list[list[float]] = []
+    for text in texts:
+        vector = [0.0] * dim
+        tokens = re.findall(r"[a-zA-Z0-9_\u1200-\u137F]+", (text or "").lower())
+        if not tokens:
+            vectors.append(vector)
+            continue
+
+        for token in tokens:
+            digest = hashlib.sha256(token.encode("utf-8")).digest()
+            bucket = int.from_bytes(digest[:4], byteorder="big", signed=False) % dim
+            sign = 1.0 if digest[4] % 2 == 0 else -1.0
+            vector[bucket] += sign
+
+        norm = sum(v * v for v in vector) ** 0.5
+        if norm > 0:
+            vector = [v / norm for v in vector]
+        vectors.append(vector)
+
+    return vectors
 
 
 def _split_documents(documents: Iterable[Document]) -> list[Document]:
@@ -342,21 +449,20 @@ def ask_knowledge_question(
     )
 
     try:
-        completion = chat_client.chat.completions.create(
-            model=model or DEFAULT_CHAT_MODEL,
+        completion = _create_chat_completion_with_fallback(
+            chat_client=chat_client,
+            preferred_model=model,
             messages=[
                 {"role": "system", "content": system_prompt},
                 {"role": "user", "content": user_prompt},
             ],
             temperature=temperature,
-            top_p=0.95,
             max_tokens=max_tokens,
         )
-    except Exception as exc:
-        raise RuntimeError(f"NVIDIA chat request failed: {exc}") from exc
-
-    answer_text = completion.choices[0].message.content or "No answer generated."
-    answer_text = _clean_answer_text(answer_text)
+        answer_text = completion.choices[0].message.content or "No answer generated."
+        answer_text = _clean_answer_text(answer_text)
+    except RuntimeError:
+        answer_text = _build_retrieval_only_answer(question=question, sources=sources)
 
     return {
         "answer": answer_text.strip(),
@@ -511,19 +617,16 @@ def ask_home_chat_question(
         f"{context_text or 'No platform context available.'}"
     )
 
-    try:
-        completion = chat_client.chat.completions.create(
-            model=model or DEFAULT_CHAT_MODEL,
-            messages=[
-                {"role": "system", "content": system_prompt},
-                {"role": "user", "content": user_prompt},
-            ],
-            temperature=temperature,
-            top_p=0.95,
-            max_tokens=max_tokens,
-        )
-    except Exception as exc:
-        raise RuntimeError(f"NVIDIA chat request failed: {exc}") from exc
+    completion = _create_chat_completion_with_fallback(
+        chat_client=chat_client,
+        preferred_model=model,
+        messages=[
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": user_prompt},
+        ],
+        temperature=temperature,
+        max_tokens=max_tokens,
+    )
 
     answer_text = completion.choices[0].message.content or "No answer generated."
     answer_text = _clean_answer_text(answer_text)

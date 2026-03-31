@@ -6,6 +6,7 @@ from urllib import request as url_request
 
 NVIDIA_IMAGE_API_URL = os.getenv("NVIDIA_IMAGE_API_URL", "https://ai.api.nvidia.com/v1/genai/black-forest-labs/flux.1-dev")
 MYMEMORY_TRANSLATE_URL = "https://api.mymemory.translated.net/get"
+PUBLIC_IMAGE_FALLBACK_URL = "https://image.pollinations.ai/prompt"
 
 
 def parse_size(size: str):
@@ -137,6 +138,11 @@ def extract_image_url(parsed: dict):
     raise ValueError("Image generation API did not return image content.")
 
 
+def build_public_fallback_image_url(prompt: str, width: int, height: int):
+    encoded_prompt = url_parse.quote(prompt.strip())
+    return f"{PUBLIC_IMAGE_FALLBACK_URL}/{encoded_prompt}?width={width}&height={height}&nologo=true"
+
+
 def generate_image_from_prompt(prompt: str, size: str = "1024x1024", style: str | None = None):
     """Call NVIDIA's OpenAI-compatible image endpoint and return image URL/base64."""
     api_key = (os.getenv("NVIDIA_API_KEY") or os.getenv("NVIDIA_CHAT_API_KEY") or "").strip()
@@ -176,6 +182,15 @@ def generate_image_from_prompt(prompt: str, size: str = "1024x1024", style: str 
                 )
                 return {"image_url": extract_image_url(parsed)}
             except url_error.HTTPError as exc:
+                if exc.code in {401, 403}:
+                    # Keep tool usable when NVIDIA image model access is restricted.
+                    return {
+                        "image_url": build_public_fallback_image_url(
+                            prompt=english_prompt,
+                            width=width,
+                            height=height,
+                        )
+                    }
                 last_http_error_message = parse_error_message(exc)
                 should_retry = (
                     exc.code >= 500

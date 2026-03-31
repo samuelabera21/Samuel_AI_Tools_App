@@ -4,7 +4,7 @@ from urllib import error as url_error
 from urllib import request as url_request
 
 NVIDIA_CHAT_API_URL = os.getenv("NVIDIA_CHAT_API_URL", "https://integrate.api.nvidia.com/v1/chat/completions")
-NVIDIA_CHAT_MODEL = os.getenv("NVIDIA_CHAT_MODEL", "meta/llama-3.1-70b-instruct")
+NVIDIA_CHAT_MODEL = os.getenv("NVIDIA_CHAT_MODEL", "qwen/qwen3.5-397b-a17b")
 
 
 def _looks_like_valid_amharic(text: str):
@@ -26,9 +26,10 @@ def _looks_like_valid_amharic(text: str):
 
 def polish_amharic_text(text: str):
     """Light AI cleanup for Amharic text while preserving meaning and language."""
-    api_key = os.getenv("NVIDIA_API_KEY", "").strip()
+    api_key = (os.getenv("NVIDIA_API_KEY") or os.getenv("NVIDIA_CHAT_API_KEY") or "").strip()
     if not api_key:
-        raise RuntimeError("NVIDIA_API_KEY is missing")
+        # Keep tool functional even when AI credentials are missing.
+        return text
 
     payload = {
         "model": NVIDIA_CHAT_MODEL,
@@ -63,10 +64,13 @@ def polish_amharic_text(text: str):
         with url_request.urlopen(api_request, timeout=60) as response:
             parsed = json.loads(response.read().decode("utf-8"))
     except url_error.HTTPError as exc:
+        # Authorization/model mismatches should not break typing workflow.
+        if exc.code in {401, 403}:
+            return text
         error_text = exc.read().decode("utf-8", errors="ignore")
         raise ValueError(f"AI edit API error: {error_text or str(exc)}") from exc
     except url_error.URLError as exc:
-        raise ValueError("Could not reach AI edit service.") from exc
+        return text
 
     choices = parsed.get("choices") or []
     if not choices:
