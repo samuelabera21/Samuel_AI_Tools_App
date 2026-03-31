@@ -41,16 +41,29 @@ from tools.ethiopian_knowledge_assistant.service import (
     ask_knowledge_question,
     ask_home_chat_question,
 )
-from tools.amharic_music_generator.generator import (
-    generate_music,
-    MusicGenerationError,
-    get_audio_storage_dir,
-)
 
 load_dotenv()
 
 app = Flask(__name__)
 SHORT_LINK_PUBLIC_BASE_URL = os.getenv("SHORT_LINK_PUBLIC_BASE_URL", "").strip()
+APP_PROFILE = os.getenv("APP_PROFILE", "full").strip().lower()
+
+_music_default_enabled = "false" if APP_PROFILE in {"production-lite", "lite"} else "true"
+ENABLE_MUSIC_GENERATION = (
+    os.getenv("ENABLE_MUSIC_GENERATION", _music_default_enabled).strip().lower()
+    in {"1", "true", "yes", "on"}
+)
+MUSIC_DISABLED_MESSAGE = os.getenv(
+    "MUSIC_DISABLED_MESSAGE",
+    "Music generation is currently disabled on this deployment profile.",
+).strip()
+
+if ENABLE_MUSIC_GENERATION:
+    from tools.amharic_music_generator.generator import (
+        generate_music,
+        MusicGenerationError,
+        get_audio_storage_dir,
+    )
 
 frontend_origins_raw = os.getenv("FRONTEND_ORIGINS", "*").strip()
 if frontend_origins_raw == "*":
@@ -139,7 +152,14 @@ def amharic_ocr():
 @app.route("/generate-music", methods=["GET", "POST"])
 def generate_music_page():
     if request.method == "GET":
-        return render_template("music.html")
+        return render_template(
+            "music.html",
+            music_enabled=ENABLE_MUSIC_GENERATION,
+            music_disabled_message=MUSIC_DISABLED_MESSAGE,
+        )
+
+    if not ENABLE_MUSIC_GENERATION:
+        return jsonify({"error": MUSIC_DISABLED_MESSAGE}), 503
 
     payload = request.get_json(silent=True) or request.form
     prompt = str(payload.get("prompt", "")).strip()
@@ -167,6 +187,9 @@ def generate_music_page():
 
 @app.route("/media/audio/<path:filename>")
 def generated_audio_file(filename):
+    if not ENABLE_MUSIC_GENERATION:
+        abort(404)
+
     audio_dir = get_audio_storage_dir()
     return send_from_directory(audio_dir, filename)
 
