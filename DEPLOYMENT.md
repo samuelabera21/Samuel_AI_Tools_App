@@ -12,6 +12,7 @@ With this setup, users open the Vercel URL, and all pages and APIs are served th
 - Render blueprint config: render.yaml
 - Vercel routing config: vercel.json
 - Production server dependency: gunicorn in requirements.txt
+- Optional music dependency set: requirements-music.txt
 - API CORS support for split-domain use in app.py
 
 ## Important Before Deploying
@@ -132,3 +133,7 @@ Fallback behavior:
 When you want full music support again, set:
 
 - `ENABLE_MUSIC_GENERATION=true`
+
+Then install optional music dependencies in the target environment:
+
+- `pip install -r requirements.txt -r requirements-music.txt`
