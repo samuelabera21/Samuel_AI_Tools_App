@@ -2,6 +2,8 @@ import asyncio
 import io
 import importlib
 
+from gtts import gTTS
+
 edge_tts = None
 
 VOICE_MAP = {
@@ -37,7 +39,15 @@ def _load_edge_tts():
 
 def synthesize_amharic_speech(text: str, voice_key: str):
     """Generate Amharic speech audio with selectable male/female voice."""
-    _load_edge_tts()
-
     voice_name = VOICE_MAP.get(voice_key, VOICE_MAP["male"])
-    return asyncio.run(_synthesize_edge_tts(text=text, voice_name=voice_name))
+
+    # Prefer edge-tts voices, but fallback to gTTS for reliability on hosted environments.
+    try:
+        _load_edge_tts()
+        return asyncio.run(_synthesize_edge_tts(text=text, voice_name=voice_name))
+    except Exception:
+        audio_buffer = io.BytesIO()
+        tts = gTTS(text=text, lang="am")
+        tts.write_to_fp(audio_buffer)
+        audio_buffer.seek(0)
+        return audio_buffer

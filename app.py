@@ -135,18 +135,27 @@ def ethiopian_date_converter_page():
 def amharic_ocr():
     text = ""
     image_url = ""
+    ocr_error = ""
 
     if request.method == "POST":
-        file = request.files.get("image")
-        if file and file.filename:
-            image_bytes = file.read()
-            text = extract_amharic_text_from_bytes(image_bytes, lang="amh")
+        try:
+            file = request.files.get("image")
+            if file and file.filename:
+                image_bytes = file.read()
+                mime_type = file.mimetype or "image/png"
+                encoded = base64.b64encode(image_bytes).decode("utf-8")
+                image_url = f"data:{mime_type};base64,{encoded}"
 
-            mime_type = file.mimetype or "image/png"
-            encoded = base64.b64encode(image_bytes).decode("utf-8")
-            image_url = f"data:{mime_type};base64,{encoded}"
+                try:
+                    text = extract_amharic_text_from_bytes(image_bytes, lang="amh")
+                except Exception as exc:
+                    ocr_error = str(exc)
+            else:
+                ocr_error = "Please upload an image file before extracting text."
+        except Exception:
+            ocr_error = "Unexpected OCR processing error. Please try another image."
 
-    return render_template("ocr.html", text=text, image_url=image_url)
+    return render_template("ocr.html", text=text, image_url=image_url, ocr_error=ocr_error)
 
 
 @app.route("/generate-music", methods=["GET", "POST"])
@@ -665,7 +674,7 @@ def home_chat_health_api():
         {
             "status": "ok",
             "chatConfigured": bool(os.getenv("NVIDIA_CHAT_API_KEY") or os.getenv("NVIDIA_API_KEY")),
-            "embeddingConfigured": bool(os.getenv("NVIDIA_API_KEY")),
+            "embeddingConfigured": bool(os.getenv("NVIDIA_API_KEY") or os.getenv("NVIDIA_CHAT_API_KEY")),
         }
     )
 

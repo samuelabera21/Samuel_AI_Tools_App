@@ -33,6 +33,10 @@
                 </div>
             </form>
 
+            {% if ocr_error %}
+            <p class="subtitle" style="color:#ff9a76; margin-top: 10px;">{{ ocr_error }}</p>
+            {% endif %}
+
             <div class="result-wrap {% if not image_url and not text %}hidden{% endif %}">
                 <div class="preview">
                     <h3>Uploaded Image</h3>

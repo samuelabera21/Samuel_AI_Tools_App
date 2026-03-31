@@ -41,9 +41,10 @@ def get_uploads_dir() -> Path:
 
 
 def _require_nvidia_embedding_api_key() -> str:
-    api_key = os.getenv("NVIDIA_API_KEY")
+    # Prefer dedicated embedding key, but allow fallback for simpler deployments.
+    api_key = os.getenv("NVIDIA_API_KEY") or os.getenv("NVIDIA_CHAT_API_KEY")
     if not api_key:
-        raise RuntimeError("Server is missing NVIDIA_API_KEY configuration.")
+        raise RuntimeError("Server is missing NVIDIA_API_KEY (or NVIDIA_CHAT_API_KEY fallback) configuration.")
     return api_key
 
 

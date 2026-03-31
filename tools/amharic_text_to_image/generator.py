@@ -139,9 +139,9 @@ def extract_image_url(parsed: dict):
 
 def generate_image_from_prompt(prompt: str, size: str = "1024x1024", style: str | None = None):
     """Call NVIDIA's OpenAI-compatible image endpoint and return image URL/base64."""
-    api_key = os.getenv("NVIDIA_API_KEY", "").strip()
+    api_key = (os.getenv("NVIDIA_API_KEY") or os.getenv("NVIDIA_CHAT_API_KEY") or "").strip()
     if not api_key:
-        raise RuntimeError("NVIDIA_API_KEY is missing")
+        raise RuntimeError("NVIDIA_API_KEY (or NVIDIA_CHAT_API_KEY fallback) is missing")
 
     width, height = parse_size(size)
     has_ethiopic_text = contains_ethiopic_text(prompt)
