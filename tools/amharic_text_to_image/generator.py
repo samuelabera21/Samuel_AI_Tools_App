@@ -27,8 +27,59 @@ def contains_ethiopic_text(value: str):
     return False
 
 
-def translate_amharic_to_english(text: str):
-    """Translate Amharic text to English with a lightweight public translation API."""
+def normalize_prompt_text(text: str):
+    return " ".join((text or "").strip().lower().split())
+
+
+def translate_with_nvidia_chat(text: str, api_key: str):
+    base_url = (os.getenv("NVIDIA_BASE_URL", "https://integrate.api.nvidia.com/v1") or "").rstrip("/")
+    chat_model = os.getenv("NVIDIA_CHAT_MODEL", "qwen/qwen3.5-397b-a17b")
+
+    payload = {
+        "model": chat_model,
+        "messages": [
+            {
+                "role": "system",
+                "content": (
+                    "You are a translator for image generation prompts. "
+                    "Translate Amharic to concise natural English. "
+                    "Return only the translated prompt text and nothing else."
+                ),
+            },
+            {"role": "user", "content": text},
+        ],
+        "temperature": 0.1,
+        "max_tokens": 120,
+    }
+
+    chat_request = url_request.Request(
+        f"{base_url}/chat/completions",
+        data=json.dumps(payload).encode("utf-8"),
+        method="POST",
+        headers={
+            "Authorization": f"Bearer {api_key}",
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+        },
+    )
+
+    try:
+        with url_request.urlopen(chat_request, timeout=30) as response:
+            parsed = json.loads(response.read().decode("utf-8"))
+        content = (((parsed.get("choices") or [{}])[0].get("message") or {}).get("content") or "").strip()
+        return content
+    except Exception:
+        return ""
+
+
+def translate_amharic_to_english(text: str, api_key: str = ""):
+    """Translate Amharic text to English while preserving arbitrary user prompts."""
+
+    if api_key:
+        nvidia_translation = translate_with_nvidia_chat(text, api_key=api_key)
+        if nvidia_translation:
+            return nvidia_translation
+
     query = url_parse.urlencode({"q": text, "langpair": "am|en"})
     translate_request = url_request.Request(f"{MYMEMORY_TRANSLATE_URL}?{query}", method="GET")
 
@@ -36,7 +87,10 @@ def translate_amharic_to_english(text: str):
         with url_request.urlopen(translate_request, timeout=20) as response:
             parsed = json.loads(response.read().decode("utf-8"))
         translated = (parsed.get("responseData") or {}).get("translatedText", "").strip()
-        return translated or text
+        if translated:
+            return translated
+
+        return text
     except Exception:
         # Keep generation available even if translation API is temporarily unavailable.
         return text
@@ -57,30 +111,20 @@ def build_generation_prompt(
     english_prompt: str | None = None,
     include_original_prompt: bool = True,
 ):
-    """Create a generation prompt with constraints to reduce semantic drift."""
+    """Create a generation prompt that follows the user's request without hardcoded subjects."""
     english_prompt = english_prompt or (
         translate_amharic_to_english(prompt) if contains_ethiopic_text(prompt) else prompt
     )
 
     prompt_parts = [
         "Generate a photorealistic, semantically accurate image that follows the user's prompt exactly.",
-        f"Primary prompt in English: {english_prompt}",
     ]
+
+    if english_prompt.strip():
+        prompt_parts.append(f"Primary prompt in English: {english_prompt}")
 
     if include_original_prompt:
         prompt_parts.append(f"Original user prompt: {prompt}")
-
-    subject_text = f"{prompt} {english_prompt}".lower()
-    if "አንበሳ" in prompt or "lion" in subject_text:
-        prompt_parts.append("The main subject must be one large lion in a forest setting.")
-        prompt_parts.append("Do not generate humans, crowds, or city scenes.")
-    elif "ነብር" in prompt or "tiger" in subject_text:
-        prompt_parts.append("The main subject must be one tiger as the focal point.")
-    elif "ዝሆን" in prompt or "elephant" in subject_text:
-        prompt_parts.append("The main subject must be one elephant as the focal point.")
-
-    if not mentions_people(f"{prompt} {english_prompt}"):
-        prompt_parts.append("Do not include people, faces, or human figures unless explicitly requested.")
 
     if style:
         prompt_parts.append(f"Visual style: {style}")
@@ -151,7 +195,7 @@ def generate_image_from_prompt(prompt: str, size: str = "1024x1024", style: str 
 
     width, height = parse_size(size)
     has_ethiopic_text = contains_ethiopic_text(prompt)
-    english_prompt = translate_amharic_to_english(prompt) if has_ethiopic_text else prompt
+    english_prompt = translate_amharic_to_english(prompt, api_key=api_key) if has_ethiopic_text else prompt
     prompt_variants = [
         build_generation_prompt(
             prompt=prompt,
@@ -188,9 +232,12 @@ def generate_image_from_prompt(prompt: str, size: str = "1024x1024", style: str 
             except url_error.HTTPError as exc:
                 if exc.code in {401, 403}:
                     # Keep tool usable when NVIDIA image model access is restricted.
+                    fallback_prompt = (english_prompt or prompt).strip()
+                    if style:
+                        fallback_prompt = f"{fallback_prompt}, {style} style"
                     return {
                         "image_url": build_public_fallback_image_url(
-                            prompt=full_prompt,
+                            prompt=fallback_prompt,
                             width=width,
                             height=height,
                         ),
