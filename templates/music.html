@@ -31,20 +31,26 @@
 
       <section class="studio-main">
         <header class="composer-bar">
-          <p>Describe your music idea in Amharic or English.</p>
+          <p>
+            {% if music_enabled %}
+              Describe your music idea in Amharic or English.
+            {% else %}
+              {{ music_disabled_message }}
+            {% endif %}
+          </p>
         </header>
 
         <section class="music-card">
           <form id="music-form" class="music-form" novalidate>
             <div id="prompt-section" class="field-block">
               <label for="prompt">Music Idea</label>
-              <textarea id="prompt" name="prompt" rows="4" placeholder="Example: ፍቅር ዘፈን or Emotional Ethiopian sunset jazz" required></textarea>
+              <textarea id="prompt" name="prompt" rows="4" placeholder="Example: ፍቅር ዘፈን or Emotional Ethiopian sunset jazz" required {% if not music_enabled %}disabled{% endif %}></textarea>
             </div>
 
             <div id="settings-section" class="form-row field-block">
               <div class="field">
                 <label for="style">Style</label>
-                <select id="style" name="style">
+                <select id="style" name="style" {% if not music_enabled %}disabled{% endif %}>
                   <option value="traditional_ethiopian">Traditional Ethiopian</option>
                   <option value="jazz">Jazz</option>
                   <option value="hip_hop">Hip Hop</option>
@@ -54,7 +60,7 @@
 
               <div class="field">
                 <label for="duration">Duration</label>
-                <select id="duration" name="duration">
+                <select id="duration" name="duration" {% if not music_enabled %}disabled{% endif %}>
                   <option value="5">5 seconds</option>
                   <option value="10" selected>10 seconds</option>
                   <option value="20">20 seconds</option>
@@ -62,7 +68,7 @@
               </div>
             </div>
 
-            <button id="generate-btn" type="submit">Generate Music</button>
+            <button id="generate-btn" type="submit" {% if not music_enabled %}disabled{% endif %}>Generate Music</button>
           </form>
 
           <p id="status" class="status" role="status" aria-live="polite"></p>
@@ -81,6 +87,8 @@
   </main>
 
   <script>
+    const musicEnabled = {{ 'true' if music_enabled else 'false' }};
+    const musicDisabledMessage = {{ music_disabled_message|tojson }};
     const form = document.getElementById('music-form');
     const statusEl = document.getElementById('status');
     const errorEl = document.getElementById('error');
@@ -102,6 +110,12 @@
       stepBtn.addEventListener('click', () => {
         const targetId = stepBtn.dataset.target;
         const targetEl = document.getElementById(targetId);
+
+        if (!musicEnabled) {
+          statusEl.textContent = musicDisabledMessage;
+          errorEl.hidden = true;
+          return;
+        }
 
         if (stepBtn.dataset.step === 'preview' && resultEl.hidden) {
           statusEl.textContent = 'Generate music first to preview output.';
@@ -145,8 +159,19 @@
       errorEl.textContent = '';
     }
 
+    if (!musicEnabled) {
+      statusEl.textContent = musicDisabledMessage;
+    }
+
     form.addEventListener('submit', async (event) => {
       event.preventDefault();
+
+      if (!musicEnabled) {
+        errorEl.hidden = false;
+        errorEl.textContent = musicDisabledMessage;
+        return;
+      }
+
       resetMessages();
       resultEl.hidden = true;
 
