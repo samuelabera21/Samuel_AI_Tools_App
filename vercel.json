@@ -1,12 +1,9 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "env": {
-    "RENDER_BACKEND_URL": "https://your-render-backend.onrender.com"
-  },
   "rewrites": [
     {
       "source": "/(.*)",
-      "destination": "$RENDER_BACKEND_URL/$1"
+      "destination": "https://samuel-ai-tools-app.onrender.com/$1"
     }
   ]
 }
