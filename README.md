@@ -1,282 +1,219 @@
-# AI Tools App (MetaAppz-Style)
+# Ethiopian AI HUB - AI Tools App
 
-Flask-based web app for Ethiopian/Amharic tools and games.
+Flask-based web application for Ethiopian and Amharic-focused AI tools, language utilities, productivity tools, and mini games.
 
-## Live tools
-- Amharic OCR
-- Amharic Numbers Converter (number words + currency + sound)
-- Geez Numerals Converter (Arabic ↔ Geez, copy, tabs, validation, clickable reference table)
-- Amharic AI Prompt to Image Generator (Amharic prompt -> AI-generated image)
+## Live Links
+- Vercel (public frontend URL): https://samuel-ai-tools-app.vercel.app
+- Render (backend + full app): https://samuel-ai-tools-app.onrender.com
+- GitHub repository: https://github.com/samuelabera21/Samuel_AI_Tools_App
 
----
+## Project Snapshot
+- Backend framework: Flask
+- UI rendering: Flask templates (Jinja2)
+- API style: JSON APIs + server-rendered pages
+- Total user-facing tools/features: 12
+- Total game pages: 2
+- Music generation: optional (can be disabled in production-lite profile)
 
-## 1) Dependencies and Why They Are Used
+## Tool Inventory (Current)
 
-### Python packages (`requirements.txt`)
-- `flask`
-  - Web framework (routes, forms, templates, JSON responses, file streaming).
-- `opencv-python`
-  - OCR image preprocessing.
-- `numpy`
-  - Byte-array image decoding for OCR.
-- `pytesseract`
-  - Python bridge to Tesseract OCR.
-- `gTTS`
-  - Generates MP3 speech for Amharic Numbers Converter.
+### Core tools (11 under /Tools)
+1. Amharic AI Prompt to Image Generator
+   - Page: `/Tools/Amharic_AI_Prompt_to_Image_Generator` (alias: `/Tools/Amharic_to_Image`)
+   - API: `/api/amharic-ai-image`
+2. Free Amharic Keyboard + AI polish
+   - Page: `/Tools/Free_Amharic_Keyboard` (alias: `/Tools/Amharic_Keyboard`)
+   - API: `/api/amharic-keyboard/ai-polish`
+3. Amharic Text to Speech
+   - Page: `/Tools/Amharic_Text_To_Speech` (alias: `/Tools/Amharic_Text_to_Speech`)
+   - API: `/api/amharic-text-to-speech`
+4. Random Amharic Words Generator
+   - Page: `/Tools/Amharic_Words_Generator` (alias: `/Tools/Random_Amharic_Words_Generator`)
+   - API: `/api/amharic-words-generator`
+5. Ethiopian Name Generator
+   - Page: `/Tools/Ethiopian_Name_Generator`
+   - APIs:
+     - `/api/ethiopian-name-generator`
+     - `/api/ethiopian-name-generator/audio`
+6. Amharic Link Shortener
+   - Page: `/Tools/Amharic_Link_Shortner` (alias: `/Tools/Amharic_Link_Shortener`)
+   - API: `/api/amharic-link-shortner`
+7. Ethiopian Date Converter and Calculator
+   - Page: `/Tools/Ethiopian_Date_Converter`
+   - APIs:
+     - `/api/ethiopian-date/meta`
+     - `/api/ethiopian-date/to-gregorian`
+     - `/api/ethiopian-date/to-ethiopian`
+     - `/api/ethiopian-date/calculate`
+8. Amharic OCR
+   - Page/API form route: `/Tools/Amharic_OCR`
+   - Download route: `/download`
+9. Amharic Numbers to Words Converter
+   - Page: `/Tools/Numbers_to_Amharic_Words_Converter` (alias: `/Tools/Amharic_Numbers_Converter`)
+   - Speech API: `/Tools/Numbers_to_Amharic_Words_Converter/speak`
+10. Geez Numbers Converter
+   - Page: `/Tools/Geez_Numbers_Converter`
+11. Ethiopian Phone Number Validator
+   - Page: `/Tools/Ethiopia_Phone_Numbers`
 
-### System dependency
-- Tesseract OCR binary (OS install)
-  - Required for OCR feature because `pytesseract` is only a wrapper.
+### Knowledge assistant feature (resource page)
+12. Ethiopian Knowledge AI Assistant
+- Page: `/Resources/Ethiopian_Knowledge_AI_Assistant`
+- APIs:
+  - `/api/ethiopian-knowledge/ingest`
+  - `/api/ethiopian-knowledge/ask`
 
-### Standard library modules currently used
-- `io` (`BytesIO`) for in-memory file/audio streaming.
-- `base64` for OCR uploaded-image preview data URL.
-- `decimal` (`Decimal`, `InvalidOperation`, `ROUND_HALF_UP`) for precise currency + santim logic.
+### Global assistant (home floating chat)
+- APIs:
+  - `/api/home-chat/ask`
+  - `/api/home-chat/health`
 
-### Frontend built-ins (no package install)
-- `fetch` for API-style requests from browser.
-- `Audio` for MP3 playback.
-- `speechSynthesis` as browser fallback.
-- `navigator.clipboard` for copy buttons.
+### Optional music feature
+- Page/API route: `/generate-music`
+- Audio route: `/media/audio/<path:filename>`
+- Can be disabled with environment profile for lightweight deployment.
 
----
+## Game Pages
+1. Amharic Fidel Sliding Puzzle
+   - `/Games/Amharic_Fidel_Sliding_Puzzle_Game`
+2. Amharic Typing Game
+   - `/Games/Amharic_Typing_Game`
 
-## 2) Project Structure and Responsibility
+## Libraries and Dependencies
+
+### Python dependencies (requirements.txt)
+- flask: Web framework and routing
+- flask-cors: Cross-origin configuration for `/api/*`
+- opencv-python: OCR image preprocessing utilities
+- numpy: Numeric/image array operations
+- pytesseract: Python wrapper for Tesseract OCR
+- gTTS: Google text-to-speech generation
+- click: CLI compatibility pin (stability)
+- edge-tts: Neural TTS support/fallback path
+- langchain: LLM orchestration primitives
+- langchain-community: Community integrations
+- faiss-cpu: Vector index for retrieval
+- pypdf: PDF extraction for knowledge ingest
+- beautifulsoup4: HTML parsing for URL ingestion
+- tiktoken: Token counting/splitting support
+- openai: OpenAI-compatible client for NVIDIA APIs
+- python-dotenv: Environment variable loading
+- gunicorn: Production WSGI server
+
+### Optional Python dependencies (requirements-music.txt)
+- torch
+- audiocraft
+
+These are isolated so core deployment can stay lightweight.
+
+### Node/package ecosystem (package.json)
+- libphonenumber-js: Phone number parsing/validation support
+
+### Bundled vendor script
+- static/vendor/libphonenumber-max.js
+
+### System-level dependency
+- Tesseract OCR binary (required for full OCR extraction in server environments)
+- Amharic language data for Tesseract (`amh.traineddata`) for best results
+
+## Environment Variables
+
+### Required for AI features
+- NVIDIA_API_KEY
+
+### Recommended
+- NVIDIA_CHAT_API_KEY
+- NVIDIA_BASE_URL (default: `https://integrate.api.nvidia.com/v1`)
+- NVIDIA_CHAT_MODEL
+- NVIDIA_HOME_CHAT_MODEL
+- NVIDIA_EMBEDDING_MODEL
+- USER_AGENT
+
+### Deployment behavior
+- APP_PROFILE (`full` or `production-lite`)
+- ENABLE_MUSIC_GENERATION (`true`/`false`)
+- MUSIC_DISABLED_MESSAGE
+- FRONTEND_ORIGINS
+- SHORT_LINK_PUBLIC_BASE_URL
+
+### Vercel proxy
+- RENDER_BACKEND_URL
+
+## Architecture and Folder Structure
 
 ```text
 ai_tools_app/
-├── app.py
-├── README.md
-├── requirements.txt
-├── static/
-├── templates/
-│   ├── home.html
-│   ├── ocr.html
-│   ├── amharic_numbers.html
-│   ├── geez_numbers.html
-│   ├── translator.html
-│   └── index.html
-├── tools/
-│   ├── ocr/
-│   │   ├── ocr.py
-│   │   └── test_ocr.py
-│   ├── amharic_numbers_converter/
-│   │   └── converter.py
-│   ├── geez_numbers_converter/
-│   │   └── converter.py
-│   └── ...other tool folders...
-└── games/
-    └── ...game folders...
+|- app.py
+|- README.md
+|- DEPLOYMENT.md
+|- requirements.txt
+|- requirements-music.txt
+|- render.yaml
+|- vercel.json
+|- templates/
+|- static/
+|- public/
+|- tools/
+|  |- amharic_keyboard/
+|  |- amharic_music_generator/
+|  |- amharic_numbers_converter/
+|  |- amharic_text_to_image/
+|  |- amharic_text_to_speech/
+|  |- ethiopian_baby_name_generator/
+|  |- ethiopian_date_converter/
+|  |- ethiopian_knowledge_assistant/
+|  |- ethiopic_links/
+|  |- geez_numbers_converter/
+|  |- ocr/
+|  |- random_amharic_words_generator/
+|- games/
+|  |- amharic_fidel_sliding_puzzle/
+|  |- amharic_typing_game/
 ```
 
-### Directory responsibilities
-- `tools/`: pure business logic for each tool.
-- `templates/`: Flask-rendered UI pages.
-- `static/`: shared CSS/JS/assets (recommended for future refactor).
-- `games/`: game-specific logic/assets.
+## Local Development
 
----
+### Prerequisites
+1. Python 3.11+ recommended
+2. pip
+3. Internet access for AI and some speech features
+4. Tesseract installed locally if using OCR
 
-## 3) File-by-File Responsibility (Current Implemented Features)
-
-### Core app
-- `app.py`
-  - Main Flask app entry point.
-  - Hosts all page routes and POST handlers.
-  - Connects templates to tool logic in `tools/`.
-
-### Amharic Numbers Converter
-- `tools/amharic_numbers_converter/converter.py`
-  - `number_to_amharic(n)` for integer-to-Amharic words.
-  - `number_to_currency(value)` for birr/santim formatting.
-- `templates/amharic_numbers.html`
-  - Number/currency mode UI.
-  - Copy and sound trigger buttons.
-  - Browser fallback speech logic.
-
-### Geez Numerals Converter
-- `tools/geez_numbers_converter/converter.py`
-  - `arabic_to_geez(num)`
-  - `geez_to_arabic(text)`
-  - Validation for unsupported/invalid input.
-- `templates/geez_numbers.html`
-  - Tabbed modes: Convert to Geez / Convert from Geez.
-  - Result card + copy button.
-  - Clickable Geez reference table that inserts symbols into input.
-
-### OCR feature
-- `tools/ocr/ocr.py`
-  - OCR preprocess + extraction functions.
-- `templates/ocr.html`
-  - Upload and OCR interaction UI.
-
-### Navigation pages
-- `templates/home.html`
-  - Landing page and links to tools.
-  - Current game placeholder route.
-
----
-
-## 4) Feature Behavior (What Works Now)
-
-## Amharic Numbers Converter
-- Number → Amharic words.
-- Currency mode with birr + santim.
-- Sound generation from backend (`gTTS`) + browser fallback.
-
-## Geez Numerals Converter
-- Arabic → Geez
-  - Example: `30 -> ፴`
-  - Example: `251 -> ፪፻፶፩`
-- Geez → Arabic
-  - Example: `፻ -> 100`
-  - Example: `፴ -> 30`
-- Tabs for mode switching.
-- Input validation.
-- Copy result button.
-- Optional reference table with clickable symbols.
-
----
-
-## 5) Current Routes
-
-- `GET /`
-- `GET, POST /Tools/Amharic_OCR`
-- `GET, POST /Tools/Numbers_to_Amharic_Words_Converter`
-- `GET, POST /Tools/Amharic_Numbers_Converter` (alias)
-- `POST /Tools/Numbers_to_Amharic_Words_Converter/speak`
-- `GET, POST /Tools/Geez_Numbers_Converter`
-- `POST /download`
-- `GET /Tools/Amharic_AI_Prompt_to_Image_Generator`
-- `GET /Tools/Amharic_to_Image` (alias)
-- `POST /api/amharic-ai-image`
-
----
-
-## Amharic AI Prompt to Image Generator Setup
-
-This tool calls NVIDIA's OpenAI-compatible image generation API from the Flask backend.
-
-Set environment variables before running `app.py`:
-
-Windows PowerShell:
-```powershell
-$env:NVIDIA_API_KEY = "your_nvidia_api_key"
-# Optional
-$env:NVIDIA_IMAGE_API_URL = "https://ai.api.nvidia.com/v1/genai/black-forest-labs/flux.1-dev"
-```
-
-The frontend sends prompt/size/style to `/api/amharic-ai-image`, and the backend returns an image URL for display and download.
-
----
-
-## 6) Local Setup and Run
-
-## Prerequisites
-1. Python 3.10+
-2. Internet access (for `gTTS`)
-3. For OCR only: Tesseract installed with `amh.traineddata`
-
-## Install
+### Install
 ```bash
 pip install -r requirements.txt
 ```
 
-Conda example:
-```bash
-conda activate ai_tools_app
-pip install -r requirements.txt
-```
-
-## Run
+### Run
 ```bash
 python app.py
 ```
 
 Open:
-- `http://127.0.0.1:5000/`
+- http://127.0.0.1:5000/
 
----
+## Deployment Summary
 
-## 7) Deployment-Ready Development Guidelines (Render + Vercel Friendly)
+### Render (backend)
+- Build command: `pip install -r requirements.txt`
+- Start command: `gunicorn app:app`
+- Recommended profile: `APP_PROFILE=production-lite` for free-tier stability
 
-Use these rules while adding new features so deployment is easy later:
+### Vercel (frontend URL/proxy)
+- Uses rewrite/proxy to Render backend
+- Public share URL: `https://samuel-ai-tools-app.vercel.app`
 
-1. Keep business logic in `tools/<tool_name>/converter.py` (or equivalent), not in route handlers.
-2. Keep route handlers thin (parse input → call logic → render template/JSON).
-3. Avoid hardcoded localhost URLs; use relative paths in frontend (`/Tools/...`).
-4. Avoid writing temp files to disk when possible; prefer `BytesIO` (already used for audio/download).
-5. Put future secrets/keys in environment variables, never in source code.
-6. Keep imports deterministic and package-based (`from tools... import ...`).
-7. Add graceful error messages for invalid input/network failure.
+## Health and Operations Checklist
+1. Confirm `/api/home-chat/health` returns `status: ok`
+2. Test image, keyboard, knowledge ingest/ask APIs
+3. Test OCR upload behavior (and ensure Tesseract availability where needed)
+4. Confirm short-link redirect routes (`/<short_code>` and `/ethio_links/<short_code>`)
+5. Verify CORS (`FRONTEND_ORIGINS`) after domain changes
 
----
+## Notes
+- Music generation is intentionally optional to keep free-tier deployments stable.
+- OCR extraction quality and availability depend on server-level Tesseract installation.
+- Keep secrets in environment variables only; do not commit real keys.
 
-## 8) Render Deployment Plan (Backend)
-
-Recommended for this current Flask monolith (templates + routes).
-
-### Minimum Render settings
-- Runtime: Python
-- Build command:
-  - `pip install -r requirements.txt`
-- Start command (recommended):
-  - `gunicorn app:app`
-
-### Notes
-- Add `gunicorn` to `requirements.txt` before deploying to Render.
-- If OCR is enabled in production, Render image/service must include Tesseract binary and `amh.traineddata`.
-
----
-
-## 9) Vercel Deployment Notes (Future)
-
-For Python on Vercel, Flask runs as serverless functions with platform constraints.
-
-### Practical recommendation
-- Keep Flask backend on Render.
-- Use Vercel for frontend projects (or static/UI shell) that call backend APIs.
-
-### If you still deploy Flask to Vercel
-- Add a `vercel.json` mapping Python handler.
-- Verify timeouts and binary dependencies (OCR/Tesseract is harder on serverless).
-
----
-
-## 10) Suggested Next Files for Easier Deployment
-
-When you are ready, add:
-
-1. `Procfile`
-   - `web: gunicorn app:app`
-2. `.gitignore`
-   - include `__pycache__/`, `*.pyc`, `.env`
-3. `runtime.txt` (optional)
-   - pin Python version for consistent deploy runtime
-4. `vercel.json` (only if deploying Flask on Vercel)
-
----
-
-## 11) Troubleshooting
-
-### Push/deployment mismatch
-- Make sure local `main` is synced (`git pull --rebase`) before pushing.
-
-### Converter sound not playing
-- `gTTS` needs internet.
-- Browser may block autoplay; user interaction (button click) is required.
-
-### Geez conversion input errors
-- Use Geez numeral symbols only (`፩..፱`, `፲..፺`, `፻`, `፼`) in from-Geez mode.
-
-### OCR not working in deployed environment
-- Tesseract binary/language data missing on server environment.
-
----
-
-## 12) Current Status
-
-- ✅ Amharic OCR working locally
-- ✅ Amharic Numbers Converter working (logic + currency + sound + fallback)
-- ✅ Geez Numerals Converter working (2-way conversion + tabs + copy + clickable table)
-- 🚧 Remaining tools/games are scaffolded for next implementation
+## License
+ISC
