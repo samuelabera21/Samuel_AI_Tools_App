@@ -16,15 +16,17 @@ With this setup, users open the Vercel URL, and all pages and APIs are served th
 
 ## Important Before Deploying
 
-You only need to edit 2 placeholders one time:
+The configs now use env-based placeholders with safe fallbacks:
 
-1. In vercel.json, replace:
-   - https://YOUR_RENDER_BACKEND.onrender.com
-   with your real Render backend URL after first Render deploy.
+1. In vercel.json, set `RENDER_BACKEND_URL` to your real Render URL.
+   - Default placeholder: `https://your-render-backend.onrender.com`
 
-2. In render.yaml, replace:
-   - https://YOUR_VERCEL_DOMAIN.vercel.app
-   with your real Vercel domain.
+2. In render.yaml, `FRONTEND_ORIGINS` defaults to `*`.
+   - Fallback behavior: APIs remain callable from any origin until you lock this down.
+   - For production, set it to your Vercel domain (or comma-separated list).
+
+3. In render.yaml, `SHORT_LINK_PUBLIC_BASE_URL` defaults to empty string.
+   - Fallback behavior: short links automatically use the current request host.
 
 ## Step-by-Step Flow
 
@@ -43,7 +45,7 @@ After success, copy your Render URL, for example:
 ## 2) Point Vercel to Render
 
 1. Open vercel.json.
-2. Replace destination placeholder with your real Render URL.
+2. Set `RENDER_BACKEND_URL` to your real Render URL.
 3. Commit and push.
 
 ## 3) Deploy Frontend on Vercel
@@ -56,7 +58,7 @@ After success, copy your Render URL, for example:
 ## 4) Lock CORS to Your Vercel Domain
 
 1. Open render.yaml.
-2. Set FRONTEND_ORIGINS to your real Vercel domain.
+2. Set `FRONTEND_ORIGINS` to your real Vercel domain.
 3. Commit and push, then redeploy Render.
 
 This allows browser API calls only from your Vercel frontend.
@@ -112,3 +114,21 @@ Generated music files are configured for production persistence:
 - Automatic cleanup is controlled by `AUDIO_RETENTION_HOURS` (default 168 hours = 7 days).
 
 This means generated audio survives restarts and redeploys, while old files are cleaned automatically.
+
+## Lightweight Production Profile Toggle
+
+The backend now supports a lightweight profile for free deployments:
+
+- `APP_PROFILE=production-lite`
+- `ENABLE_MUSIC_GENERATION=false`
+- `MUSIC_DISABLED_MESSAGE=...`
+
+Fallback behavior:
+
+- Music page still loads.
+- Generation endpoint returns a clear 503 message.
+- Other tools remain fully functional.
+
+When you want full music support again, set:
+
+- `ENABLE_MUSIC_GENERATION=true`

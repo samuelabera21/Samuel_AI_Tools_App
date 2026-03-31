@@ -22,7 +22,15 @@ services:
       - key: RAG_CHUNK_OVERLAP
         value: 150
       - key: FRONTEND_ORIGINS
-        value: https://YOUR_VERCEL_DOMAIN.vercel.app
+        value: "*"
+      - key: SHORT_LINK_PUBLIC_BASE_URL
+        value: ""
+      - key: APP_PROFILE
+        value: production-lite
+      - key: ENABLE_MUSIC_GENERATION
+        value: "false"
+      - key: MUSIC_DISABLED_MESSAGE
+        value: Music generation is disabled on this free deployment profile.
       - key: AUDIO_STORAGE_DIR
         value: /opt/render/project/src/data/generated_audio
       - key: AUDIO_RETENTION_HOURS

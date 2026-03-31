@@ -1,9 +1,12 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
+  "env": {
+    "RENDER_BACKEND_URL": "https://your-render-backend.onrender.com"
+  },
   "rewrites": [
     {
       "source": "/(.*)",
-      "destination": "https://YOUR_RENDER_BACKEND.onrender.com/$1"
+      "destination": "$RENDER_BACKEND_URL/$1"
     }
   ]
 }
