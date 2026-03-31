@@ -73,6 +73,7 @@
                     <textarea id="prompt" rows="2" placeholder="Describe your image..."></textarea>
                     <button id="generate-btn" class="btn-primary" type="button">Generate</button>
                 </div>
+                <p id="provider-warning" class="error hidden"></p>
                 <p id="error" class="error hidden"></p>
             </div>
         </section>
@@ -92,6 +93,7 @@
         const chatThreadEl = document.getElementById("chat-thread");
         const imageEl = document.getElementById("generated-image");
         const downloadLink = document.getElementById("download-link");
+        const providerWarningEl = document.getElementById("provider-warning");
         const toggleSettingsBtn = document.getElementById("toggle-settings");
         const advancedSettingsEl = document.getElementById("advanced-settings");
 
@@ -106,6 +108,7 @@
             loadingMessageEl.classList.toggle("hidden", !isLoading);
             if (isLoading) {
                 errorEl.classList.add("hidden");
+                providerWarningEl.classList.add("hidden");
             }
         }
 
@@ -151,6 +154,12 @@
                 downloadLink.href = data.imageUrl;
                 assistantMessageEl.classList.remove("hidden");
                 errorEl.classList.add("hidden");
+                if (data.warning) {
+                    providerWarningEl.textContent = data.warning;
+                    providerWarningEl.classList.remove("hidden");
+                } else {
+                    providerWarningEl.classList.add("hidden");
+                }
                 scrollChatToBottom();
             } catch (error) {
                 showError(error.message || "Unable to generate image right now.");

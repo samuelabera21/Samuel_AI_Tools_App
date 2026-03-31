@@ -180,16 +180,22 @@ def generate_image_from_prompt(prompt: str, size: str = "1024x1024", style: str 
                     height=height,
                     api_key=api_key,
                 )
-                return {"image_url": extract_image_url(parsed)}
+                return {
+                    "image_url": extract_image_url(parsed),
+                    "provider": "nvidia",
+                    "warning": "",
+                }
             except url_error.HTTPError as exc:
                 if exc.code in {401, 403}:
                     # Keep tool usable when NVIDIA image model access is restricted.
                     return {
                         "image_url": build_public_fallback_image_url(
-                            prompt=english_prompt,
+                            prompt=full_prompt,
                             width=width,
                             height=height,
-                        )
+                        ),
+                        "provider": "public-fallback",
+                        "warning": "NVIDIA image access is restricted for the current key/model. A public fallback provider generated this image, so prompt accuracy may vary.",
                     }
                 last_http_error_message = parse_error_message(exc)
                 should_retry = (

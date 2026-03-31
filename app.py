@@ -336,13 +336,33 @@ def amharic_ai_image_api():
 
     try:
         generated = generate_image_from_prompt(prompt=prompt, size=size, style=style)
-        return jsonify({"imageUrl": generated["image_url"]})
+        return jsonify(
+            {
+                "imageUrl": generated["image_url"],
+                "provider": generated.get("provider", "unknown"),
+                "warning": generated.get("warning", ""),
+            }
+        )
     except RuntimeError:
         return jsonify({"error": "Server is missing NVIDIA_API_KEY configuration."}), 500
     except ValueError as exc:
         return jsonify({"error": str(exc)}), 502
     except Exception:
         return jsonify({"error": "Unexpected server error while generating image."}), 500
+
+
+@app.route("/api/amharic-ai-image/health", methods=["GET"])
+def amharic_ai_image_health_api():
+    return jsonify(
+        {
+            "status": "ok",
+            "apiUrl": os.getenv(
+                "NVIDIA_IMAGE_API_URL",
+                "https://ai.api.nvidia.com/v1/genai/black-forest-labs/flux.1-dev",
+            ),
+            "apiKeyConfigured": bool(os.getenv("NVIDIA_API_KEY") or os.getenv("NVIDIA_CHAT_API_KEY")),
+        }
+    )
 
 
 @app.route("/api/amharic-keyboard/ai-polish", methods=["POST"])
