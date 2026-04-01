@@ -2,6 +2,11 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "redirects": [
     {
+      "source": "/",
+      "destination": "https://samuel-ai-tools-app.onrender.com/",
+      "permanent": false
+    },
+    {
       "source": "/Tools/(.*)",
       "destination": "https://samuel-ai-tools-app.onrender.com/Tools/$1",
       "permanent": false
