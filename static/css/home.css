@@ -350,12 +350,17 @@ main {
 }
 
 .hero-cta {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	min-width: 190px;
+	height: 58px;
 	text-decoration: none;
 	color: var(--accent);
 	font-weight: 800;
 	border: 1px solid rgba(255, 138, 61, 0.92);
 	background: linear-gradient(135deg, rgba(255, 138, 61, 0.16), rgba(255, 138, 61, 0.04));
-	border-radius: 16px;
+	border-radius: 12px;
 	padding: 16px 24px;
 	letter-spacing: 0.03em;
 	text-transform: uppercase;
