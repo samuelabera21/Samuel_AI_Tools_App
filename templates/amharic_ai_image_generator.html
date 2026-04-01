@@ -145,7 +145,17 @@
                     })
                 });
 
-                const data = await response.json();
+                const responseText = await response.text();
+                let data = {};
+                try {
+                    data = responseText ? JSON.parse(responseText) : {};
+                } catch (parseError) {
+                    if (!response.ok) {
+                        throw new Error("Image service returned a non-JSON error. Please try again in a few seconds.");
+                    }
+                    throw new Error("Unexpected response from image service.");
+                }
+
                 if (!response.ok) {
                     throw new Error(data.error || "Image generation failed.");
                 }
