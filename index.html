@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ፍኖት Ethiopian AI HUB</title>
+  <meta name="description" content="Public landing page for ፍኖት Ethiopian AI HUB.">
+  <style>
+    :root {
+      --bg: #06142f;
+      --bg2: #0f2348;
+      --panel: rgba(16, 33, 68, 0.88);
+      --text: #f5f8ff;
+      --muted: #b7c6ea;
+      --accent: #ff8b2c;
+      --line: rgba(109, 160, 255, 0.25);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 20% 20%, rgba(55, 120, 255, 0.3), transparent 35%),
+        radial-gradient(circle at 80% 10%, rgba(255, 139, 44, 0.2), transparent 35%),
+        linear-gradient(160deg, var(--bg), var(--bg2));
+      display: grid;
+      place-items: center;
+      padding: 24px;
+    }
+
+    .grid {
+      position: fixed;
+      inset: 0;
+      background:
+        linear-gradient(var(--line) 1px, transparent 1px) 0 0 / 100% 56px,
+        linear-gradient(90deg, var(--line) 1px, transparent 1px) 0 0 / 56px 100%;
+      opacity: 0.25;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .card {
+      position: relative;
+      z-index: 1;
+      width: min(760px, 100%);
+      background: var(--panel);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 20px;
+      padding: 28px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+      backdrop-filter: blur(10px);
+    }
+
+    h1 {
+      margin: 0 0 12px;
+      font-size: clamp(1.7rem, 3.5vw, 2.3rem);
+      line-height: 1.2;
+    }
+
+    p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .actions {
+      margin-top: 22px;
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      text-decoration: none;
+      font-weight: 700;
+      border-radius: 999px;
+      padding: 11px 18px;
+      border: 1px solid transparent;
+      transition: transform 0.18s ease, opacity 0.18s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+      opacity: 0.95;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #1f1200;
+    }
+
+    .btn-ghost {
+      background: transparent;
+      border-color: rgba(255, 255, 255, 0.45);
+      color: var(--text);
+    }
+
+    .note {
+      margin-top: 18px;
+      font-size: 0.94rem;
+      color: #d6e1ff;
+    }
+  </style>
+</head>
+<body>
+  <div class="grid" aria-hidden="true"></div>
+
+  <main class="card" role="main">
+    <h1>Welcome to ፍኖት Ethiopian AI HUB</h1>
+    <p>
+      This Vercel URL now opens instantly as a public landing page.
+      Core backend services are still running on Render.
+    </p>
+
+    <div class="actions">
+      <a class="btn btn-primary" href="https://samuel-ai-tools-app.onrender.com" rel="noopener noreferrer">Open Full App</a>
+      <a class="btn btn-ghost" href="https://samuel-ai-tools-app.onrender.com/Resources/Ethiopian_Knowledge_AI_Assistant" rel="noopener noreferrer">Knowledge Assistant</a>
+    </div>
+
+    <p class="note">
+      Shared public URL: https://samuel-ai-tools-app.vercel.app
+    </p>
+  </main>
+</body>
+</html>

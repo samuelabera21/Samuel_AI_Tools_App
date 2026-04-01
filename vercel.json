@@ -1,9 +1,47 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
+  "redirects": [
+    {
+      "source": "/Tools/(.*)",
+      "destination": "https://samuel-ai-tools-app.onrender.com/Tools/$1",
+      "permanent": false
+    },
+    {
+      "source": "/Resources",
+      "destination": "https://samuel-ai-tools-app.onrender.com/Resources",
+      "permanent": false
+    },
+    {
+      "source": "/Resources/(.*)",
+      "destination": "https://samuel-ai-tools-app.onrender.com/Resources/$1",
+      "permanent": false
+    },
+    {
+      "source": "/Games/(.*)",
+      "destination": "https://samuel-ai-tools-app.onrender.com/Games/$1",
+      "permanent": false
+    }
+  ],
   "rewrites": [
     {
-      "source": "/(.*)",
-      "destination": "https://samuel-ai-tools-app.onrender.com/$1"
+      "source": "/api/(.*)",
+      "destination": "https://samuel-ai-tools-app.onrender.com/api/$1"
+    },
+    {
+      "source": "/generate-music",
+      "destination": "https://samuel-ai-tools-app.onrender.com/generate-music"
+    },
+    {
+      "source": "/media/audio/(.*)",
+      "destination": "https://samuel-ai-tools-app.onrender.com/media/audio/$1"
+    },
+    {
+      "source": "/download",
+      "destination": "https://samuel-ai-tools-app.onrender.com/download"
+    },
+    {
+      "source": "/ethio_links/(.*)",
+      "destination": "https://samuel-ai-tools-app.onrender.com/ethio_links/$1"
     }
   ]
 }
