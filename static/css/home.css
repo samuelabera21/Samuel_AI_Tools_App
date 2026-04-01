@@ -353,21 +353,26 @@ main {
 	text-decoration: none;
 	color: var(--accent);
 	font-weight: 800;
-	border: 1px solid #ff8a3d;
-	background: transparent;
+	border: 1px solid rgba(255, 138, 61, 0.92);
+	background: linear-gradient(135deg, rgba(255, 138, 61, 0.16), rgba(255, 138, 61, 0.04));
+	border-radius: 16px;
+	padding: 16px 24px;
+	letter-spacing: 0.03em;
+	text-transform: uppercase;
 	transition: background 0.3s ease, color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
 }
 
 .hero-cta.ghost {
-	background: rgba(255, 255, 255, 0.08);
-	border-color: rgba(255, 255, 255, 0.25);
-	color: var(--text);
+	background: linear-gradient(135deg, rgba(15, 29, 62, 0.98), rgba(28, 45, 92, 0.92));
+	border-color: rgba(128, 171, 255, 0.3);
+	color: #f5f7ff;
+	box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.05);
 }
 
 .hero-cta:hover {
-	background: #ff8a3d;
+	background: linear-gradient(135deg, #ff8a3d, #ff6d2d);
 	color: #ffffff;
-	box-shadow: 0 0 20px rgba(255, 140, 70, 0.5);
+	box-shadow: 0 0 24px rgba(255, 140, 70, 0.58);
 	transform: translateY(-2px);
 }
 
