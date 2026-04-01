@@ -1266,7 +1266,7 @@ main {
 	}
 }
 
-@media (max-width: 700px) {
+@media (max-width: 700px) and (hover: none) {
 	.hero-topbar {
 		display: grid;
 		grid-template-columns: auto 1fr;
