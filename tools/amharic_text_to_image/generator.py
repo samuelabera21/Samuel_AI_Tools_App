@@ -189,13 +189,18 @@ def build_public_fallback_image_url(prompt: str, width: int, height: int):
 
 def generate_image_from_prompt(prompt: str, size: str = "1024x1024", style: str | None = None):
     """Call NVIDIA's OpenAI-compatible image endpoint and return image URL/base64."""
-    api_key = (os.getenv("NVIDIA_API_KEY") or os.getenv("NVIDIA_CHAT_API_KEY") or "").strip()
-    if not api_key:
+    api_keys: list[str] = []
+    for env_name in ("NVIDIA_API_KEY", "NVIDIA_CHAT_API_KEY"):
+        candidate = (os.getenv(env_name) or "").strip()
+        if candidate and candidate not in api_keys:
+            api_keys.append(candidate)
+
+    if not api_keys:
         raise RuntimeError("NVIDIA_API_KEY (or NVIDIA_CHAT_API_KEY fallback) is missing")
 
     width, height = parse_size(size)
     has_ethiopic_text = contains_ethiopic_text(prompt)
-    english_prompt = translate_amharic_to_english(prompt, api_key=api_key) if has_ethiopic_text else prompt
+    english_prompt = translate_amharic_to_english(prompt, api_key=api_keys[0]) if has_ethiopic_text else prompt
     prompt_variants = [
         build_generation_prompt(
             prompt=prompt,
@@ -216,42 +221,51 @@ def generate_image_from_prompt(prompt: str, size: str = "1024x1024", style: str 
 
     try:
         last_http_error_message = None
-        for index, full_prompt in enumerate(prompt_variants):
-            try:
-                parsed = request_image_generation(
-                    full_prompt=full_prompt,
+        auth_restricted = False
+
+        for api_key in api_keys:
+            for index, full_prompt in enumerate(prompt_variants):
+                try:
+                    parsed = request_image_generation(
+                        full_prompt=full_prompt,
+                        width=width,
+                        height=height,
+                        api_key=api_key,
+                    )
+                    return {
+                        "image_url": extract_image_url(parsed),
+                        "provider": "nvidia",
+                        "warning": "",
+                    }
+                except url_error.HTTPError as exc:
+                    if exc.code in {401, 403}:
+                        auth_restricted = True
+                        # This key cannot access the image model. Try the next key.
+                        break
+
+                    last_http_error_message = parse_error_message(exc)
+                    should_retry = (
+                        exc.code >= 500
+                        and index < len(prompt_variants) - 1
+                    )
+                    if should_retry:
+                        continue
+                    raise ValueError(f"Image generation API error: {last_http_error_message}") from exc
+
+        if auth_restricted:
+            # Keep tool usable when NVIDIA image model access is restricted for all configured keys.
+            fallback_prompt = (english_prompt or prompt).strip()
+            if style:
+                fallback_prompt = f"{fallback_prompt}, {style} style"
+            return {
+                "image_url": build_public_fallback_image_url(
+                    prompt=fallback_prompt,
                     width=width,
                     height=height,
-                    api_key=api_key,
-                )
-                return {
-                    "image_url": extract_image_url(parsed),
-                    "provider": "nvidia",
-                    "warning": "",
-                }
-            except url_error.HTTPError as exc:
-                if exc.code in {401, 403}:
-                    # Keep tool usable when NVIDIA image model access is restricted.
-                    fallback_prompt = (english_prompt or prompt).strip()
-                    if style:
-                        fallback_prompt = f"{fallback_prompt}, {style} style"
-                    return {
-                        "image_url": build_public_fallback_image_url(
-                            prompt=fallback_prompt,
-                            width=width,
-                            height=height,
-                        ),
-                        "provider": "public-fallback",
-                        "warning": "NVIDIA image access is restricted for the current key/model. A public fallback provider generated this image, so prompt accuracy may vary.",
-                    }
-                last_http_error_message = parse_error_message(exc)
-                should_retry = (
-                    exc.code >= 500
-                    and index < len(prompt_variants) - 1
-                )
-                if should_retry:
-                    continue
-                raise ValueError(f"Image generation API error: {last_http_error_message}") from exc
+                ),
+                "provider": "public-fallback",
+                "warning": "NVIDIA image access is restricted for the current key/model. A public fallback provider generated this image, so prompt accuracy may vary.",
+            }
     except url_error.HTTPError as exc:
         message = parse_error_message(exc)
         raise ValueError(f"Image generation API error: {message}") from exc
