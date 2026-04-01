@@ -1298,20 +1298,11 @@ main {
 	}
 
 	.hero-menu-summary {
-		display: inline-flex;
-		width: 100%;
+		display: none;
 	}
 
 	.hero-menu:not([open]) .hero-nav {
 		display: none;
-	}
-
-	.hero-menu[open] .hero-nav {
-		display: grid;
-	}
-
-	.hero-menu[open] .hero-menu-summary {
-		margin-bottom: 8px;
 	}
 
 	.hero-nav {
@@ -1319,9 +1310,12 @@ main {
 		display: grid;
 		grid-template-columns: 1fr;
 		justify-content: stretch;
-		gap: 6px;
-		padding: 10px;
-		border-radius: 18px;
+		gap: 0;
+		padding: 10px 10px 12px;
+		border-radius: 22px;
+		border: 1px solid rgba(255, 167, 109, 0.18);
+		background: rgba(14, 20, 44, 0.92);
+		box-shadow: 0 12px 30px rgba(3, 8, 22, 0.36), 0 0 18px rgba(255, 150, 60, 0.12);
 		overflow: visible;
 	}
 
@@ -1331,8 +1325,18 @@ main {
 		text-align: left;
 		font-size: 14px;
 		line-height: 1.25;
-		padding: 11px 14px;
-		border-radius: 12px;
+		padding: 14px 14px;
+		border-radius: 14px;
+	}
+
+	.hero-nav > a + a,
+	.hero-nav > a + .hero-dropdown,
+	.hero-dropdown + a,
+	.hero-dropdown + .hero-dropdown,
+	.hero-dropdown + .hero-nav-contact,
+	.hero-nav-contact + a,
+	.hero-nav-contact + .hero-dropdown {
+		margin-top: 6px;
 	}
 
 	.hero-dropdown {
@@ -1342,8 +1346,8 @@ main {
 	.hero-nav-contact {
 		display: block;
 		width: 100%;
-		padding: 11px 14px;
-		border-radius: 12px;
+		padding: 14px 14px;
+		border-radius: 14px;
 		text-align: left;
 		color: var(--text);
 		text-decoration: none;
@@ -1359,17 +1363,23 @@ main {
 		left: auto;
 		min-width: 0;
 		width: 100%;
-		margin-top: 6px;
-		border-radius: 12px;
+		margin-top: 8px;
+		border-radius: 14px;
 		box-shadow: none;
 		max-height: 280px;
 		overflow-y: auto;
 	}
 
 	.contact-pill {
-		display: none;
+		grid-column: 1 / -1;
+		order: 2;
+		width: 100%;
+		display: block;
 		font-size: 14px;
-		padding: 10px 14px;
+		padding: 13px 16px;
+		text-align: center;
+		border-radius: 18px;
+		margin-bottom: 2px;
 	}
 
 	.brand-mark {
