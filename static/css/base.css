@@ -547,7 +547,7 @@ main :where(button, input, select, textarea, .btn-primary, .hero-cta, .scene-cta
   }
 
   .hero-menu:not([open]) .hero-nav {
-    display: none;
+    display: grid;
   }
 
   .brand-chip {
@@ -645,6 +645,10 @@ main :where(button, input, select, textarea, .btn-primary, .hero-cta, .scene-cta
 @media (min-width: 701px) {
   .hero-menu {
     flex: 1;
+  }
+
+  .hero-menu:not([open]) > .hero-nav {
+    display: flex;
   }
 
   .hero-menu-summary {

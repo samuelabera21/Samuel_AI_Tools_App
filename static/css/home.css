@@ -403,17 +403,6 @@ main {
 	align-items: center;
 	justify-content: center;
 	overflow: hidden;
-			display: inline-flex;
-			width: 100%;
-		}
-
-		.hero-menu:not([open]) .hero-nav {
-			display: none;
-		}
-
-		.hero-menu[open] .hero-menu-summary {
-			margin-bottom: 8px;
-		}
 	border-radius: 26px;
 	border: 1px solid rgba(108, 151, 255, 0.18);
 	background: rgba(8, 14, 34, 0.84);
@@ -429,9 +418,6 @@ main {
 		repeating-linear-gradient(90deg, rgba(79, 134, 246, 0.08) 0 1px, transparent 1px 82px);
 	animation: story-backdrop-drift 13s linear infinite;
 	pointer-events: none;
-		.hero-menu[open] .hero-nav {
-			display: grid;
-		}
 }
 
 .tool-scene {
