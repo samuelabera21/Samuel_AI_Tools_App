@@ -134,7 +134,7 @@ main :where(button, input, select, textarea, .btn-primary, .hero-cta, .scene-cta
 }
 
 .hero-menu-summary {
-  display: inline-flex;
+  display: none;
   list-style: none;
   align-items: center;
   justify-content: center;
@@ -543,16 +543,11 @@ main :where(button, input, select, textarea, .btn-primary, .hero-cta, .scene-cta
   }
 
   .hero-menu-summary {
-    display: inline-flex;
-    width: 100%;
+    display: none;
   }
 
   .hero-menu:not([open]) .hero-nav {
     display: none;
-  }
-
-  .hero-menu[open] .hero-menu-summary {
-    margin-bottom: 8px;
   }
 
   .brand-chip {
@@ -659,18 +654,20 @@ main :where(button, input, select, textarea, .btn-primary, .hero-cta, .scene-cta
   .hero-nav {
     display: flex;
     flex: 1;
-    max-width: 680px;
+    max-width: 820px;
     justify-content: center;
   }
 
   .hero-nav-contact {
-    display: none;
+    display: inline-flex;
   }
 
   .contact-pill {
-    display: inline-flex;
+    display: none;
   }
 }
+
+@media (max-width: 700px) {
   .chatbot-fab {
     right: auto;
     bottom: auto;

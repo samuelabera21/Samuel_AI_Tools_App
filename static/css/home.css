@@ -1304,11 +1304,6 @@ main {
 	}
 
 	.hero-menu-summary {
-		display: inline-flex;
-		width: 100%;
-	}
-
-	.hero-menu:not([open]) .hero-nav {
 		display: none;
 	}
 
@@ -1559,6 +1554,27 @@ main {
 
 	.tools-head {
 		align-items: flex-start;
+	}
+}
+
+@media (min-width: 701px) {
+	.hero-menu {
+		flex: 1;
+	}
+
+	.hero-nav {
+		display: flex;
+		flex: 1;
+		max-width: 820px;
+		justify-content: center;
+	}
+
+	.hero-nav-contact {
+		display: inline-flex;
+	}
+
+	.contact-pill {
+		display: none;
 	}
 }
 
