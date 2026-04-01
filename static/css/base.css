@@ -259,10 +259,6 @@ main :where(button, input, select, textarea, .btn-primary, .hero-cta, .scene-cta
   display: block;
 }
 
-.hero-menu[open] .hero-nav {
-  display: grid;
-}
-
 .contact-pill {
   color: #f5f7ff;
   text-decoration: none;
@@ -546,10 +542,6 @@ main :where(button, input, select, textarea, .btn-primary, .hero-cta, .scene-cta
     display: none;
   }
 
-  .hero-menu:not([open]) .hero-nav {
-    display: grid;
-  }
-
   .brand-chip {
     width: 66px;
     height: 66px;
@@ -635,20 +627,12 @@ main :where(button, input, select, textarea, .btn-primary, .hero-cta, .scene-cta
     font-size: 20px;
   }
 
-  .hero-menu[open] .hero-nav {
-    display: grid;
-  }
-
 }
 
 
 @media (min-width: 701px) {
   .hero-menu {
     flex: 1;
-  }
-
-  .hero-menu:not([open]) > .hero-nav {
-    display: flex;
   }
 
   .hero-menu-summary {
