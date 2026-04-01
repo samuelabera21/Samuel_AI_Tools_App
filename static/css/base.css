@@ -226,6 +226,10 @@ main :where(button, input, select, textarea, .btn-primary, .hero-cta, .scene-cta
   display: block;
 }
 
+.hero-dropdown:focus-within .hero-dropdown-menu {
+  display: block;
+}
+
 .contact-pill {
   color: #f5f7ff;
   text-decoration: none;
@@ -497,6 +501,14 @@ main :where(button, input, select, textarea, .btn-primary, .hero-cta, .scene-cta
 }
 
 @media (max-width: 700px) {
+  .hero-topbar {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    gap: 10px;
+    justify-content: stretch;
+  }
+
   .brand-chip {
     width: 66px;
     height: 66px;
@@ -506,17 +518,50 @@ main :where(button, input, select, textarea, .btn-primary, .hero-cta, .scene-cta
     font-size: 20px;
   }
 
+  .hero-nav {
+    order: 3;
+    grid-column: 1 / -1;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr;
+    justify-content: stretch;
+    gap: 6px;
+    padding: 10px;
+    border-radius: 18px;
+    overflow: visible;
+  }
+
   .hero-nav > a,
   .hero-drop-btn {
+    width: 100%;
+    text-align: left;
     font-size: 14px;
-    padding: 10px 14px;
+    line-height: 1.25;
+    padding: 11px 14px;
+    border-radius: 12px;
+  }
+
+  .hero-dropdown {
+    width: 100%;
   }
 
   .hero-dropdown-menu {
-    min-width: 250px;
+    position: static;
+    top: auto;
+    left: auto;
+    min-width: 0;
+    width: 100%;
+    margin-top: 6px;
+    border-radius: 12px;
+    box-shadow: none;
+    max-height: 280px;
+    overflow-y: auto;
   }
 
   .contact-pill {
+    grid-column: 1 / -1;
+    width: 100%;
+    text-align: center;
     font-size: 14px;
     padding: 10px 14px;
   }
