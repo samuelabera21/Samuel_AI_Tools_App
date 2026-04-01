@@ -3,34 +3,38 @@
     <img class="brand-logo" src="{{ url_for('static', filename='images/logo.png') }}" alt="ፍኖት Ethiopian AI HUB logo">
   </a>
 
-  <nav class="hero-nav" aria-label="Main">
-    <a class="{% if request.path == '/' %}active{% endif %}" href="/">Home</a>
-    <div class="hero-dropdown">
-      <button class="hero-drop-btn" type="button">Tools <span aria-hidden="true">▾</span></button>
-      <div class="hero-dropdown-menu">
-        <a href="/Tools/Amharic_OCR">Amharic OCR</a>
-        <a href="/Tools/Numbers_to_Amharic_Words_Converter">Amharic Numbers Converter</a>
-        <a href="/Tools/Geez_Numbers_Converter">Geez Numbers Converter</a>
-        <a href="/Tools/Ethiopia_Phone_Numbers">Phone Number Validator</a>
-        <a href="/Tools/Ethiopian_Name_Generator">Baby Name Generator</a>
-        <a href="/Tools/Amharic_Link_Shortner">Ethiopic Links</a>
-        <a href="/Tools/Ethiopian_Date_Converter">Date Converter</a>
-        <a href="/Tools/Amharic_to_Image">Prompt to Image</a>
-        <a href="/Tools/Free_Amharic_Keyboard">Amharic Keyboard</a>
-        <a href="/Tools/Amharic_Text_To_Speech">Text to Speech</a>
-        <a href="/Tools/Amharic_Words_Generator">Words Generator</a>
+  <details class="hero-menu">
+    <summary class="hero-menu-summary">Menu <span aria-hidden="true">▾</span></summary>
+    <nav class="hero-nav" aria-label="Main">
+      <a class="{% if request.path == '/' %}active{% endif %}" href="/">Home</a>
+      <div class="hero-dropdown">
+        <button class="hero-drop-btn" type="button">Tools <span aria-hidden="true">▾</span></button>
+        <div class="hero-dropdown-menu">
+          <a href="/Tools/Amharic_OCR">Amharic OCR</a>
+          <a href="/Tools/Numbers_to_Amharic_Words_Converter">Amharic Numbers Converter</a>
+          <a href="/Tools/Geez_Numbers_Converter">Geez Numbers Converter</a>
+          <a href="/Tools/Ethiopia_Phone_Numbers">Phone Number Validator</a>
+          <a href="/Tools/Ethiopian_Name_Generator">Baby Name Generator</a>
+          <a href="/Tools/Amharic_Link_Shortner">Ethiopic Links</a>
+          <a href="/Tools/Ethiopian_Date_Converter">Date Converter</a>
+          <a href="/Tools/Amharic_to_Image">Prompt to Image</a>
+          <a href="/Tools/Free_Amharic_Keyboard">Amharic Keyboard</a>
+          <a href="/Tools/Amharic_Text_To_Speech">Text to Speech</a>
+          <a href="/Tools/Amharic_Words_Generator">Words Generator</a>
+        </div>
       </div>
-    </div>
-    <div class="hero-dropdown">
-      <button class="hero-drop-btn" type="button">Games <span aria-hidden="true">▾</span></button>
-      <div class="hero-dropdown-menu">
-        <a href="/Games/Amharic_Fidel_Sliding_Puzzle_Game">Fidel Sliding Puzzle</a>
-        <a href="/Games/Amharic_Typing_Game">Amharic Typing Game</a>
+      <div class="hero-dropdown">
+        <button class="hero-drop-btn" type="button">Games <span aria-hidden="true">▾</span></button>
+        <div class="hero-dropdown-menu">
+          <a href="/Games/Amharic_Fidel_Sliding_Puzzle_Game">Fidel Sliding Puzzle</a>
+          <a href="/Games/Amharic_Typing_Game">Amharic Typing Game</a>
+        </div>
       </div>
-    </div>
-    <a class="{% if request.path == '/generate-music' %}active{% endif %}" href="/generate-music">Generate Music</a>
-    <a class="{% if request.path == '/Resources' %}active{% endif %}" href="/Resources">Resources</a>
-  </nav>
+      <a class="{% if request.path == '/generate-music' %}active{% endif %}" href="/generate-music">Generate Music</a>
+      <a class="{% if request.path == '/Resources' %}active{% endif %}" href="/Resources">Resources</a>
+      <a class="hero-nav-contact" href="/Resources/Ethiopian_Knowledge_AI_Assistant">Contact Us</a>
+    </nav>
+  </details>
 
   <a class="contact-pill" href="/Resources/Ethiopian_Knowledge_AI_Assistant">Contact Us</a>
 </header>

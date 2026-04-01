@@ -157,6 +157,37 @@ html {
 	padding: 4px 0;
 }
 
+.hero-menu {
+	flex: 1;
+	min-width: 0;
+}
+
+.hero-menu-summary {
+	display: none;
+	list-style: none;
+	align-items: center;
+	justify-content: center;
+	gap: 8px;
+	padding: 12px 16px;
+	border-radius: 18px;
+	border: 1px solid rgba(255, 167, 109, 0.24);
+	background: rgba(30, 40, 70, 0.5);
+	color: var(--text);
+	font-size: 16px;
+	font-weight: 800;
+	cursor: pointer;
+	backdrop-filter: blur(12px);
+	box-shadow: 0 0 22px rgba(255, 150, 60, 0.24);
+}
+
+.hero-menu-summary::-webkit-details-marker {
+	display: none;
+}
+
+.hero-nav-contact {
+	display: none;
+}
+
 .brand-chip {
 	display: inline-flex;
 	align-items: center;
@@ -1184,6 +1215,10 @@ main {
 		top: 6px;
 	}
 
+	.hero-menu {
+		width: 100%;
+	}
+
 	.hero-nav {
 		order: 3;
 		width: 100%;
@@ -1243,7 +1278,7 @@ main {
 	.hero-topbar {
 		display: grid;
 		grid-template-columns: auto 1fr;
-		align-items: center;
+		align-items: start;
 		gap: 10px;
 		justify-content: stretch;
 	}
@@ -1257,13 +1292,29 @@ main {
 		height: 66px;
 	}
 
-	.brand-mark {
-		font-size: 20px;
+	.hero-menu {
+		grid-column: 1 / -1;
+		order: 3;
+	}
+
+	.hero-menu-summary {
+		display: inline-flex;
+		width: 100%;
+	}
+
+	.hero-menu:not([open]) .hero-nav {
+		display: none;
+	}
+
+	.hero-menu[open] .hero-nav {
+		display: grid;
+	}
+
+	.hero-menu[open] .hero-menu-summary {
+		margin-bottom: 8px;
 	}
 
 	.hero-nav {
-		order: 3;
-		grid-column: 1 / -1;
 		width: 100%;
 		display: grid;
 		grid-template-columns: 1fr;
@@ -1288,6 +1339,20 @@ main {
 		width: 100%;
 	}
 
+	.hero-nav-contact {
+		display: block;
+		width: 100%;
+		padding: 11px 14px;
+		border-radius: 12px;
+		text-align: left;
+		color: var(--text);
+		text-decoration: none;
+		font-size: 14px;
+		line-height: 1.25;
+		font-weight: 700;
+		background: rgba(255, 255, 255, 0.06);
+	}
+
 	.hero-dropdown-menu {
 		position: static;
 		top: auto;
@@ -1302,11 +1367,13 @@ main {
 	}
 
 	.contact-pill {
-		grid-column: 1 / -1;
-		width: 100%;
-		text-align: center;
+		display: none;
 		font-size: 14px;
 		padding: 10px 14px;
+	}
+
+	.brand-mark {
+		font-size: 20px;
 	}
 
 	.hero {
