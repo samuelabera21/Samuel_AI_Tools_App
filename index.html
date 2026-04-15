@@ -1,129 +1,378 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" href="/static/images/logo.png">
   <title>ፍኖት Ethiopian AI HUB</title>
-  <meta name="description" content="Public landing page for ፍኖት Ethiopian AI HUB.">
-  <style>
-    :root {
-      --bg: #06142f;
-      --bg2: #0f2348;
-      --panel: rgba(16, 33, 68, 0.88);
-      --text: #f5f8ff;
-      --muted: #b7c6ea;
-      --accent: #ff8b2c;
-      --line: rgba(109, 160, 255, 0.25);
-    }
-
-    * { box-sizing: border-box; }
-
-    body {
-      margin: 0;
-      min-height: 100vh;
-      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-      color: var(--text);
-      background:
-        radial-gradient(circle at 20% 20%, rgba(55, 120, 255, 0.3), transparent 35%),
-        radial-gradient(circle at 80% 10%, rgba(255, 139, 44, 0.2), transparent 35%),
-        linear-gradient(160deg, var(--bg), var(--bg2));
-      display: grid;
-      place-items: center;
-      padding: 24px;
-    }
-
-    .grid {
-      position: fixed;
-      inset: 0;
-      background:
-        linear-gradient(var(--line) 1px, transparent 1px) 0 0 / 100% 56px,
-        linear-gradient(90deg, var(--line) 1px, transparent 1px) 0 0 / 56px 100%;
-      opacity: 0.25;
-      pointer-events: none;
-      z-index: 0;
-    }
-
-    .card {
-      position: relative;
-      z-index: 1;
-      width: min(760px, 100%);
-      background: var(--panel);
-      border: 1px solid rgba(255, 255, 255, 0.18);
-      border-radius: 20px;
-      padding: 28px;
-      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
-      backdrop-filter: blur(10px);
-    }
-
-    h1 {
-      margin: 0 0 12px;
-      font-size: clamp(1.7rem, 3.5vw, 2.3rem);
-      line-height: 1.2;
-    }
-
-    p {
-      margin: 0;
-      color: var(--muted);
-      line-height: 1.6;
-    }
-
-    .actions {
-      margin-top: 22px;
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-
-    .btn {
-      text-decoration: none;
-      font-weight: 700;
-      border-radius: 999px;
-      padding: 11px 18px;
-      border: 1px solid transparent;
-      transition: transform 0.18s ease, opacity 0.18s ease;
-    }
-
-    .btn:hover {
-      transform: translateY(-1px);
-      opacity: 0.95;
-    }
-
-    .btn-primary {
-      background: var(--accent);
-      color: #1f1200;
-    }
-
-    .btn-ghost {
-      background: transparent;
-      border-color: rgba(255, 255, 255, 0.45);
-      color: var(--text);
-    }
-
-    .note {
-      margin-top: 18px;
-      font-size: 0.94rem;
-      color: #d6e1ff;
-    }
-  </style>
+  <link rel="stylesheet" href="/static/css/base.css">
+  <link rel="stylesheet" href="/static/css/home.css">
 </head>
 <body>
-  <div class="grid" aria-hidden="true"></div>
+  <canvas id="ai-network" aria-hidden="true"></canvas>
+  <div class="ai-home">
 
-  <main class="card" role="main">
-    <h1>Welcome to ፍኖት Ethiopian AI HUB</h1>
-    <p>
-      This Vercel URL now opens instantly as a public landing page.
-      Core backend services are still running on Render.
-    </p>
+    <header class="hero-topbar">
+      <a class="brand-chip" href="/" aria-label="ፍኖት Ethiopian AI HUB home">
+        <img class="brand-logo" src="/static/images/logo.png" alt="ፍኖት Ethiopian AI HUB logo">
+      </a>
 
-    <div class="actions">
-      <a class="btn btn-primary" href="https://samuel-ai-tools-app.onrender.com" rel="noopener noreferrer">Open Full App</a>
-      <a class="btn btn-ghost" href="https://samuel-ai-tools-app.onrender.com/Resources/Ethiopian_Knowledge_AI_Assistant" rel="noopener noreferrer">Knowledge Assistant</a>
+      <div class="hero-menu">
+        <nav class="hero-nav" aria-label="Main">
+          <a class="active" href="/">Home</a>
+          <div class="hero-dropdown">
+            <button class="hero-drop-btn" type="button">Tools <span aria-hidden="true">▾</span></button>
+            <div class="hero-dropdown-menu">
+              <a href="/Tools/Amharic_OCR">Amharic OCR</a>
+              <a href="/Tools/Numbers_to_Amharic_Words_Converter">Amharic Numbers Converter</a>
+              <a href="/Tools/Geez_Numbers_Converter">Geez Numbers Converter</a>
+              <a href="/Tools/Ethiopia_Phone_Numbers">Phone Number Validator</a>
+              <a href="/Tools/Ethiopian_Name_Generator">Baby Name Generator</a>
+              <a href="/Tools/Amharic_Link_Shortner">Ethiopic Links</a>
+              <a href="/Tools/Ethiopian_Date_Converter">Date Converter</a>
+              <a href="/Tools/Amharic_to_Image">Prompt to Image</a>
+              <a href="/Tools/Free_Amharic_Keyboard">Amharic Keyboard</a>
+              <a href="/Tools/Amharic_Text_To_Speech">Text to Speech</a>
+              <a href="/Tools/Amharic_Words_Generator">Words Generator</a>
+            </div>
+          </div>
+          <div class="hero-dropdown">
+            <button class="hero-drop-btn" type="button">Games <span aria-hidden="true">▾</span></button>
+            <div class="hero-dropdown-menu">
+              <a href="/Games/Amharic_Fidel_Sliding_Puzzle_Game">Fidel Sliding Puzzle</a>
+              <a href="/Games/Amharic_Typing_Game">Amharic Typing Game</a>
+            </div>
+          </div>
+          <a href="/generate-music">Generate Music</a>
+          <a href="/Resources">Resources</a>
+          <a class="hero-nav-contact" href="#site-footer-contact">Contact Me</a>
+        </nav>
+      </div>
+
+      <a class="contact-pill" href="#site-footer-contact">Contact Me</a>
+    </header>
+
+    <section class="visual-ethiopian-hero">
+      <div class="ethiopian-hero-img-wrap">
+        <img src="/static/images/banner.png" alt="Ethiopian AI banner" class="ethiopian-hero-img" loading="eager">
+        <div class="ethiopian-hero-overlay"></div>
+        <div class="ethiopian-hero-text">
+          <h2>Welcome to ፍኖት Ethiopian AI HUB</h2>
+          <p>Modern AI tools, inspired by Ethiopia’s heritage and future.</p>
+        </div>
+      </div>
+    </section>
+
+    <main>
+      <section class="hero">
+        <p class="eyebrow">ፍኖት ETHIOPIAN AI HUB</p>
+        <h1>
+          Ethiopian Artificial
+          <span>Intelligence Hub</span>
+        </h1>
+        <p class="hero-copy">
+          Build, learn, and experiment with practical Ethiopian AI tools for language,
+          education, productivity, and creative workflows.
+        </p>
+        <div class="hero-actions">
+          <a class="hero-cta" href="#tools-grid">Explore AI Tools</a>
+          <a class="hero-cta ghost" href="/Resources">View AI Resources</a>
+        </div>
+      </section>
+
+      <section class="content-block tools-story" id="tools-grid">
+        <div class="tools-story-sticky">
+          <div class="tools-story-backdrop" aria-hidden="true"></div>
+
+          <article class="tool-scene is-active" data-scene="0">
+            <div class="tool-scene-media">
+              <img src="https://images.unsplash.com/photo-1586281380349-632531db7ed4?auto=format&fit=crop&w=1400&q=80" alt="Document scanning and OCR" loading="lazy">
+            </div>
+            <div class="tool-scene-copy">
+              <p class="scene-kicker">Scene 01</p>
+              <h3>Amharic OCR</h3>
+              <p>Extract Amharic text from images and scanned pages with fast recognition flow built for practical document work.</p>
+              <a href="/Tools/Amharic_OCR" class="scene-cta">Try Tool</a>
+            </div>
+          </article>
+
+          <article class="tool-scene" data-scene="1">
+            <div class="tool-scene-media">
+              <img src="https://images.unsplash.com/photo-1635070041078-e363dbe005cb?auto=format&fit=crop&w=1400&q=80" alt="Numeric calculations and conversion" loading="lazy">
+            </div>
+            <div class="tool-scene-copy">
+              <p class="scene-kicker">Scene 02</p>
+              <h3>Amharic Numbers Converter</h3>
+              <p>Transform western numbers into natural Amharic words for education, finance, and local-language content workflows.</p>
+              <a href="/Tools/Numbers_to_Amharic_Words_Converter" class="scene-cta">Try Tool</a>
+            </div>
+          </article>
+
+          <article class="tool-scene" data-scene="2">
+            <div class="tool-scene-media">
+              <img src="https://images.unsplash.com/photo-1639322537228-f710d846310a?auto=format&fit=crop&w=1400&q=80" alt="Ancient numerals and symbol systems" loading="lazy">
+            </div>
+            <div class="tool-scene-copy">
+              <p class="scene-kicker">Scene 03</p>
+              <h3>Geez Numbers Converter</h3>
+              <p>Convert modern numerals to Geez representation and back with immersive support for traditional Ethiopian numbering use cases.</p>
+              <a href="/Tools/Geez_Numbers_Converter" class="scene-cta">Try Tool</a>
+            </div>
+          </article>
+
+          <article class="tool-scene" data-scene="3">
+            <div class="tool-scene-media">
+              <img src="https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&w=1400&q=80" alt="Mobile phone validation and telecom data" loading="lazy">
+            </div>
+            <div class="tool-scene-copy">
+              <p class="scene-kicker">Scene 04</p>
+              <h3>Ethiopian Phone Number Validator</h3>
+              <p>Verify Ethiopian phone number structure and formatting quickly for cleaner data pipelines and communication tools.</p>
+              <a href="/Tools/Ethiopia_Phone_Numbers" class="scene-cta">Try Tool</a>
+            </div>
+          </article>
+
+          <article class="tool-scene" data-scene="4">
+            <div class="tool-scene-media">
+              <img src="https://images.unsplash.com/photo-1516589091380-5d8e87df6999?auto=format&fit=crop&w=1400&q=80" alt="Creative naming and idea generation" loading="lazy">
+            </div>
+            <div class="tool-scene-copy">
+              <p class="scene-kicker">Scene 05</p>
+              <h3>Ethiopian Baby Name Generator</h3>
+              <p>Generate culturally rich Ethiopian baby names with modern AI-assisted inspiration and pronunciation support.</p>
+              <a href="/Tools/Ethiopian_Name_Generator" class="scene-cta">Try Tool</a>
+            </div>
+          </article>
+
+          <article class="tool-scene" data-scene="5">
+            <div class="tool-scene-media">
+              <img src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=1400&q=80" alt="Short links and network routing" loading="lazy">
+            </div>
+            <div class="tool-scene-copy">
+              <p class="scene-kicker">Scene 06</p>
+              <h3>Ethiopic Links</h3>
+              <p>Create short links using Ethiopic characters for memorable, localized URL sharing experiences.</p>
+              <a href="/Tools/Amharic_Link_Shortner" class="scene-cta">Try Tool</a>
+            </div>
+          </article>
+
+          <article class="tool-scene" data-scene="6">
+            <div class="tool-scene-media">
+              <img src="https://images.unsplash.com/photo-1506784983877-45594efa4cbe?auto=format&fit=crop&w=1400&q=80" alt="Calendar planning and date conversion visualization" loading="lazy">
+            </div>
+            <div class="tool-scene-copy">
+              <p class="scene-kicker">Scene 07</p>
+              <h3>Ethiopian Date Converter</h3>
+              <p>Convert dates between Ethiopian and Gregorian systems with calendar-aware logic for planning and historical context.</p>
+              <a href="/Tools/Ethiopian_Date_Converter" class="scene-cta">Try Tool</a>
+            </div>
+          </article>
+
+          <article class="tool-scene" data-scene="7">
+            <div class="tool-scene-media">
+              <img src="https://images.unsplash.com/photo-1549692520-acc6669e2f0c?auto=format&fit=crop&w=1400&q=80" alt="AI-generated art and visual creativity" loading="lazy">
+            </div>
+            <div class="tool-scene-copy">
+              <p class="scene-kicker">Scene 08</p>
+              <h3>Amharic AI Prompt to Image</h3>
+              <p>Turn Amharic prompts into visual creations through a modern text-to-image generation workflow.</p>
+              <a href="/Tools/Amharic_to_Image" class="scene-cta">Try Tool</a>
+            </div>
+          </article>
+
+          <article class="tool-scene" data-scene="8">
+            <div class="tool-scene-media">
+              <img src="https://images.unsplash.com/photo-1516321497487-e288fb19713f?auto=format&fit=crop&w=1400&q=80" alt="Keyboard typing and language interface" loading="lazy">
+            </div>
+            <div class="tool-scene-copy">
+              <p class="scene-kicker">Scene 09</p>
+              <h3>Free Amharic Keyboard</h3>
+              <p>Type Amharic text smoothly with assistant features for writing, editing, and productivity use cases.</p>
+              <a href="/Tools/Free_Amharic_Keyboard" class="scene-cta">Try Tool</a>
+            </div>
+          </article>
+
+          <article class="tool-scene" data-scene="9">
+            <div class="tool-scene-media">
+              <img src="https://images.unsplash.com/photo-1478737270239-2f02b77fc618?auto=format&fit=crop&w=1400&q=80" alt="Speech waveform and voice synthesis" loading="lazy">
+            </div>
+            <div class="tool-scene-copy">
+              <p class="scene-kicker">Scene 10</p>
+              <h3>Amharic Text to Speech</h3>
+              <p>Convert written Amharic into voice output for accessibility, content playback, and language learning.</p>
+              <a href="/Tools/Amharic_Text_To_Speech" class="scene-cta">Try Tool</a>
+            </div>
+          </article>
+
+          <article class="tool-scene" data-scene="10">
+            <div class="tool-scene-media">
+              <img src="https://images.unsplash.com/photo-1517430816045-df4b7de11d1d?auto=format&fit=crop&w=1400&q=80" alt="Puzzle letters and word generation" loading="lazy">
+            </div>
+            <div class="tool-scene-copy">
+              <p class="scene-kicker">Scene 11</p>
+              <h3>Random Amharic Words Generator</h3>
+              <p>Generate Amharic words for learning exercises, linguistic experiments, and playful vocabulary workflows.</p>
+              <a href="/Tools/Amharic_Words_Generator" class="scene-cta">Try Tool</a>
+            </div>
+          </article>
+
+          <div id="tools-story-progress" class="tools-story-progress" aria-label="Tool story progress"></div>
+        </div>
+      </section>
+
+      <section class="content-block tools-story games-story" id="games-grid">
+        <div class="tools-story-sticky">
+          <div class="tools-story-backdrop" aria-hidden="true"></div>
+
+          <article class="tool-scene is-active" data-scene="0">
+            <div class="tool-scene-media">
+              <img src="https://images.unsplash.com/photo-1611996575749-79a3a250f948?auto=format&fit=crop&w=1400&q=80" alt="Sliding puzzle and game board" loading="lazy">
+            </div>
+            <div class="tool-scene-copy">
+              <p class="scene-kicker">Game 01</p>
+              <h3>Amharic Fidel Sliding Puzzle</h3>
+              <p>Arrange Amharic fidel and Geez numerals in the correct order through immersive puzzle gameplay and strategic moves.</p>
+              <a href="/Games/Amharic_Fidel_Sliding_Puzzle_Game" class="scene-cta">Play Game</a>
+            </div>
+          </article>
+
+          <article class="tool-scene" data-scene="1">
+            <div class="tool-scene-media">
+              <img src="https://images.unsplash.com/photo-1515879218367-8466d910aaa4?auto=format&fit=crop&w=1400&q=80" alt="Typing speed and keyboard challenge" loading="lazy">
+            </div>
+            <div class="tool-scene-copy">
+              <p class="scene-kicker">Game 02</p>
+              <h3>Amharic Typing Game</h3>
+              <p>Improve typing speed and accuracy with interactive Amharic phrase challenges designed for language learning and focus training.</p>
+              <a href="/Games/Amharic_Typing_Game" class="scene-cta">Play Game</a>
+            </div>
+          </article>
+
+          <div id="games-story-progress" class="tools-story-progress" aria-label="Game story progress"></div>
+        </div>
+      </section>
+
+      <section class="content-block tools-story knowledge-story" id="knowledge-grid">
+        <div class="tools-story-sticky">
+          <div class="tools-story-backdrop" aria-hidden="true"></div>
+
+          <article class="tool-scene is-active" data-scene="0">
+            <div class="tool-scene-media">
+              <img src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=1400&q=80" alt="AI knowledge network and retrieval" loading="lazy">
+            </div>
+            <div class="tool-scene-copy">
+              <p class="scene-kicker">Knowledge</p>
+              <h3>Ethiopian Knowledge AI Assistant</h3>
+              <p>Ask Ethiopia-focused questions using indexed documents and grounded retrieval-augmented AI responses for reliable, context-aware answers.</p>
+              <a href="/Resources/Ethiopian_Knowledge_AI_Assistant" class="scene-cta">Open Assistant</a>
+            </div>
+          </article>
+
+          <div id="knowledge-story-progress" class="tools-story-progress" aria-label="Knowledge story progress"></div>
+        </div>
+      </section>
+
+      <footer id="site-footer-contact" class="home-footer" aria-label="Site footer and contact links">
+        <div class="home-footer-main">
+          <div class="home-footer-brand">
+            <h2>Developed by Samuel Abera</h2>
+            <p>Software Engineering Student building practical Ethiopian AI tools for language, education, and creativity.</p>
+          </div>
+
+          <div class="home-footer-contact" aria-label="Contact links">
+            <button
+              class="home-social-link home-social-copy"
+              id="home-email-trigger"
+              type="button"
+              aria-label="Show email"
+              aria-expanded="false"
+              aria-controls="home-email-popover"
+            >
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M3 6.5A2.5 2.5 0 0 1 5.5 4h13A2.5 2.5 0 0 1 21 6.5v11a2.5 2.5 0 0 1-2.5 2.5h-13A2.5 2.5 0 0 1 3 17.5v-11Zm2 .47V17.5c0 .28.22.5.5.5h13a.5.5 0 0 0 .5-.5V6.97l-7 4.76-7-4.76Zm1.09-.97L12 10.07l5.91-4.07H6.09Z" />
+              </svg>
+              <span class="contact-link-label">Email</span>
+            </button>
+
+            <div id="home-email-popover" class="home-copy-popover" aria-hidden="true">
+              <p class="home-copy-value">sami21.good.bad@gmail.com</p>
+              <button id="home-email-copy" class="home-copy-btn" type="button">Copy</button>
+            </div>
+
+            <a class="home-social-link" href="https://www.linkedin.com/in/samuelabera21/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn profile">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M6.5 8.25a1.75 1.75 0 1 1 0-3.5 1.75 1.75 0 0 1 0 3.5ZM5 10h3v9H5v-9Zm5 0h2.87v1.28h.04c.4-.76 1.38-1.56 2.83-1.56 3.02 0 3.58 1.99 3.58 4.58V19h-3v-4.05c0-.97-.02-2.22-1.35-2.22-1.35 0-1.56 1.05-1.56 2.15V19h-3v-9Z" />
+              </svg>
+              <span class="contact-link-label">LinkedIn</span>
+            </a>
+
+            <a class="home-social-link" href="https://github.com/samuelabera21" aria-label="GitHub profile">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M12 2A10 10 0 0 0 8.84 21.49c.5.09.68-.22.68-.48v-1.7c-2.78.61-3.37-1.2-3.37-1.2-.46-1.15-1.1-1.45-1.1-1.45-.9-.62.07-.61.07-.61 1 .07 1.52 1.01 1.52 1.01.88 1.5 2.31 1.07 2.88.82.08-.64.34-1.07.62-1.32-2.22-.25-4.56-1.1-4.56-4.89 0-1.08.39-1.96 1.02-2.65-.1-.25-.44-1.28.1-2.66 0 0 .84-.27 2.75 1.01a9.66 9.66 0 0 1 5 0c1.91-1.28 2.75-1.01 2.75-1.01.54 1.38.2 2.41.1 2.66.63.69 1.02 1.57 1.02 2.65 0 3.8-2.34 4.63-4.57 4.88.35.3.67.9.67 1.82v2.7c0 .26.18.58.68.48A10 10 0 0 0 12 2Z" />
+              </svg>
+              <span class="contact-link-label">GitHub</span>
+            </a>
+
+            <button
+              class="home-social-link home-social-copy"
+              id="home-phone-trigger"
+              type="button"
+              aria-label="Show phone number"
+              aria-expanded="false"
+              aria-controls="home-phone-popover"
+            >
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M6.43 3.15c.33-.34.83-.46 1.27-.3l2.03.73c.51.18.82.71.74 1.24l-.34 2.13a1.1 1.1 0 0 1-.75.88l-1.1.37a13.7 13.7 0 0 0 6.52 6.52l.37-1.1c.12-.37.44-.64.82-.73l2.13-.34c.53-.08 1.05.23 1.23.74l.74 2.03c.16.44.04.94-.3 1.27l-1.4 1.4a2.15 2.15 0 0 1-2.01.58 17.5 17.5 0 0 1-10.92-10.92 2.15 2.15 0 0 1 .58-2.01l1.4-1.4Z" />
+              </svg>
+              <span class="contact-link-label">Phone</span>
+            </button>
+
+            <div id="home-phone-popover" class="home-copy-popover" aria-hidden="true">
+              <p class="home-copy-value">+251923010537</p>
+              <button id="home-phone-copy" class="home-copy-btn" type="button">Copy</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="home-footer-bottom">
+          <p>All rights reserved 2025.</p>
+          <p>Made with dedication for Ethiopia's digital future.</p>
+        </div>
+      </footer>
+    </main>
+  </div>
+
+  <div id="chatbot-launcher" class="chatbot-launcher">
+    <p class="chatbot-launcher-label">Ask me anything</p>
+    <button id="chatbot-toggle" class="chatbot-fab" type="button" aria-label="Open AI chat" aria-expanded="false" aria-controls="chatbot-panel">
+      <span class="chatbot-fab-core" aria-hidden="true">
+        <svg viewBox="0 0 24 24" focusable="false">
+          <path d="M12 3C6.48 3 2 6.94 2 11.8c0 2.69 1.37 5.1 3.53 6.72L4.5 22l4.08-2.24c1.08.3 2.23.46 3.42.46 5.52 0 10-3.94 10-8.8S17.52 3 12 3Zm-4 9.3a1.3 1.3 0 1 1 0-2.6 1.3 1.3 0 0 1 0 2.6Zm4 0a1.3 1.3 0 1 1 0-2.6 1.3 1.3 0 0 1 0 2.6Zm4 0a1.3 1.3 0 1 1 0-2.6 1.3 1.3 0 0 1 0 2.6Z" />
+        </svg>
+      </span>
+    </button>
+  </div>
+
+  <section id="chatbot-panel" class="chatbot-panel" aria-label="AI Chat Assistant" hidden>
+    <header class="chatbot-header">
+      <div class="chatbot-title-block">
+        <h2>ፍኖት Ethiopian AI HUB</h2>
+        <p>Ask about the platform or anything else</p>
+      </div>
+      <button id="chatbot-close" class="chatbot-close" type="button" aria-label="Close chat">&times;</button>
+    </header>
+    <div id="chatbot-messages" class="chatbot-messages">
+      <article class="chatbot-msg bot">
+        Welcome. I can answer general questions and platform-specific questions using project knowledge.
+      </article>
     </div>
+    <form id="chatbot-form" class="chatbot-form">
+      <input id="chatbot-input" type="text" placeholder="Ask anything..." maxlength="500" required>
+      <button type="submit" aria-label="Send message">&#10148;</button>
+    </form>
+    <p class="chatbot-footnote">AI can make mistakes. Verify important information.</p>
+  </section>
 
-    <p class="note">
-      Shared public URL: https://samuel-ai-tools-app.vercel.app
-    </p>
-  </main>
+  <script src="/static/js/home.js"></script>
 </body>
 </html>

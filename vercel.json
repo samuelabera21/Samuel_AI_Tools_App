@@ -1,33 +1,23 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "redirects": [
-    {
-      "source": "/",
-      "destination": "https://samuel-ai-tools-app.onrender.com/",
-      "permanent": false
-    },
+  "redirects": [],
+  "rewrites": [
     {
       "source": "/Tools/(.*)",
-      "destination": "https://samuel-ai-tools-app.onrender.com/Tools/$1",
-      "permanent": false
+      "destination": "https://samuel-ai-tools-app.onrender.com/Tools/$1"
     },
     {
       "source": "/Resources",
-      "destination": "https://samuel-ai-tools-app.onrender.com/Resources",
-      "permanent": false
+      "destination": "https://samuel-ai-tools-app.onrender.com/Resources"
     },
     {
       "source": "/Resources/(.*)",
-      "destination": "https://samuel-ai-tools-app.onrender.com/Resources/$1",
-      "permanent": false
+      "destination": "https://samuel-ai-tools-app.onrender.com/Resources/$1"
     },
     {
       "source": "/Games/(.*)",
-      "destination": "https://samuel-ai-tools-app.onrender.com/Games/$1",
-      "permanent": false
-    }
-  ],
-  "rewrites": [
+      "destination": "https://samuel-ai-tools-app.onrender.com/Games/$1"
+    },
     {
       "source": "/api/(.*)",
       "destination": "https://samuel-ai-tools-app.onrender.com/api/$1"
