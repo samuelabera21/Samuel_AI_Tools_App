@@ -10,7 +10,7 @@ from werkzeug.utils import secure_filename
 from dotenv import load_dotenv
 from flask_cors import CORS
 from gtts import gTTS
-from tools.ocr.ocr import extract_amharic_text_from_bytes
+from tools.ocr.ocr import extract_amharic_text_from_bytes, get_ocr_health
 from tools.amharic_numbers_converter.converter import number_to_amharic, number_to_currency
 from tools.geez_numbers_converter.converter import arabic_to_geez, geez_to_arabic
 from tools.amharic_text_to_image.generator import generate_image_from_prompt
@@ -156,6 +156,13 @@ def amharic_ocr():
             ocr_error = "Unexpected OCR processing error. Please try another image."
 
     return render_template("ocr.html", text=text, image_url=image_url, ocr_error=ocr_error)
+
+
+@app.route("/api/ocr/health", methods=["GET"])
+def ocr_health_api():
+    health = get_ocr_health()
+    status_code = 200 if health.get("status") == "ok" else 503
+    return jsonify(health), status_code
 
 
 @app.route("/generate-music", methods=["GET", "POST"])
