@@ -1,10 +1,9 @@
 services:
   - type: web
     name: ai-tools-backend
-    runtime: python
+    runtime: docker
+    dockerfilePath: ./Dockerfile
     plan: free
-    buildCommand: pip install -r requirements.txt
-    startCommand: gunicorn app:app --workers 2 --timeout 180
     healthCheckPath: /
     envVars:
       - key: PYTHON_VERSION
