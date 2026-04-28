@@ -3,6 +3,10 @@
   "redirects": [],
   "rewrites": [
     {
+      "source": "/static/(.*)",
+      "destination": "https://samuel-ai-tools-app.onrender.com/static/$1"
+    },
+    {
       "source": "/Tools/(.*)",
       "destination": "https://samuel-ai-tools-app.onrender.com/Tools/$1"
     },
