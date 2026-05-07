@@ -1,10 +1,11 @@
 [build]
 # Serve static files from the public directory
 publish = "public"
-# Skip any build process - just serve static files
-command = "echo 'Deploying frontend only'"
-# Don't process any dependencies
-ignore = "false"
+# Remove Python files before Netlify tries to install dependencies
+command = "bash ./ignore-python.sh"
+
+# Only serve static files
+ignore = "git diff --quiet $COMMIT_REF $COMMIT_REF^ --exit-code -- public; test $? -eq 1"
 
 # Redirect SPA requests to index.html
 [[redirects]]
