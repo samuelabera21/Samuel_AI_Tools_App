@@ -1,6 +1,10 @@
 [build]
 publish = "public"
-command = "echo 'Frontend deployment - no build needed'"
+command = "echo 'Frontend deployment'"
+
+[build.environment]
+NODE_VERSION = "20"
+SKIP_DEPS = "true"
 
 [[redirects]]
 from = "/*"
