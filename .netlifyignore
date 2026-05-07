@@ -1,0 +1,7 @@
+requirements.txt
+requirements-music.txt
+app.py
+tools/
+.python-version
+__pycache__/
+*.pyc

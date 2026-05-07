@@ -1,23 +1,12 @@
 [build]
-# Tell Netlify to serve static files from the public directory
+# Serve static files from the public directory
 publish = "public"
-# Don't try to build anything - just serve static files
-command = "echo 'Frontend deployment'"
+# Skip any build process - just serve static files
+command = "echo 'Deploying frontend only'"
+# Don't process any dependencies
+ignore = "false"
 
-# Redirect all API calls to your Render backend
-[[redirects]]
-from = "/api/*"
-to = "https://your-render-backend.onrender.com/api/:splat"
-status = 200
-
-# Redirect root API calls to backend
-[[redirects]]
-from = "/*"
-to = "https://your-render-backend.onrender.com/:splat"
-status = 200
-conditions = { Path = ["/api/*"] }
-
-# SPA fallback - route to index.html for client-side routing
+# Redirect SPA requests to index.html
 [[redirects]]
 from = "/*"
 to = "/index.html"
