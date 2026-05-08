@@ -26,6 +26,12 @@ status = 200
 force = true
 
 [[redirects]]
+from = "/static/*"
+to = "https://samuel-ai-tools-app.onrender.com/static/:splat"
+status = 200
+force = true
+
+[[redirects]]
 from = "/*"
 to = "/index.html"
 status = 200
