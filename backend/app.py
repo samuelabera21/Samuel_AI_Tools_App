@@ -44,7 +44,11 @@ from tools.ethiopian_knowledge_assistant.service import (
 
 load_dotenv()
 
-app = Flask(__name__)
+# Get the parent directory (project root) to locate templates and static folders
+project_root = Path(__file__).parent.parent
+app = Flask(__name__, 
+            template_folder=str(project_root / "templates"),
+            static_folder=str(project_root / "static"))
 SHORT_LINK_PUBLIC_BASE_URL = os.getenv("SHORT_LINK_PUBLIC_BASE_URL", "").strip()
 APP_PROFILE = os.getenv("APP_PROFILE", "full").strip().lower()
 
