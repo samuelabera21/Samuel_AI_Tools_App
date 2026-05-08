@@ -6,7 +6,6 @@ command = "echo 'Frontend deployment'"
 NODE_VERSION = "20"
 SKIP_DEPS = "true"
 
-[[redirects]]
 # Proxy API and backend routes to the Render backend so Netlify serves frontend only
 [[redirects]]
 from = "/api/*"
