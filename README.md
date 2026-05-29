@@ -3,6 +3,7 @@
 Flask-based web application for Ethiopian and Amharic-focused AI tools, language utilities, productivity tools, and mini games.
 
 ## Live Links
+Netlify (Frontend URL): https://majestic-gumdrop-e713f7.netlify.app/
 - Vercel (public frontend URL): https://samuel-ai-tools-app.vercel.app
 - Render (backend + full app): https://samuel-ai-tools-app.onrender.com
 - GitHub repository: https://github.com/samuelabera21/Samuel_AI_Tools_App
