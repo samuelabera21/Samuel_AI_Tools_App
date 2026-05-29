@@ -213,7 +213,7 @@ Open:
 ## Notes
 - Music generation is intentionally optional to keep free-tier deployments stable.
 - OCR extraction quality and availability depend on server-level Tesseract installation.
-- Keep secrets in environment variables only; do not commit real keys.
+- Keep secrets in environment variables only; do not commit real keys .
 
 ## License
 ISC
