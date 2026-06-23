@@ -1,5 +1,5 @@
 # Ethiopian AI HUB - AI Tools App
-AI tools APPlic
+AI tools APPli
 Flask-based web application for Ethiopian and Amharic-focused AI tools, language utilities, productivity tools, and mini games.
 
 ## Live Links
