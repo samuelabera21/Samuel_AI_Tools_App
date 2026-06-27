@@ -1,5 +1,5 @@
 # Ethiopian AI HUB - AI Tools App
-samel abera mekonn ab
+samel abera mekonn a
 
 Flask-based web application for Ethiopian and Amharic-focused AI tools, language utilities, productivity tools, and mini games.
 
