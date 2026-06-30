@@ -1,5 +1,5 @@
 # Ethiopian AI HUB - AI Tools App
-Samuel abera mekon
+Samuel abera meko
 
 Flask-based web application for Ethiopian and Amharic-focused AI tools, language utilities, productivity tools, and mini games.
 
