@@ -1,0 +1,248 @@
+:root {
+  --eka-panel: rgba(9, 22, 52, 0.95);
+  --eka-panel-soft: rgba(16, 31, 66, 0.9);
+  --eka-border: rgba(149, 177, 255, 0.32);
+  --eka-text: #eff4ff;
+  --eka-muted: #c6d5f5;
+  --eka-accent: #ff9637;
+  --eka-accent-2: #ff6f56;
+}
+
+body {
+  color: var(--eka-text);
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at 10% 12%, rgba(255, 124, 64, 0.2), transparent 32%),
+    radial-gradient(circle at 88% 10%, rgba(76, 132, 255, 0.22), transparent 32%),
+    linear-gradient(148deg, #060f26 0%, #0c1b42 56%, #0f2a4d 100%);
+  overflow-x: hidden;
+}
+
+.knowledge-chat-page {
+  min-height: calc(100vh - 110px);
+  padding: 24px 14px 90px;
+}
+
+.assistant-shell {
+  width: min(980px, 100%);
+  margin: 0 auto;
+  border: 1px solid var(--eka-border);
+  border-radius: 26px;
+  background: linear-gradient(180deg, var(--eka-panel) 0%, rgba(7, 18, 43, 0.96) 100%);
+  box-shadow: 0 24px 48px rgba(3, 9, 24, 0.45);
+  padding: 18px;
+}
+
+.assistant-header {
+  border: 1px solid rgba(166, 187, 255, 0.3);
+  border-radius: 16px;
+  padding: 14px 16px;
+  background: linear-gradient(110deg, rgba(28, 36, 68, 0.92), rgba(18, 29, 60, 0.88));
+}
+
+.assistant-header h1 {
+  margin: 0;
+  font-size: clamp(1.4rem, 3.1vw, 2rem);
+}
+
+.assistant-header p {
+  margin: 6px 0 0;
+  color: var(--eka-muted);
+  font-size: 0.98rem;
+}
+
+.knowledge-tools {
+  margin-top: 12px;
+}
+
+.tool-toggle {
+  border: 1px solid rgba(255, 160, 97, 0.5);
+  border-radius: 999px;
+  padding: 9px 14px;
+  background: rgba(255, 255, 255, 0.08);
+  color: #ffe7d0;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.ingest-drawer {
+  margin-top: 10px;
+  border: 1px solid rgba(150, 177, 255, 0.3);
+  border-radius: 14px;
+  background: var(--eka-panel-soft);
+  padding: 12px;
+}
+
+.ingest-form {
+  display: grid;
+  gap: 8px;
+}
+
+.ingest-form label {
+  color: var(--eka-muted);
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.btn {
+  border: none;
+  border-radius: 999px;
+  background: linear-gradient(100deg, var(--eka-accent), var(--eka-accent-2));
+  color: #fff;
+  padding: 11px 16px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.status {
+  margin: 8px 0 0;
+  min-height: 1.3rem;
+  color: #c5d8ff;
+  font-size: 0.88rem;
+}
+
+.chat-area {
+  margin-top: 12px;
+  border: 1px solid rgba(145, 171, 246, 0.3);
+  border-radius: 16px;
+  background: rgba(6, 17, 40, 0.82);
+  padding: 12px;
+}
+
+.chat-log {
+  max-height: 420px;
+  min-height: 260px;
+  overflow-y: auto;
+  display: grid;
+  gap: 8px;
+  padding-right: 4px;
+}
+
+.chat-msg {
+  max-width: 88%;
+  border-radius: 14px;
+  padding: 10px 12px;
+  line-height: 1.5;
+}
+
+.chat-msg.assistant {
+  justify-self: start;
+  background: rgba(27, 41, 79, 0.9);
+  border: 1px solid rgba(170, 192, 255, 0.35);
+  color: #e5eeff;
+}
+
+.chat-msg.user {
+  justify-self: end;
+  background: rgba(255, 154, 76, 0.18);
+  border: 1px solid rgba(255, 168, 98, 0.45);
+  color: #fff1e4;
+}
+
+.examples {
+  margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.chip {
+  border: 1px solid rgba(132, 177, 255, 0.44);
+  border-radius: 999px;
+  background: rgba(14, 28, 62, 0.86);
+  color: #d7e5ff;
+  padding: 6px 10px;
+  font-size: 0.82rem;
+  cursor: pointer;
+}
+
+.chip:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.ask-row {
+  margin-top: 10px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 8px;
+}
+
+input[type="text"],
+textarea,
+input[type="file"] {
+  width: 100%;
+  border: 1px solid rgba(169, 188, 255, 0.3);
+  border-radius: 12px;
+  padding: 10px;
+  font: inherit;
+  color: var(--eka-text);
+  background: rgba(9, 19, 44, 0.9);
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #94a9d6;
+}
+
+.sources {
+  display: grid;
+  gap: 8px;
+  color: #dbe6ff;
+  margin-top: 8px;
+}
+
+.source-item {
+  border: 1px solid rgba(142, 173, 255, 0.28);
+  border-radius: 10px;
+  background: rgba(17, 30, 64, 0.85);
+  padding: 8px;
+}
+
+.source-item h4 {
+  margin: 0 0 4px;
+  font-size: 0.84rem;
+  color: #d8e6ff;
+}
+
+.source-item p {
+  margin: 0;
+  color: #c6d8ff;
+  line-height: 1.45;
+  font-size: 0.86rem;
+}
+
+.sources-details {
+  margin-top: 10px;
+  border-top: 1px dashed rgba(162, 185, 255, 0.25);
+  padding-top: 8px;
+}
+
+.sources-details summary {
+  cursor: pointer;
+  color: #bdd1ff;
+  font-size: 0.9rem;
+}
+
+@media (max-width: 720px) {
+  .knowledge-chat-page {
+    padding: 14px 10px 74px;
+  }
+
+  .assistant-shell {
+    border-radius: 18px;
+    padding: 12px;
+  }
+
+  .chat-log {
+    max-height: 360px;
+    min-height: 220px;
+  }
+
+  .ask-row {
+    grid-template-columns: 1fr;
+  }
+
+  .btn {
+    width: 100%;
+  }
+}

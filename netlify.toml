@@ -26,6 +26,25 @@ status = 200
 force = true
 
 [[redirects]]
+from = "/generate-music"
+to = "https://samuel-ai-tools-app.onrender.com/generate-music"
+status = 200
+force = true
+
+[[redirects]]
+from = "/Resources"
+to = "https://samuel-ai-tools-app.onrender.com/Resources"
+status = 200
+force = true
+
+[[redirects]]
+from = "/Ethiopian_Knowledge_AI_Assistant"
+to = "https://samuel-ai-tools-app.onrender.com/Ethiopian_Knowledge_AI_Assistant"
+status = 200
+force = true
+
+# Fallback: serve index.html for unknown paths (home page SPA fallback)
+[[redirects]]
 from = "/*"
 to = "/index.html"
 status = 200

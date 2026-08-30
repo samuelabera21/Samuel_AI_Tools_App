@@ -1,0 +1,245 @@
+:root {
+    --line: rgba(80, 150, 255, 0.2);
+    --panel: rgba(11, 21, 48, 0.86);
+    --soft-border: rgba(122, 165, 245, 0.28);
+    --text: #f5f7ff;
+    --muted: #b5c4e8;
+    --accent: #ff8b2c;
+}
+
+body {
+    color: var(--text);
+    min-height: 100vh;
+    background: radial-gradient(circle at center, #0a1a35 0%, #071022 52%, #020617 100%);
+    overflow-x: hidden;
+}
+
+body::before,
+body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+}
+
+body::before {
+    z-index: -2;
+    background:
+        linear-gradient(var(--line) 1px, transparent 1px) 0 0 / 100% 64px,
+        linear-gradient(90deg, var(--line) 1px, transparent 1px) 0 0 / 64px 100%;
+    opacity: 0.2;
+}
+
+body::after {
+    z-index: -1;
+    background:
+        radial-gradient(circle at 16% 18%, rgba(65, 118, 255, 0.22), transparent 34%),
+        radial-gradient(circle at 86% 14%, rgba(255, 139, 44, 0.16), transparent 34%),
+        radial-gradient(circle at 50% 84%, rgba(40, 155, 255, 0.14), transparent 42%);
+}
+
+.page {
+    max-width: 1120px;
+    margin: 26px auto 36px;
+    padding: 0 16px;
+}
+
+.title {
+    text-align: center;
+    font-size: clamp(2rem, 3.5vw, 2.9rem);
+    margin: 18px 0 10px;
+    color: #edf3ff;
+    font-weight: 800;
+    letter-spacing: 0.01em;
+}
+
+.subtitle {
+    text-align: center;
+    max-width: 860px;
+    margin: 0 auto 24px;
+    line-height: 1.55;
+    font-size: 1.05rem;
+    color: var(--muted);
+}
+
+.card {
+    min-height: 360px;
+    max-width: 760px;
+    margin: 0 auto;
+    border: 1px solid var(--soft-border);
+    border-radius: 18px;
+    background: var(--panel);
+    padding: 26px 18px;
+    box-shadow: 0 18px 36px rgba(5, 12, 32, 0.36);
+}
+
+.label {
+    text-align: center;
+    margin: 0 0 12px;
+    font-weight: 700;
+    font-size: 1.05rem;
+    color: #eaf1ff;
+}
+
+.filters {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.gender-option {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.98rem;
+    color: #dfe9ff;
+}
+
+.gender-option input {
+    width: 16px;
+    height: 16px;
+}
+
+.actions {
+    display: flex;
+    justify-content: center;
+    margin-top: 16px;
+}
+
+#generate-btn,
+.again-btn {
+    border: 1px solid var(--accent);
+    background: rgba(255, 138, 61, 0.08);
+    color: #ffd4b2;
+    border-radius: 999px;
+    padding: 10px 24px;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+#generate-btn:hover,
+.again-btn:hover {
+    background: rgba(255, 138, 61, 0.2);
+}
+
+#generate-btn:disabled,
+.again-btn:disabled {
+    opacity: 0.75;
+    cursor: not-allowed;
+}
+
+.error {
+    margin: 14px auto 0;
+    max-width: 560px;
+    border: 1px solid rgba(255, 123, 123, 0.45);
+    background: rgba(95, 22, 22, 0.3);
+    color: #ffb4b4;
+    border-radius: 10px;
+    padding: 8px 12px;
+    font-size: 0.95rem;
+}
+
+.warning {
+    margin: 10px auto 0;
+    max-width: 560px;
+    border: 1px solid rgba(255, 195, 86, 0.4);
+    background: rgba(87, 61, 9, 0.28);
+    color: #ffd99a;
+    border-radius: 10px;
+    padding: 8px 12px;
+    font-size: 0.95rem;
+}
+
+.result-card {
+    width: 410px;
+    max-width: 100%;
+    margin: 24px auto 0;
+    background: rgba(16, 35, 74, 0.95);
+    border: 1px solid rgba(122, 165, 245, 0.34);
+    border-radius: 14px;
+    padding: 16px 14px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.name-amharic {
+    font-family: "Abyssinica SIL", "Noto Sans Ethiopic", sans-serif;
+    font-size: clamp(2rem, 5vw, 2.8rem);
+    color: #eef3ff;
+    line-height: 1.2;
+    text-align: center;
+}
+
+.name-english {
+    font-size: 1rem;
+    color: #bcd0f6;
+    line-height: 1.2;
+}
+
+.result-actions {
+    margin-top: 4px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+#name-audio {
+    width: calc(100% - 54px);
+    height: 40px;
+}
+
+.icon-btn {
+    width: 42px;
+    height: 42px;
+    border: 1px solid rgba(255, 138, 61, 0.9);
+    border-radius: 10px;
+    background: rgba(255, 138, 61, 0.12);
+    color: #ffe4cf;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.again-btn {
+    margin-top: 4px;
+}
+
+.hidden {
+    display: none;
+}
+
+@media (max-width: 860px) {
+    .page {
+        margin-top: 18px;
+        padding: 0 12px;
+    }
+
+    .title {
+        font-size: clamp(1.65rem, 8vw, 2.15rem);
+    }
+
+    .subtitle {
+        font-size: 0.98rem;
+    }
+
+    .card {
+        min-height: 320px;
+        padding: 18px 14px;
+    }
+
+    .gender-option,
+    .name-english,
+    .error,
+    .warning {
+        font-size: 0.94rem;
+    }
+
+    .name-amharic {
+        font-size: clamp(1.7rem, 8vw, 2.2rem);
+    }
+}
