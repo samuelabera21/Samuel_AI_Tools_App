@@ -40,17 +40,18 @@ body::after {
 
 .page {
     max-width: 1120px;
-    margin: 26px auto 36px;
-    padding: 0 16px;
+    margin: 24px auto 36px;
+    padding: 0 16px 24px;
 }
 
 .title {
     text-align: center;
-    font-size: clamp(2rem, 3.5vw, 2.9rem);
-    margin: 18px 0 10px;
+    font-size: clamp(24px, 4vw, 44px);
+    margin: 14px 0 10px;
     color: #edf3ff;
     font-weight: 800;
     letter-spacing: 0.01em;
+    line-height: 1.18;
 }
 
 .subtitle {
@@ -58,7 +59,7 @@ body::after {
     max-width: 860px;
     margin: 0 auto 22px;
     line-height: 1.55;
-    font-size: 1.05rem;
+    font-size: clamp(14px, 1.8vw, 17px);
     color: var(--muted);
 }
 
@@ -66,9 +67,9 @@ body::after {
     max-width: 900px;
     margin: 0 auto;
     border: 1px solid var(--soft-border);
-    border-radius: 18px;
+    border-radius: 20px;
     background: var(--panel);
-    padding: 18px;
+    padding: clamp(16px, 2.5vw, 24px);
     box-shadow: 0 18px 36px rgba(5, 12, 32, 0.36);
 }
 
@@ -76,8 +77,9 @@ body::after {
     display: flex;
     gap: 8px;
     flex-wrap: wrap;
+    justify-content: center;
     border-bottom: 1px solid rgba(122, 165, 245, 0.26);
-    padding-bottom: 10px;
+    padding-bottom: 12px;
 }
 
 .tab {
@@ -85,13 +87,18 @@ body::after {
     background: rgba(10, 22, 50, 0.78);
     color: #d8e6ff;
     cursor: pointer;
-    padding: 9px 14px;
+    padding: 8px 16px;
     border-radius: 999px;
-    font-size: 0.96rem;
+    font-size: 0.94rem;
+    min-height: 38px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
 }
 
 .tab.active {
-    background: rgba(255, 138, 61, 0.14);
+    background: rgba(255, 138, 61, 0.16);
     border-color: rgba(255, 138, 61, 0.72);
     color: #ffe1cc;
 }
@@ -111,14 +118,15 @@ body::after {
 
 .converter-block h2 {
     text-align: center;
-    font-size: clamp(1.35rem, 2.4vw, 1.85rem);
-    margin: 12px 0;
+    font-size: clamp(1.25rem, 2.4vw, 1.85rem);
+    margin: 10px 0 14px;
     color: #edf3ff;
 }
 
 .controls-row {
     display: flex;
     justify-content: center;
+    align-items: center;
     gap: 8px;
     flex-wrap: wrap;
     margin: 10px 0;
@@ -128,10 +136,11 @@ body::after {
 .controls-row input {
     border: 1px solid rgba(122, 165, 245, 0.42);
     border-radius: 10px;
-    padding: 9px 10px;
-    font-size: 0.98rem;
+    padding: 10px 12px;
+    font-size: 16px;
     background: rgba(6, 13, 30, 0.84);
     color: #f4f8ff;
+    min-height: 42px;
 }
 
 .controls-row select:focus,
@@ -144,11 +153,12 @@ body::after {
 #to-gregorian-month,
 #to-ethiopian-month,
 #calc-month {
-    min-width: 240px;
+    min-width: 200px;
+    max-width: 100%;
 }
 
 .controls-row.narrow #calc-operation {
-    min-width: 120px;
+    min-width: 110px;
 }
 
 .input-group {
@@ -157,48 +167,54 @@ body::after {
     border-radius: 10px;
     overflow: hidden;
     background: rgba(6, 13, 30, 0.84);
+    align-items: center;
 }
 
 .input-group input {
-    width: 74px;
+    width: 70px;
     border: none;
     border-right: 1px solid rgba(122, 165, 245, 0.32);
     border-radius: 0;
     text-align: center;
     box-shadow: none;
+    padding: 9px 6px;
 }
 
 .input-group span {
     padding: 8px 10px;
-    font-size: 0.95rem;
+    font-size: 0.92rem;
     color: #d5e3ff;
+    white-space: nowrap;
 }
 
 .action-row {
     display: flex;
     justify-content: center;
-    margin: 10px 0;
+    margin: 14px 0 10px;
 }
 
 .action-row button {
     border: 1px solid var(--accent);
-    background: rgba(255, 138, 61, 0.08);
+    background: rgba(255, 138, 61, 0.12);
     color: #ffd4b2;
     border-radius: 999px;
-    padding: 10px 22px;
+    padding: 11px 28px;
     font-size: 1rem;
     font-weight: 700;
     cursor: pointer;
+    min-height: 44px;
+    transition: background 0.2s ease, transform 0.2s ease;
 }
 
 .action-row button:hover {
-    background: rgba(255, 138, 61, 0.2);
+    background: rgba(255, 138, 61, 0.25);
+    transform: translateY(-1px);
 }
 
 hr {
     border: none;
     border-top: 1px solid rgba(122, 165, 245, 0.26);
-    margin: 14px 0;
+    margin: 16px 0;
 }
 
 .result-card {
@@ -207,7 +223,7 @@ hr {
     background: rgba(16, 35, 74, 0.95);
     border: 1px solid rgba(122, 165, 245, 0.34);
     border-radius: 12px;
-    padding: 12px 14px;
+    padding: 14px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -217,7 +233,7 @@ hr {
 .result-card span {
     flex: 1;
     text-align: center;
-    font-size: 1.08rem;
+    font-size: 1.05rem;
     color: #edf3ff;
     line-height: 1.35;
 }
@@ -235,7 +251,7 @@ hr {
 }
 
 .line-en {
-    font-size: 1rem;
+    font-size: 0.96rem;
     color: #bdd2f8;
     margin-top: 4px;
     line-height: 1.35;
@@ -247,14 +263,19 @@ hr {
 }
 
 .icon-btn {
-    width: 42px;
-    height: 42px;
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    min-height: 44px;
     border: 1px solid rgba(255, 138, 61, 0.9);
     border-radius: 10px;
     background: rgba(255, 138, 61, 0.12);
     color: #ffe4cf;
     cursor: pointer;
     font-size: 1rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .icon-btn:hover {
@@ -268,7 +289,7 @@ hr {
     color: #ffb4b4;
     border-radius: 10px;
     padding: 8px 10px;
-    font-size: 0.95rem;
+    font-size: 0.94rem;
 }
 
 .hidden {
@@ -277,36 +298,32 @@ hr {
 
 @media (max-width: 860px) {
     .page {
-        margin-top: 18px;
-        padding: 0 12px;
+        margin-top: 14px;
+        padding: 0 10px 20px;
     }
 
     .title {
-        font-size: clamp(1.65rem, 8vw, 2.15rem);
+        font-size: clamp(22px, 7vw, 30px);
     }
 
     .subtitle,
-    .tab,
-    .controls-row select,
-    .controls-row input,
-    .action-row button,
-    .error {
-        font-size: 0.95rem;
+    .tab {
+        font-size: 14px;
     }
 
-    .converter-block h2 {
-        font-size: 1.2rem;
+    .controls-row {
+        gap: 8px;
+    }
+
+    .action-row button {
+        width: 100%;
+        max-width: 260px;
     }
 
     .result-card {
         flex-direction: column;
         align-items: stretch;
-    }
-
-    .result-card span,
-    .line-am,
-    .line-en {
-        font-size: 0.98rem;
+        gap: 12px;
     }
 
     .result-actions {

@@ -12,8 +12,7 @@
 body {
     color: var(--text);
     min-height: 100vh;
-    background:
-        radial-gradient(circle at center, #0a1a35 0%, #071022 52%, #020617 100%);
+    background: radial-gradient(circle at center, #0a1a35 0%, #071022 52%, #020617 100%);
     overflow-x: hidden;
 }
 
@@ -43,15 +42,16 @@ body::after {
 
 .page {
     max-width: 1160px;
-    margin: 26px auto 36px;
-    padding: 0 16px;
+    margin: 24px auto 36px;
+    padding: 0 16px 24px;
 }
 
 .title {
     text-align: center;
-    font-size: clamp(2rem, 3.5vw, 2.9rem);
+    font-size: clamp(24px, 4vw, 44px);
     font-weight: 800;
-    margin-bottom: 10px;
+    line-height: 1.15;
+    margin-bottom: 12px;
     letter-spacing: 0.01em;
 }
 
@@ -60,17 +60,19 @@ body::after {
     max-width: 920px;
     margin: 0 auto 22px;
     color: var(--muted);
-    font-size: 1.06rem;
+    font-size: clamp(15px, 1.8vw, 17px);
     line-height: 1.55;
 }
 
 .tool-card {
     background: var(--panel);
     border: 1px solid var(--soft-border);
-    border-radius: 18px;
-    min-height: 420px;
-    padding: 18px 20px 28px;
+    border-radius: 20px;
+    min-height: 380px;
+    padding: clamp(16px, 2.5vw, 24px) 16px;
     box-shadow: 0 18px 36px rgba(5, 12, 32, 0.36);
+    max-width: 860px;
+    margin: 0 auto;
 }
 
 .tabs {
@@ -78,29 +80,35 @@ body::after {
     flex-wrap: wrap;
     gap: 8px;
     align-items: center;
+    justify-content: center;
     border-bottom: 1px solid rgba(122, 165, 245, 0.26);
-    margin-bottom: 24px;
+    margin-bottom: 22px;
     padding-bottom: 10px;
 }
 
 .tab-link {
     text-decoration: none;
     color: #d8e6ff;
-    font-size: 0.96rem;
-    padding: 9px 14px;
+    font-size: 0.94rem;
+    padding: 8px 16px;
     border: 1px solid rgba(122, 165, 245, 0.32);
     border-radius: 999px;
     background: rgba(10, 22, 50, 0.78);
+    transition: all 0.2s ease;
+    min-height: 38px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .tab-link.active {
     color: #ffe1cc;
-    background: rgba(255, 138, 61, 0.14);
+    background: rgba(255, 138, 61, 0.16);
     border-color: rgba(255, 138, 61, 0.72);
 }
 
 .inner {
-    max-width: 860px;
+    max-width: 760px;
     margin: 0 auto;
     text-align: center;
 }
@@ -113,20 +121,22 @@ body::after {
 }
 
 .input-wrap {
-    display: inline-flex;
-    width: 620px;
-    max-width: 100%;
+    display: flex;
+    width: 100%;
+    max-width: 620px;
+    margin: 0 auto;
     border: 1px solid rgba(122, 165, 245, 0.4);
     border-radius: 12px;
     background: rgba(5, 12, 28, 0.85);
+    overflow: hidden;
 }
 
 .input-wrap input {
     width: 100%;
     border: none;
     outline: none;
-    font-size: 1rem;
-    padding: 14px 16px;
+    font-size: 16px;
+    padding: 13px 16px;
     color: #f4f7ff;
     background: transparent;
 }
@@ -135,16 +145,19 @@ body::after {
     margin-top: 16px;
     border: 1px solid var(--accent);
     border-radius: 999px;
-    background: rgba(255, 138, 61, 0.08);
+    background: rgba(255, 138, 61, 0.12);
     color: #ffd4b2;
     font-size: 1rem;
     font-weight: 700;
     padding: 11px 28px;
     cursor: pointer;
+    min-height: 44px;
+    transition: background 0.2s ease, transform 0.2s ease;
 }
 
 .submit-btn:hover {
-    background: rgba(255, 138, 61, 0.2);
+    background: rgba(255, 138, 61, 0.25);
+    transform: translateY(-1px);
 }
 
 .error {
@@ -155,12 +168,12 @@ body::after {
 }
 
 .result-card {
-    margin: 16px auto 0;
+    margin: 18px auto 0;
     background: rgba(16, 35, 74, 0.95);
     border: 1px solid rgba(122, 165, 245, 0.36);
     border-radius: 14px;
-    width: min(320px, 100%);
-    min-height: 150px;
+    width: min(340px, 100%);
+    min-height: 140px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -171,23 +184,29 @@ body::after {
 .result-text {
     width: 100%;
     text-align: center;
-    font-size: 1.06rem;
+    font-size: 1.15rem;
     font-weight: 700;
-    line-height: 1.35;
+    line-height: 1.4;
     color: #dbe9ff;
     word-break: break-word;
+    font-family: "Noto Sans Ethiopic", "Abyssinica SIL", sans-serif;
 }
 
 .copy-btn {
     margin-top: 12px;
     width: 44px;
     height: 44px;
+    min-width: 44px;
+    min-height: 44px;
     border: 1px solid rgba(255, 138, 61, 0.9);
     border-radius: 10px;
     background: rgba(255, 138, 61, 0.12);
     color: #ffe4cf;
     font-size: 1rem;
     cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .copy-btn:hover {
@@ -195,9 +214,11 @@ body::after {
 }
 
 .table-wrap {
-    margin: 28px auto 0;
+    margin: 24px auto 0;
     max-width: 620px;
-    overflow: auto;
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
     border: 1px solid rgba(122, 165, 245, 0.26);
     border-radius: 12px;
 }
@@ -211,9 +232,9 @@ table {
 th,
 td {
     border: 1px solid rgba(122, 165, 245, 0.2);
-    padding: 8px;
+    padding: 8px 6px;
     text-align: center;
-    font-size: 0.96rem;
+    font-size: 0.94rem;
     color: #e7efff;
 }
 
@@ -227,10 +248,14 @@ th {
     border-radius: 8px;
     background: rgba(16, 31, 63, 0.94);
     color: #f4f8ff;
-    padding: 4px 8px;
-    min-width: 34px;
+    padding: 6px 8px;
+    min-width: 36px;
+    min-height: 36px;
     font-size: 1rem;
     cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .geez-char-btn:hover {
@@ -240,32 +265,43 @@ th {
 
 @media (max-width: 760px) {
     .page {
-        margin-top: 18px;
-        padding: 0 12px;
+        margin-top: 14px;
+        padding: 0 10px 20px;
     }
 
     .title {
-        font-size: clamp(1.65rem, 8vw, 2.15rem);
+        font-size: clamp(22px, 7vw, 30px);
     }
 
     .subtitle {
-        font-size: 0.98rem;
+        font-size: 14px;
         margin-bottom: 16px;
     }
 
     .tool-card {
-        min-height: 340px;
-        padding: 16px 14px 20px;
+        min-height: 320px;
+        padding: 16px 12px 20px;
     }
 
     .tab-link {
-        font-size: 0.92rem;
-        padding: 8px 12px;
+        font-size: 0.88rem;
+        padding: 6px 12px;
+    }
+
+    .submit-btn {
+        width: 100%;
+        max-width: 260px;
     }
 
     th,
-    td,
+    td {
+        padding: 6px 4px;
+        font-size: 0.88rem;
+    }
+
     .geez-char-btn {
-        font-size: 0.9rem;
+        min-width: 32px;
+        min-height: 32px;
+        font-size: 0.95rem;
     }
 }

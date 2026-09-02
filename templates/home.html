@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/logo.png') }}">
+  <link rel="icon" type="image/png" href="/static/images/logo.png">
   <title>ፍኖት Ethiopian AI HUB</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+  <link rel="stylesheet" href="/static/css/base.css">
+  <link rel="stylesheet" href="/static/css/home.css">
 </head>
 <body>
   <canvas id="ai-network" aria-hidden="true"></canvas>
@@ -14,14 +14,14 @@
 
     <header class="hero-topbar">
       <a class="brand-chip" href="/" aria-label="ፍኖት Ethiopian AI HUB home">
-        <img class="brand-logo" src="{{ url_for('static', filename='images/logo.png') }}" alt="ፍኖት Ethiopian AI HUB logo">
+        <img class="brand-logo" src="/static/images/logo.png" alt="ፍኖት Ethiopian AI HUB logo">
       </a>
 
-      <div class="hero-menu">
-        <nav class="hero-nav" aria-label="Main">
+      <div class="hero-menu" id="hero-menu">
+        <nav class="hero-nav" id="main-nav" aria-label="Main">
           <a class="active" href="/">Home</a>
           <div class="hero-dropdown">
-            <button class="hero-drop-btn" type="button">Tools <span aria-hidden="true">▾</span></button>
+            <button class="hero-drop-btn" type="button" aria-expanded="false">Tools <span aria-hidden="true">▾</span></button>
             <div class="hero-dropdown-menu">
               <a href="/Tools/Amharic_OCR">Amharic OCR</a>
               <a href="/Tools/Numbers_to_Amharic_Words_Converter">Amharic Numbers Converter</a>
@@ -37,7 +37,7 @@
             </div>
           </div>
           <div class="hero-dropdown">
-            <button class="hero-drop-btn" type="button">Games <span aria-hidden="true">▾</span></button>
+            <button class="hero-drop-btn" type="button" aria-expanded="false">Games <span aria-hidden="true">▾</span></button>
             <div class="hero-dropdown-menu">
               <a href="/Games/Amharic_Fidel_Sliding_Puzzle_Game">Fidel Sliding Puzzle</a>
               <a href="/Games/Amharic_Typing_Game">Amharic Typing Game</a>
@@ -49,12 +49,19 @@
         </nav>
       </div>
 
-      <a class="contact-pill" href="#site-footer-contact">Contact Me</a>
+      <div class="hero-topbar-actions">
+        <a class="contact-pill" href="#site-footer-contact">Contact Me</a>
+        <button class="mobile-menu-toggle" id="mobile-nav-toggle" type="button" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="main-nav">
+          <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+          </span>
+        </button>
+      </div>
     </header>
 
     <section class="visual-ethiopian-hero">
       <div class="ethiopian-hero-img-wrap">
-        <img src="{{ url_for('static', filename='images/banner.png') }}" alt="Ethiopian AI banner" class="ethiopian-hero-img" loading="eager">
+        <img src="/static/images/banner.png" alt="Ethiopian AI banner" class="ethiopian-hero-img" loading="eager">
         <div class="ethiopian-hero-overlay"></div>
         <div class="ethiopian-hero-text">
           <h2>Welcome to ፍኖት Ethiopian AI HUB</h2>
@@ -65,7 +72,7 @@
 
     <main>
       <section class="hero">
-        <p class="eyebrow">ፍኖት Ethiopian AI HUB</p>
+        <p class="eyebrow">ፍኖት ETHIOPIAN AI HUB</p>
         <h1>
           Ethiopian Artificial
           <span>Intelligence Hub</span>
@@ -373,6 +380,6 @@
     <p class="chatbot-footnote">AI can make mistakes. Verify important information.</p>
   </section>
 
-  <script src="{{ url_for('static', filename='js/home.js') }}"></script>
+  <script src="/static/js/home.js"></script>
 </body>
 </html>

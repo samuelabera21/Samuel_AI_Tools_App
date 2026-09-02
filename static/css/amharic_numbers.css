@@ -12,8 +12,7 @@
 body {
     color: var(--text);
     min-height: 100vh;
-    background:
-        radial-gradient(circle at center, #0a1a35 0%, #071022 52%, #020617 100%);
+    background: radial-gradient(circle at center, #0a1a35 0%, #071022 52%, #020617 100%);
     overflow-x: hidden;
 }
 
@@ -43,15 +42,16 @@ body::after {
 
 .page {
     max-width: 1160px;
-    margin: 26px auto 36px;
-    padding: 0 16px;
+    margin: 24px auto 36px;
+    padding: 0 16px 24px;
 }
 
 .title {
     text-align: center;
-    font-size: clamp(2rem, 3.5vw, 2.9rem);
+    font-size: clamp(24px, 4vw, 44px);
     font-weight: 800;
-    margin-bottom: 10px;
+    line-height: 1.15;
+    margin-bottom: 12px;
     letter-spacing: 0.01em;
 }
 
@@ -60,17 +60,19 @@ body::after {
     max-width: 920px;
     margin: 0 auto 22px;
     color: var(--muted);
-    font-size: 1.06rem;
+    font-size: clamp(15px, 1.8vw, 17px);
     line-height: 1.55;
 }
 
 .tool-card {
     background: var(--panel);
     border: 1px solid var(--soft-border);
-    border-radius: 18px;
-    min-height: 380px;
-    padding: 28px 20px;
+    border-radius: 20px;
+    min-height: 360px;
+    padding: clamp(18px, 3vw, 28px) 16px;
     box-shadow: 0 18px 36px rgba(5, 12, 32, 0.36);
+    max-width: 800px;
+    margin: 0 auto;
 }
 
 .inner {
@@ -87,9 +89,10 @@ body::after {
 }
 
 .input-wrap {
-    display: inline-flex;
-    width: 620px;
-    max-width: 100%;
+    display: flex;
+    width: 100%;
+    max-width: 620px;
+    margin: 0 auto;
     border: 1px solid rgba(122, 165, 245, 0.4);
     border-radius: 12px;
     overflow: hidden;
@@ -97,11 +100,12 @@ body::after {
 }
 
 .input-wrap input {
-    width: 100%;
+    flex: 1;
+    min-width: 0;
     border: none;
     outline: none;
-    font-size: 1rem;
-    padding: 14px 16px;
+    font-size: 16px;
+    padding: 13px 16px;
     text-align: left;
     color: #f4f7ff;
     background: transparent;
@@ -111,9 +115,13 @@ body::after {
     border: none;
     border-left: 1px solid rgba(122, 165, 245, 0.4);
     background: rgba(12, 24, 52, 0.92);
-    width: 60px;
+    width: 52px;
+    min-width: 52px;
     cursor: pointer;
     font-size: 1.1rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .sound-btn:hover {
@@ -124,8 +132,9 @@ body::after {
     margin-top: 18px;
     display: flex;
     justify-content: center;
-    gap: 24px;
-    font-size: 0.98rem;
+    gap: 18px;
+    font-size: 0.96rem;
+    flex-wrap: wrap;
 }
 
 .modes label {
@@ -134,27 +143,32 @@ body::after {
     gap: 8px;
     cursor: pointer;
     color: #dbe7ff;
+    min-height: 40px;
 }
 
 .modes input[type="radio"] {
-    width: 16px;
-    height: 16px;
+    width: 18px;
+    height: 18px;
+    accent-color: var(--accent);
 }
 
 .submit-btn {
-    margin-top: 20px;
+    margin-top: 18px;
     border: 1px solid var(--accent);
     border-radius: 999px;
-    background: rgba(255, 138, 61, 0.08);
+    background: rgba(255, 138, 61, 0.12);
     color: #ffd4b2;
     font-size: 1rem;
     font-weight: 700;
     padding: 11px 28px;
     cursor: pointer;
+    min-height: 44px;
+    transition: background 0.2s ease, transform 0.2s ease;
 }
 
 .submit-btn:hover {
-    background: rgba(255, 138, 61, 0.2);
+    background: rgba(255, 138, 61, 0.25);
+    transform: translateY(-1px);
 }
 
 .result-card {
@@ -162,8 +176,8 @@ body::after {
     background: rgba(16, 35, 74, 0.95);
     border: 1px solid rgba(122, 165, 245, 0.36);
     border-radius: 14px;
-    width: min(320px, 100%);
-    min-height: 150px;
+    width: min(340px, 100%);
+    min-height: 140px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -174,23 +188,29 @@ body::after {
 .result-text {
     width: 100%;
     text-align: center;
-    font-size: 1.06rem;
+    font-size: 1.05rem;
     font-weight: 700;
-    line-height: 1.35;
+    line-height: 1.4;
     color: #dbe9ff;
     word-break: break-word;
+    font-family: "Noto Sans Ethiopic", "Abyssinica SIL", sans-serif;
 }
 
 .copy-btn {
     margin-top: 12px;
     width: 44px;
     height: 44px;
+    min-width: 44px;
+    min-height: 44px;
     border: 1px solid rgba(255, 138, 61, 0.9);
     border-radius: 10px;
     background: rgba(255, 138, 61, 0.12);
     color: #ffe4cf;
     font-size: 1rem;
     cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .copy-btn:hover {
@@ -199,30 +219,32 @@ body::after {
 
 @media (max-width: 760px) {
     .page {
-        margin-top: 18px;
-        padding: 0 12px;
+        margin-top: 14px;
+        padding: 0 10px 20px;
     }
 
     .title {
-        font-size: clamp(1.65rem, 8vw, 2.15rem);
+        font-size: clamp(22px, 7vw, 30px);
     }
 
     .subtitle {
-        font-size: 0.98rem;
+        font-size: 14px;
         margin-bottom: 16px;
     }
 
     .tool-card {
-        min-height: 320px;
-        padding: 18px 14px;
+        min-height: 300px;
+        padding: 18px 12px;
     }
 
     .modes {
-        gap: 16px;
-        font-size: 0.94rem;
+        gap: 12px;
+        font-size: 0.92rem;
     }
 
     .submit-btn {
-        padding: 10px 20px;
+        width: 100%;
+        max-width: 260px;
+        padding: 10px 18px;
     }
 }

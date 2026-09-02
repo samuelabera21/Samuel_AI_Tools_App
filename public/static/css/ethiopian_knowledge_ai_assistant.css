@@ -20,17 +20,17 @@ body {
 
 .knowledge-chat-page {
   min-height: calc(100vh - 110px);
-  padding: 24px 14px 90px;
+  padding: 20px 14px 70px;
 }
 
 .assistant-shell {
   width: min(980px, 100%);
   margin: 0 auto;
   border: 1px solid var(--eka-border);
-  border-radius: 26px;
+  border-radius: 24px;
   background: linear-gradient(180deg, var(--eka-panel) 0%, rgba(7, 18, 43, 0.96) 100%);
   box-shadow: 0 24px 48px rgba(3, 9, 24, 0.45);
-  padding: 18px;
+  padding: clamp(14px, 2.5vw, 20px);
 }
 
 .assistant-header {
@@ -42,13 +42,15 @@ body {
 
 .assistant-header h1 {
   margin: 0;
-  font-size: clamp(1.4rem, 3.1vw, 2rem);
+  font-size: clamp(1.3rem, 3.1vw, 2rem);
+  line-height: 1.2;
 }
 
 .assistant-header p {
   margin: 6px 0 0;
   color: var(--eka-muted);
-  font-size: 0.98rem;
+  font-size: clamp(13px, 1.8vw, 15px);
+  line-height: 1.45;
 }
 
 .knowledge-tools {
@@ -58,11 +60,15 @@ body {
 .tool-toggle {
   border: 1px solid rgba(255, 160, 97, 0.5);
   border-radius: 999px;
-  padding: 9px 14px;
+  padding: 8px 16px;
   background: rgba(255, 255, 255, 0.08);
   color: #ffe7d0;
   font-weight: 700;
+  font-size: 13px;
   cursor: pointer;
+  min-height: 40px;
+  display: inline-flex;
+  align-items: center;
 }
 
 .ingest-drawer {
@@ -89,9 +95,14 @@ body {
   border-radius: 999px;
   background: linear-gradient(100deg, var(--eka-accent), var(--eka-accent-2));
   color: #fff;
-  padding: 11px 16px;
+  padding: 11px 18px;
   font-weight: 800;
+  font-size: 14px;
   cursor: pointer;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .status {
@@ -110,19 +121,22 @@ body {
 }
 
 .chat-log {
-  max-height: 420px;
-  min-height: 260px;
+  max-height: 400px;
+  min-height: 220px;
   overflow-y: auto;
   display: grid;
   gap: 8px;
   padding-right: 4px;
+  -webkit-overflow-scrolling: touch;
 }
 
 .chat-msg {
   max-width: 88%;
   border-radius: 14px;
-  padding: 10px 12px;
+  padding: 10px 14px;
   line-height: 1.5;
+  font-size: 14px;
+  word-break: break-word;
 }
 
 .chat-msg.assistant {
@@ -134,7 +148,7 @@ body {
 
 .chat-msg.user {
   justify-self: end;
-  background: rgba(255, 154, 76, 0.18);
+  background: rgba(255, 154, 76, 0.2);
   border: 1px solid rgba(255, 168, 98, 0.45);
   color: #fff1e4;
 }
@@ -151,9 +165,12 @@ body {
   border-radius: 999px;
   background: rgba(14, 28, 62, 0.86);
   color: #d7e5ff;
-  padding: 6px 10px;
+  padding: 6px 12px;
   font-size: 0.82rem;
   cursor: pointer;
+  min-height: 34px;
+  display: inline-flex;
+  align-items: center;
 }
 
 .chip:hover {
@@ -173,8 +190,9 @@ input[type="file"] {
   width: 100%;
   border: 1px solid rgba(169, 188, 255, 0.3);
   border-radius: 12px;
-  padding: 10px;
-  font: inherit;
+  padding: 11px 13px;
+  font-size: 16px;
+  font-family: inherit;
   color: var(--eka-text);
   background: rgba(9, 19, 44, 0.9);
 }
@@ -195,7 +213,7 @@ textarea::placeholder {
   border: 1px solid rgba(142, 173, 255, 0.28);
   border-radius: 10px;
   background: rgba(17, 30, 64, 0.85);
-  padding: 8px;
+  padding: 8px 10px;
 }
 
 .source-item h4 {
@@ -225,7 +243,7 @@ textarea::placeholder {
 
 @media (max-width: 720px) {
   .knowledge-chat-page {
-    padding: 14px 10px 74px;
+    padding: 12px 8px 60px;
   }
 
   .assistant-shell {
@@ -234,8 +252,12 @@ textarea::placeholder {
   }
 
   .chat-log {
-    max-height: 360px;
-    min-height: 220px;
+    max-height: 340px;
+    min-height: 200px;
+  }
+
+  .chat-msg {
+    max-width: 92%;
   }
 
   .ask-row {

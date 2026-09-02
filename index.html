@@ -17,11 +17,11 @@
         <img class="brand-logo" src="/static/images/logo.png" alt="ፍኖት Ethiopian AI HUB logo">
       </a>
 
-      <div class="hero-menu">
-        <nav class="hero-nav" aria-label="Main">
+      <div class="hero-menu" id="hero-menu">
+        <nav class="hero-nav" id="main-nav" aria-label="Main">
           <a class="active" href="/">Home</a>
           <div class="hero-dropdown">
-            <button class="hero-drop-btn" type="button">Tools <span aria-hidden="true">▾</span></button>
+            <button class="hero-drop-btn" type="button" aria-expanded="false">Tools <span aria-hidden="true">▾</span></button>
             <div class="hero-dropdown-menu">
               <a href="/Tools/Amharic_OCR">Amharic OCR</a>
               <a href="/Tools/Numbers_to_Amharic_Words_Converter">Amharic Numbers Converter</a>
@@ -37,7 +37,7 @@
             </div>
           </div>
           <div class="hero-dropdown">
-            <button class="hero-drop-btn" type="button">Games <span aria-hidden="true">▾</span></button>
+            <button class="hero-drop-btn" type="button" aria-expanded="false">Games <span aria-hidden="true">▾</span></button>
             <div class="hero-dropdown-menu">
               <a href="/Games/Amharic_Fidel_Sliding_Puzzle_Game">Fidel Sliding Puzzle</a>
               <a href="/Games/Amharic_Typing_Game">Amharic Typing Game</a>
@@ -49,7 +49,14 @@
         </nav>
       </div>
 
-      <a class="contact-pill" href="#site-footer-contact">Contact Me</a>
+      <div class="hero-topbar-actions">
+        <a class="contact-pill" href="#site-footer-contact">Contact Me</a>
+        <button class="mobile-menu-toggle" id="mobile-nav-toggle" type="button" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="main-nav">
+          <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+          </span>
+        </button>
+      </div>
     </header>
 
     <section class="visual-ethiopian-hero">

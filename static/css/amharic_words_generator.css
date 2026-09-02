@@ -17,6 +17,7 @@ body {
         radial-gradient(130% 110% at 90% 100%, rgba(56, 189, 248, 0.12), rgba(9, 11, 17, 0) 50%),
         var(--awg-bg);
     color: var(--awg-text);
+    overflow-x: hidden;
 }
 
 body::before,
@@ -44,14 +45,14 @@ body::after {
     position: relative;
     z-index: 1;
     max-width: 980px;
-    margin: 34px auto;
-    padding: 0 18px 20px;
+    margin: 24px auto 36px;
+    padding: 0 16px 24px;
 }
 
 .title {
     margin: 0 0 10px;
     text-align: center;
-    font-size: clamp(1.45rem, 2.6vw, 2rem);
+    font-size: clamp(22px, 3.8vw, 36px);
     line-height: 1.18;
     letter-spacing: 0.01em;
 }
@@ -61,15 +62,15 @@ body::after {
     max-width: 860px;
     text-align: center;
     color: var(--awg-muted);
-    font-size: clamp(0.95rem, 1.4vw, 1.05rem);
-    line-height: 1.62;
+    font-size: clamp(14px, 1.8vw, 17px);
+    line-height: 1.6;
 }
 
 .card {
     background: var(--awg-panel);
     border: 1px solid var(--awg-border);
-    border-radius: 18px;
-    padding: clamp(16px, 2.3vw, 24px);
+    border-radius: 20px;
+    padding: clamp(16px, 2.5vw, 24px);
     box-shadow:
         0 22px 52px rgba(0, 0, 0, 0.45),
         inset 0 1px 0 rgba(255, 255, 255, 0.06);
@@ -103,8 +104,8 @@ select {
     border: 1px solid rgba(255, 255, 255, 0.14);
     border-radius: 12px;
     color: var(--awg-text);
-    padding: 10px 12px;
-    font-size: 0.95rem;
+    padding: 11px 12px;
+    font-size: 16px;
     transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
@@ -125,11 +126,12 @@ select:focus {
 
 #generate-btn {
     margin: 4px auto 0;
-    padding: 10px 30px;
-    font-size: 0.95rem;
+    padding: 11px 32px;
+    font-size: 0.98rem;
     background: linear-gradient(135deg, var(--awg-accent), var(--awg-accent-strong));
     color: #161616;
     box-shadow: 0 8px 20px rgba(245, 158, 11, 0.3);
+    min-height: 44px;
 }
 
 #generate-btn:hover {
@@ -163,12 +165,14 @@ select:focus {
     padding: 14px;
     box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
     backdrop-filter: blur(8px);
+    overflow-x: auto;
 }
 
 .result-output {
     font-size: 0.96rem;
     line-height: 1.62;
     word-break: break-word;
+    font-family: "Noto Sans Ethiopic", "Abyssinica SIL", sans-serif;
 }
 
 .result-output ul,
@@ -194,8 +198,10 @@ select:focus {
 
 .copy-btn {
     margin-top: 12px;
-    width: 40px;
-    height: 40px;
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    min-height: 44px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -215,7 +221,8 @@ select:focus {
 
 @media (max-width: 860px) {
     .page {
-        margin-top: 24px;
+        margin-top: 14px;
+        padding: 0 10px 20px;
     }
 
     .controls {
@@ -224,5 +231,10 @@ select:focus {
 
     .result-wrap {
         width: 100%;
+    }
+
+    #generate-btn {
+        width: 100%;
+        max-width: 280px;
     }
 }

@@ -40,36 +40,37 @@ body::after {
 
 .page {
     max-width: 1120px;
-    margin: 26px auto 36px;
-    padding: 0 16px;
+    margin: 24px auto 36px;
+    padding: 0 16px 24px;
 }
 
 .title {
     text-align: center;
-    font-size: clamp(2rem, 3.5vw, 2.9rem);
-    margin: 18px 0 10px;
+    font-size: clamp(24px, 4vw, 44px);
+    margin: 14px 0 10px;
     color: #edf3ff;
     font-weight: 800;
     letter-spacing: 0.01em;
+    line-height: 1.18;
 }
 
 .subtitle {
     text-align: center;
     max-width: 860px;
-    margin: 0 auto 24px;
+    margin: 0 auto 22px;
     line-height: 1.55;
-    font-size: 1.05rem;
+    font-size: clamp(14px, 1.8vw, 17px);
     color: var(--muted);
 }
 
 .card {
-    min-height: 360px;
+    min-height: 340px;
     max-width: 760px;
     margin: 0 auto;
     border: 1px solid var(--soft-border);
-    border-radius: 18px;
+    border-radius: 20px;
     background: var(--panel);
-    padding: 26px 18px;
+    padding: clamp(16px, 2.5vw, 26px);
     box-shadow: 0 18px 36px rgba(5, 12, 32, 0.36);
 }
 
@@ -94,11 +95,14 @@ body::after {
     gap: 8px;
     font-size: 0.98rem;
     color: #dfe9ff;
+    cursor: pointer;
+    min-height: 40px;
 }
 
 .gender-option input {
-    width: 16px;
-    height: 16px;
+    width: 18px;
+    height: 18px;
+    accent-color: var(--accent);
 }
 
 .actions {
@@ -110,18 +114,21 @@ body::after {
 #generate-btn,
 .again-btn {
     border: 1px solid var(--accent);
-    background: rgba(255, 138, 61, 0.08);
+    background: rgba(255, 138, 61, 0.12);
     color: #ffd4b2;
     border-radius: 999px;
-    padding: 10px 24px;
+    padding: 11px 28px;
     font-size: 1rem;
     font-weight: 700;
     cursor: pointer;
+    min-height: 44px;
+    transition: background 0.2s ease, transform 0.2s ease;
 }
 
 #generate-btn:hover,
 .again-btn:hover {
-    background: rgba(255, 138, 61, 0.2);
+    background: rgba(255, 138, 61, 0.25);
+    transform: translateY(-1px);
 }
 
 #generate-btn:disabled,
@@ -138,7 +145,7 @@ body::after {
     color: #ffb4b4;
     border-radius: 10px;
     padding: 8px 12px;
-    font-size: 0.95rem;
+    font-size: 0.94rem;
 }
 
 .warning {
@@ -149,13 +156,12 @@ body::after {
     color: #ffd99a;
     border-radius: 10px;
     padding: 8px 12px;
-    font-size: 0.95rem;
+    font-size: 0.94rem;
 }
 
 .result-card {
-    width: 410px;
-    max-width: 100%;
-    margin: 24px auto 0;
+    width: min(410px, 100%);
+    margin: 22px auto 0;
     background: rgba(16, 35, 74, 0.95);
     border: 1px solid rgba(122, 165, 245, 0.34);
     border-radius: 14px;
@@ -168,7 +174,7 @@ body::after {
 
 .name-amharic {
     font-family: "Abyssinica SIL", "Noto Sans Ethiopic", sans-serif;
-    font-size: clamp(2rem, 5vw, 2.8rem);
+    font-size: clamp(1.8rem, 5vw, 2.8rem);
     color: #eef3ff;
     line-height: 1.2;
     text-align: center;
@@ -181,28 +187,38 @@ body::after {
 }
 
 .result-actions {
-    margin-top: 4px;
+    margin-top: 6px;
     width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
     gap: 10px;
+    flex-wrap: wrap;
 }
 
 #name-audio {
-    width: calc(100% - 54px);
+    width: min(100%, 280px);
     height: 40px;
 }
 
 .icon-btn {
-    width: 42px;
-    height: 42px;
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    min-height: 44px;
     border: 1px solid rgba(255, 138, 61, 0.9);
     border-radius: 10px;
     background: rgba(255, 138, 61, 0.12);
     color: #ffe4cf;
     font-size: 1rem;
     cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.icon-btn:hover {
+    background: rgba(255, 138, 61, 0.24);
 }
 
 .again-btn {
@@ -215,31 +231,25 @@ body::after {
 
 @media (max-width: 860px) {
     .page {
-        margin-top: 18px;
-        padding: 0 12px;
+        margin-top: 14px;
+        padding: 0 10px 20px;
     }
 
     .title {
-        font-size: clamp(1.65rem, 8vw, 2.15rem);
+        font-size: clamp(22px, 7vw, 30px);
     }
 
     .subtitle {
-        font-size: 0.98rem;
+        font-size: 14px;
     }
 
     .card {
-        min-height: 320px;
-        padding: 18px 14px;
+        min-height: 300px;
+        padding: 16px 12px;
     }
 
-    .gender-option,
-    .name-english,
-    .error,
-    .warning {
-        font-size: 0.94rem;
-    }
-
-    .name-amharic {
-        font-size: clamp(1.7rem, 8vw, 2.2rem);
+    #generate-btn {
+        width: 100%;
+        max-width: 260px;
     }
 }

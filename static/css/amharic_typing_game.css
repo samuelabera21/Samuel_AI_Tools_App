@@ -1,11 +1,13 @@
 :root {
-  --atg-bg: #090b11;
-  --atg-panel: rgba(14, 18, 30, 0.9);
-  --atg-border: rgba(255, 255, 255, 0.12);
-  --atg-text: #eef2ff;
-  --atg-muted: #bdc7e6;
-  --atg-accent: #f59e0b;
-  --atg-accent-strong: #d97706;
+  --at-bg: #090b11;
+  --at-panel: rgba(14, 18, 30, 0.9);
+  --at-border: rgba(255, 255, 255, 0.12);
+  --at-text: #eef2ff;
+  --at-muted: #bdc7e6;
+  --at-accent: #f59e0b;
+  --at-accent-strong: #d97706;
+  --at-success: #34d399;
+  --at-danger: #f87171;
 }
 
 body {
@@ -13,8 +15,9 @@ body {
   background:
     radial-gradient(140% 120% at 10% 0%, rgba(245, 158, 11, 0.14), rgba(9, 11, 17, 0) 45%),
     radial-gradient(130% 110% at 90% 100%, rgba(56, 189, 248, 0.12), rgba(9, 11, 17, 0) 50%),
-    var(--atg-bg);
-  color: var(--atg-text);
+    var(--at-bg);
+  color: var(--at-text);
+  overflow-x: hidden;
 }
 
 body::before,
@@ -38,228 +41,195 @@ body::after {
   background: radial-gradient(circle at 50% 22%, rgba(245, 158, 11, 0.12), transparent 58%);
 }
 
-.typing-page {
+.page-wrap {
   position: relative;
   z-index: 1;
-  max-width: 1040px;
-  padding: 20px 18px 34px;
+  max-width: 980px;
+  margin: 24px auto 36px;
+  padding: 0 16px 24px;
 }
 
-.game-title {
+.title {
   margin: 0 0 10px;
-  font-size: clamp(1.95rem, 3.8vw, 2.75rem);
+  text-align: center;
+  font-size: clamp(22px, 3.8vw, 36px);
   line-height: 1.18;
   letter-spacing: 0.01em;
 }
 
-.game-subtitle {
-  max-width: 900px;
-  margin-left: auto;
-  margin-right: auto;
-  color: var(--atg-muted);
-  line-height: 1.5;
-  font-size: clamp(0.95rem, 1.45vw, 1.08rem);
+.subtitle {
+  margin: 0 auto 22px;
+  max-width: 860px;
+  text-align: center;
+  color: var(--at-muted);
+  font-size: clamp(14px, 1.8vw, 17px);
+  line-height: 1.6;
 }
 
-.typing-page > .container {
-  margin-top: 18px !important;
-}
-
-.typing-card {
-  border: 1px solid var(--atg-border);
-  border-radius: 18px;
-  background: var(--atg-panel);
-  max-width: 980px;
+.game-shell {
+  background: var(--at-panel);
+  border: 1px solid var(--at-border);
+  border-radius: 20px;
+  padding: clamp(16px, 2.5vw, 24px);
   box-shadow:
     0 22px 52px rgba(0, 0, 0, 0.45),
     inset 0 1px 0 rgba(255, 255, 255, 0.06);
   backdrop-filter: blur(8px);
 }
 
-.typing-card .card-subtitle,
-.typing-card .card-text,
-.typing-card span,
-.typing-card label,
-.typing-card .form-check-label {
-  color: var(--atg-muted);
+.stats-bar {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 18px;
 }
 
-.typing-card .card-text {
-  font-size: 0.95rem;
-  margin-bottom: 8px;
+.stat-chip {
+  padding: 8px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(8, 12, 24, 0.66);
+  font-size: 0.9rem;
+  color: var(--at-muted);
 }
 
-#targetText {
-  min-height: 64px;
-  line-height: 1.52;
-  font-size: clamp(1.35rem, 3vw, 2rem) !important;
-  font-family: "Noto Sans Ethiopic", "Abyssinica SIL", sans-serif;
-  color: #f5f8ff;
+.stat-chip strong {
+  color: var(--at-text);
+  margin-left: 4px;
 }
 
-#typingInput {
-  font-size: clamp(1.15rem, 2.2vw, 1.65rem);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: 12px;
+.target-card {
+  border: 1px solid rgba(255, 255, 255, 0.12);
   background: rgba(8, 12, 24, 0.86);
-  color: var(--atg-text);
+  border-radius: 14px;
+  padding: clamp(16px, 3vw, 24px) 14px;
+  text-align: center;
+  margin-bottom: 14px;
+}
+
+#target-text {
+  font-family: "Noto Sans Ethiopic", "Abyssinica SIL", sans-serif;
+  font-size: clamp(1.4rem, 4.5vw, 2.2rem);
+  line-height: 1.45;
+  color: #f8fafc;
+  word-break: break-word;
+}
+
+.target-char.correct {
+  color: var(--at-success);
+}
+
+.target-char.wrong {
+  color: var(--at-danger);
+  background: rgba(248, 113, 113, 0.2);
+  border-radius: 3px;
+}
+
+.input-row {
+  margin-bottom: 12px;
+}
+
+#typing-input {
+  width: 100%;
+  padding: 13px 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(8, 12, 24, 0.92);
+  color: var(--at-text);
+  font-size: 16px;
+  line-height: 1.5;
   font-family: "Noto Sans Ethiopic", "Abyssinica SIL", sans-serif;
 }
 
-#typingInput::placeholder {
-  color: #8e99bc;
-}
-
-#typingInput:focus {
+#typing-input:focus {
+  outline: none;
   border-color: rgba(245, 158, 11, 0.62);
   box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.16);
-  background: rgba(8, 12, 24, 0.9);
-  color: var(--atg-text);
 }
 
-.kbd-container {
-  min-height: 20px;
-  margin-bottom: 8px;
-  text-align: left;
+.control-row {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
 }
 
-.kbd-helper {
-  display: inline-block;
-  margin-right: 8px;
-  margin-bottom: 6px;
-  padding: 3px 8px;
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  border-radius: 8px;
-  background: rgba(8, 12, 24, 0.76);
-  color: #cdd7f6;
-  font-size: 0.72rem;
-}
-
-.form-check-input {
-  background-color: rgba(8, 12, 24, 0.8);
-  border-color: rgba(255, 255, 255, 0.35);
-}
-
-.form-check-input:checked {
-  background-color: var(--atg-accent);
-  border-color: var(--atg-accent);
-}
-
-.progress {
-  background-color: rgba(8, 12, 24, 0.8);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-}
-
-#restartBtn,
-.modal-footer .btn-primary,
-.typing-card .btn-primary {
+.btn {
   border: 1px solid rgba(245, 158, 11, 0.48);
-  background: linear-gradient(135deg, var(--atg-accent), var(--atg-accent-strong));
-  color: #161616;
-  font-weight: 600;
   border-radius: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 10px 22px;
+  font-size: 0.94rem;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.15s ease, box-shadow 0.2s ease, background 0.2s ease;
 }
 
-#restartBtn:hover,
-.modal-footer .btn-primary:hover,
-.typing-card .btn-primary:hover {
-  filter: brightness(1.04);
+.btn-primary {
+  background: linear-gradient(135deg, var(--at-accent), var(--at-accent-strong));
+  color: #161616;
+  box-shadow: 0 8px 20px rgba(245, 158, 11, 0.3);
 }
 
-.kbd_targetText {
-  font-size: 0.72rem;
-  vertical-align: middle;
-  color: #8e99bc;
+.btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 24px rgba(245, 158, 11, 0.34);
 }
 
-.word-container {
-  display: inline-block;
-  position: relative;
-  margin-right: 4px;
+.btn-secondary {
+  background: rgba(245, 158, 11, 0.14);
+  color: #ffd495;
 }
 
-.word-container.animated-underline::after {
-  content: "";
-  position: absolute;
-  bottom: -2px;
-  left: 0;
-  height: 2px;
-  background: #60a5fa;
-  width: 100%;
-  animation: underline-grow 1.5s infinite;
+.btn-secondary:hover {
+  background: rgba(245, 158, 11, 0.24);
 }
 
-.kbd_targetText.animated-underline {
-  position: relative;
+.result-card {
+  margin-top: 14px;
+  border: 1px solid rgba(245, 158, 11, 0.35);
+  background: rgba(14, 20, 36, 0.92);
+  border-radius: 14px;
+  padding: 14px;
+  text-align: center;
 }
 
-.kbd_targetText.animated-underline::after {
-  content: "";
-  position: absolute;
-  bottom: -2px;
-  left: 0;
-  height: 2px;
-  background: #60a5fa;
-  width: 100%;
-  animation: underline-grow 1.5s infinite;
+.result-title {
+  margin: 0 0 6px;
+  color: #ffd495;
+  font-size: 1.1rem;
 }
 
-@keyframes underline-grow {
-  0% {
-    width: 0;
+.result-summary {
+  margin: 0;
+  color: var(--at-muted);
+  font-size: 0.94rem;
+}
+
+.hidden {
+  display: none;
+}
+
+@media (max-width: 760px) {
+  .page-wrap {
+    margin-top: 14px;
+    padding: 0 10px 20px;
   }
 
-  50% {
+  .title {
+    font-size: clamp(22px, 7vw, 30px);
+  }
+
+  .subtitle {
+    font-size: 14px;
+  }
+
+  .btn {
     width: 100%;
-  }
-
-  100% {
-    width: 0;
-  }
-}
-
-.text-success {
-  color: #86efac !important;
-}
-
-.modal-content {
-  background: #101728;
-  color: var(--atg-text);
-  border: 1px solid rgba(255, 255, 255, 0.14);
-}
-
-.modal-header,
-.modal-footer {
-  border-color: rgba(255, 255, 255, 0.14);
-}
-
-.btn-close {
-  filter: invert(1) grayscale(1);
-}
-
-@media (max-width: 700px) {
-  .typing-page {
-    padding: 14px 12px 24px;
-  }
-
-  .game-title {
-    font-size: clamp(1.55rem, 7.2vw, 2.05rem);
-  }
-
-  .game-subtitle {
-    font-size: clamp(0.9rem, 3.6vw, 1rem);
-    line-height: 1.42;
-  }
-
-  #targetText {
-    font-size: clamp(1.15rem, 6vw, 1.5rem) !important;
-  }
-
-  #typingInput {
-    font-size: 1.05rem;
-  }
-
-  .typing-card {
-    padding: 14px !important;
+    max-width: 260px;
   }
 }

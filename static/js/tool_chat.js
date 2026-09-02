@@ -1,4 +1,74 @@
 (function () {
+  // Mobile navigation drawer toggle & dropdown handler
+  const menuToggle = document.getElementById("mobile-nav-toggle");
+  const menu = document.getElementById("hero-menu");
+  const nav = document.getElementById("main-nav");
+
+  if (menuToggle && menu) {
+    function setMenuOpen(isOpen) {
+      menu.classList.toggle("is-open", isOpen);
+      menuToggle.setAttribute("aria-expanded", String(isOpen));
+    }
+
+    menuToggle.addEventListener("click", function (e) {
+      e.stopPropagation();
+      const isOpen = menu.classList.contains("is-open");
+      setMenuOpen(!isOpen);
+    });
+
+    // Handle dropdowns on mobile devices (click to open submenus)
+    const dropdownBtns = menu.querySelectorAll(".hero-drop-btn");
+    dropdownBtns.forEach(function (btn) {
+      btn.addEventListener("click", function (e) {
+        if (window.innerWidth <= 880) {
+          e.preventDefault();
+          e.stopPropagation();
+          const dropdown = btn.closest(".hero-dropdown");
+          if (!dropdown) return;
+          const isOpen = dropdown.classList.contains("is-open");
+          
+          // Close other dropdowns
+          menu.querySelectorAll(".hero-dropdown").forEach(function (d) {
+            if (d !== dropdown) {
+              d.classList.remove("is-open");
+              const b = d.querySelector(".hero-drop-btn");
+              if (b) b.setAttribute("aria-expanded", "false");
+            }
+          });
+
+          dropdown.classList.toggle("is-open", !isOpen);
+          btn.setAttribute("aria-expanded", String(!isOpen));
+        }
+      });
+    });
+
+    // Close menu on link click
+    if (nav) {
+      nav.querySelectorAll("a").forEach(function (link) {
+        link.addEventListener("click", function () {
+          if (window.innerWidth <= 880) {
+            setMenuOpen(false);
+          }
+        });
+      });
+    }
+
+    // Close menu when clicking outside
+    document.addEventListener("click", function (e) {
+      if (menu.classList.contains("is-open") && !menu.contains(e.target) && !menuToggle.contains(e.target)) {
+        setMenuOpen(false);
+      }
+    });
+
+    // Close on Escape key
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape" && menu.classList.contains("is-open")) {
+        setMenuOpen(false);
+      }
+    });
+  }
+
+  // Floating Chatbot Widget
   const launcher = document.getElementById("chatbot-launcher");
   const toggleBtn = document.getElementById("chatbot-toggle");
   const closeBtn = document.getElementById("chatbot-close");

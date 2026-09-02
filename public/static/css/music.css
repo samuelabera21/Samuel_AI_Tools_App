@@ -5,11 +5,12 @@ body {
     radial-gradient(circle at 92% 6%, rgba(17, 129, 230, 0.2), transparent 28%),
     linear-gradient(150deg, #060a17 0%, #0a1430 48%, #0d243f 100%);
   color: #f6f7ff;
+  overflow-x: hidden;
 }
 
 .music-page {
   min-height: calc(100vh - 110px);
-  padding: 26px 18px 88px;
+  padding: 24px 16px 88px;
 }
 
 .studio-shell {
@@ -21,8 +22,8 @@ body {
 }
 
 .studio-rail {
-  border-radius: 24px;
-  padding: 24px 20px;
+  border-radius: 22px;
+  padding: 22px 18px;
   background: linear-gradient(180deg, rgba(26, 30, 49, 0.94) 0%, rgba(16, 20, 35, 0.96) 100%);
   border: 1px solid rgba(255, 255, 255, 0.09);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 16px 30px rgba(0, 0, 0, 0.26);
@@ -30,22 +31,23 @@ body {
 
 .studio-rail h1 {
   margin: 0;
-  font-size: 1.7rem;
+  font-size: clamp(1.4rem, 2.5vw, 1.7rem);
 }
 
 .studio-rail p {
   margin-top: 10px;
   color: #c6d4f7;
   line-height: 1.45;
+  font-size: 0.95rem;
 }
 
 .rail-list {
   list-style: none;
-  margin: 22px 0 0;
+  margin: 18px 0 0;
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
 }
 
 .rail-list li {
@@ -55,14 +57,15 @@ body {
 
 .rail-step {
   width: 100%;
-  border-radius: 14px;
-  padding: 12px 14px;
+  border-radius: 12px;
+  padding: 11px 13px;
   color: #d8dff7;
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.08);
   text-align: left;
-  font-size: 1rem;
+  font-size: 0.95rem;
   cursor: pointer;
+  min-height: 42px;
 }
 
 .rail-step.active {
@@ -79,8 +82,8 @@ body {
 }
 
 .composer-bar {
-  border-radius: 24px;
-  padding: 14px 20px;
+  border-radius: 20px;
+  padding: 14px 18px;
   background: linear-gradient(90deg, rgba(42, 47, 71, 0.96), rgba(23, 30, 54, 0.94));
   border: 1px solid rgba(123, 136, 194, 0.5);
   box-shadow: 0 0 0 2px rgba(102, 83, 236, 0.4), 0 12px 26px rgba(0, 0, 0, 0.24);
@@ -90,12 +93,12 @@ body {
 .composer-bar p {
   margin: 0;
   color: #dde6ff;
-  font-size: 1.18rem;
+  font-size: clamp(1rem, 2vw, 1.18rem);
 }
 
 .music-card {
-  border-radius: 28px;
-  padding: 24px;
+  border-radius: 22px;
+  padding: clamp(16px, 2.5vw, 24px);
   background: linear-gradient(180deg, rgba(7, 20, 48, 0.95) 0%, rgba(6, 17, 39, 0.94) 100%);
   border: 1px solid rgba(148, 167, 255, 0.22);
   box-shadow: 0 18px 40px rgba(2, 6, 20, 0.45);
@@ -110,16 +113,29 @@ body {
 .music-form label {
   font-weight: 700;
   color: #e5edff;
+  font-size: 0.95rem;
 }
 
 .music-form textarea,
 .music-form select {
   width: 100%;
-  border-radius: 14px;
+  border-radius: 12px;
   border: 1px solid rgba(164, 183, 255, 0.35);
   background: rgba(255, 255, 255, 0.1);
   color: #f4f7ff;
-  padding: 11px 12px;
+  padding: 12px 13px;
+  font-size: 16px;
+}
+
+.music-form textarea:focus,
+.music-form select:focus {
+  outline: none;
+  border-color: rgba(255, 138, 61, 0.7);
+}
+
+.music-form textarea {
+  min-height: 90px;
+  resize: vertical;
 }
 
 .music-form textarea::placeholder {
@@ -146,12 +162,14 @@ body {
   margin-top: 8px;
   border: none;
   border-radius: 999px;
-  padding: 13px 18px;
+  padding: 13px 24px;
   background: linear-gradient(100deg, #ff9c38, #ff7041 55%, #ff5e56);
   color: #fff;
   font-weight: 800;
   cursor: pointer;
   letter-spacing: 0.01em;
+  font-size: 1rem;
+  min-height: 44px;
   transition: transform 0.18s ease, box-shadow 0.18s ease;
 }
 
@@ -189,22 +207,26 @@ body {
 
 .result h2 {
   margin-bottom: 10px;
+  font-size: 1.25rem;
 }
 
 #audio-player {
   width: 100%;
-  min-height: 50px;
+  min-height: 48px;
 }
 
 .download-btn {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   margin-top: 12px;
   text-decoration: none;
   font-weight: 700;
   color: #132141;
   background: linear-gradient(100deg, #ffe7a3, #ffd070);
-  padding: 10px 14px;
+  padding: 10px 18px;
   border-radius: 10px;
+  min-height: 44px;
 }
 
 .enhanced-label {
@@ -224,13 +246,13 @@ body {
   }
 
   .studio-rail {
-    padding: 20px 16px;
+    padding: 18px 14px;
   }
 }
 
 @media (max-width: 760px) {
   .music-page {
-    padding: 18px 12px 74px;
+    padding: 16px 10px 74px;
   }
 
   .composer-bar p {
@@ -238,10 +260,18 @@ body {
   }
 
   .music-card {
-    padding: 20px;
+    padding: 16px 12px;
   }
 
   .form-row {
     grid-template-columns: 1fr;
+  }
+
+  #generate-btn {
+    width: 100%;
+  }
+
+  .download-btn {
+    width: 100%;
   }
 }

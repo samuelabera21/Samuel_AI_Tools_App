@@ -17,6 +17,7 @@ body {
         radial-gradient(130% 110% at 90% 100%, rgba(56, 189, 248, 0.12), rgba(9, 11, 17, 0) 50%),
         var(--tts-bg);
     color: var(--tts-text);
+    overflow-x: hidden;
 }
 
 body::before,
@@ -44,14 +45,14 @@ body::after {
     position: relative;
     z-index: 1;
     max-width: 980px;
-    margin: 34px auto;
-    padding: 0 18px 20px;
+    margin: 24px auto 36px;
+    padding: 0 16px 24px;
 }
 
 .title {
     margin: 0 0 10px;
     text-align: center;
-    font-size: clamp(1.45rem, 2.6vw, 2rem);
+    font-size: clamp(22px, 3.8vw, 36px);
     line-height: 1.18;
     letter-spacing: 0.01em;
 }
@@ -61,15 +62,15 @@ body::after {
     max-width: 860px;
     text-align: center;
     color: var(--tts-muted);
-    font-size: clamp(0.95rem, 1.4vw, 1.05rem);
-    line-height: 1.62;
+    font-size: clamp(14px, 1.8vw, 17px);
+    line-height: 1.6;
 }
 
 .card {
     background: var(--tts-panel);
     border: 1px solid var(--tts-border);
-    border-radius: 18px;
-    padding: clamp(16px, 2.3vw, 24px);
+    border-radius: 20px;
+    padding: clamp(16px, 2.5vw, 24px);
     box-shadow:
         0 22px 52px rgba(0, 0, 0, 0.45),
         inset 0 1px 0 rgba(255, 255, 255, 0.06);
@@ -84,13 +85,13 @@ body::after {
     border-radius: 12px;
     color: var(--tts-text);
     transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    font-size: 16px;
 }
 
 #tts-text {
-    min-height: 160px;
+    min-height: 150px;
     resize: vertical;
     padding: 13px 14px;
-    font-size: clamp(0.95rem, 1.2vw, 1rem);
     line-height: 1.62;
     font-family: "Noto Sans Ethiopic", "Abyssinica SIL", sans-serif;
 }
@@ -100,9 +101,8 @@ body::after {
 }
 
 #voice-select {
-    min-width: 320px;
-    padding: 10px 12px;
-    font-size: 0.95rem;
+    min-width: 240px;
+    padding: 11px 12px;
 }
 
 #tts-text:focus,
@@ -123,10 +123,13 @@ body::after {
     display: inline-flex;
     align-items: center;
     gap: 10px;
+    min-height: 40px;
 }
 
 .switch-row input {
     accent-color: var(--tts-accent);
+    width: 18px;
+    height: 18px;
 }
 
 .voice-row {
@@ -134,6 +137,7 @@ body::after {
     align-items: center;
     justify-content: center;
     gap: 12px;
+    flex-wrap: wrap;
 }
 
 .actions {
@@ -149,11 +153,15 @@ body::after {
     font-weight: 600;
     cursor: pointer;
     transition: transform 0.15s ease, box-shadow 0.2s ease, background 0.2s ease;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 }
 
 #generate-btn {
     padding: 10px 30px;
-    font-size: 0.95rem;
+    font-size: 0.98rem;
     background: linear-gradient(135deg, var(--tts-accent), var(--tts-accent-strong));
     color: #161616;
     box-shadow: 0 8px 20px rgba(245, 158, 11, 0.3);
@@ -181,7 +189,7 @@ body::after {
 }
 
 .audio-result {
-    margin-top: 16px;
+    margin-top: 18px;
     border: 1px solid var(--tts-border);
     background: var(--tts-panel);
     border-radius: 14px;
@@ -189,7 +197,7 @@ body::after {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 10px;
+    gap: 12px;
     box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
     backdrop-filter: blur(8px);
 }
@@ -199,15 +207,18 @@ body::after {
 }
 
 .download-btn {
-    width: 42px;
-    height: 42px;
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    min-height: 44px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     text-decoration: none;
-    font-size: 1rem;
+    font-size: 1.1rem;
     background: rgba(245, 158, 11, 0.18);
     color: #ffd495;
+    border-radius: 10px;
 }
 
 .download-btn:hover {
@@ -221,7 +232,8 @@ body::after {
 
 @media (max-width: 860px) {
     .page {
-        margin-top: 24px;
+        margin-top: 14px;
+        padding: 0 10px 20px;
     }
 
     .voice-row {
@@ -231,6 +243,7 @@ body::after {
 
     #voice-select {
         min-width: 0;
+        width: 100%;
     }
 
     .audio-result {
@@ -238,8 +251,14 @@ body::after {
         align-items: stretch;
     }
 
+    #generate-btn {
+        width: 100%;
+        max-width: 280px;
+    }
+
     .download-btn {
         width: 100%;
-        height: 40px;
+        height: 44px;
+        font-size: 14px;
     }
 }

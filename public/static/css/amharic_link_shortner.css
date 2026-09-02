@@ -40,17 +40,18 @@ body::after {
 
 .page {
     max-width: 1120px;
-    margin: 26px auto 36px;
-    padding: 0 16px;
+    margin: 24px auto 36px;
+    padding: 0 16px 24px;
 }
 
 .title {
     text-align: center;
-    font-size: clamp(2rem, 3.5vw, 2.9rem);
-    margin: 18px 0 10px;
+    font-size: clamp(24px, 4vw, 44px);
+    margin: 14px 0 10px;
     color: #edf3ff;
     font-weight: 800;
     letter-spacing: 0.01em;
+    line-height: 1.18;
 }
 
 .subtitle {
@@ -58,7 +59,7 @@ body::after {
     max-width: 860px;
     margin: 0 auto 24px;
     line-height: 1.55;
-    font-size: 1.05rem;
+    font-size: clamp(14px, 1.8vw, 17px);
     color: var(--muted);
 }
 
@@ -66,9 +67,9 @@ body::after {
     max-width: 760px;
     margin: 0 auto;
     border: 1px solid var(--soft-border);
-    border-radius: 18px;
+    border-radius: 20px;
     background: var(--panel);
-    padding: 24px 20px;
+    padding: clamp(16px, 2.5vw, 24px);
     box-shadow: 0 18px 36px rgba(5, 12, 32, 0.36);
 }
 
@@ -86,7 +87,7 @@ body::after {
     border: 1px solid rgba(122, 165, 245, 0.42);
     border-radius: 12px;
     padding: 13px 15px;
-    font-size: 1rem;
+    font-size: 16px;
     color: #f4f8ff;
     background: rgba(6, 13, 30, 0.84);
 }
@@ -100,22 +101,25 @@ body::after {
 .actions {
     display: flex;
     justify-content: center;
-    margin-top: 14px;
+    margin-top: 16px;
 }
 
 #generate-btn {
     border: 1px solid var(--accent);
-    background: rgba(255, 138, 61, 0.08);
+    background: rgba(255, 138, 61, 0.12);
     color: #ffd4b2;
     border-radius: 999px;
-    padding: 10px 24px;
+    padding: 11px 28px;
     font-size: 1rem;
     font-weight: 700;
     cursor: pointer;
+    min-height: 44px;
+    transition: background 0.2s ease, transform 0.2s ease;
 }
 
 #generate-btn:hover {
-    background: rgba(255, 138, 61, 0.2);
+    background: rgba(255, 138, 61, 0.25);
+    transform: translateY(-1px);
 }
 
 #generate-btn:disabled {
@@ -131,13 +135,12 @@ body::after {
     color: #ffb4b4;
     border-radius: 10px;
     padding: 8px 12px;
-    font-size: 0.95rem;
+    font-size: 0.94rem;
 }
 
 .result-card {
-    width: 560px;
-    max-width: 100%;
-    margin: 24px auto 0;
+    width: min(560px, 100%);
+    margin: 22px auto 0;
     background: rgba(16, 35, 74, 0.95);
     border: 1px solid rgba(122, 165, 245, 0.34);
     border-radius: 14px;
@@ -151,9 +154,10 @@ body::after {
 .short-url {
     color: #eef3ff;
     text-decoration: none;
-    font-size: 1.15rem;
+    font-size: 1.1rem;
     line-height: 1.35;
     overflow-wrap: anywhere;
+    word-break: break-all;
     font-family: "Abyssinica SIL", "Noto Sans Ethiopic", sans-serif;
 }
 
@@ -162,10 +166,14 @@ body::after {
     background: rgba(255, 138, 61, 0.12);
     color: #ffe4cf;
     border-radius: 10px;
-    padding: 8px 12px;
+    padding: 8px 14px;
     font-size: 0.95rem;
     cursor: pointer;
     flex-shrink: 0;
+    min-height: 40px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .copy-btn:hover {
@@ -178,25 +186,28 @@ body::after {
 
 @media (max-width: 860px) {
     .page {
-        margin-top: 18px;
-        padding: 0 12px;
+        margin-top: 14px;
+        padding: 0 10px 20px;
     }
 
     .title {
-        font-size: clamp(1.65rem, 8vw, 2.15rem);
+        font-size: clamp(22px, 7vw, 30px);
     }
 
-    .subtitle,
-    #long-url-input,
-    #generate-btn,
-    .error,
-    .copy-btn {
-        font-size: 0.95rem;
+    .subtitle {
+        font-size: 14px;
+        margin-bottom: 18px;
+    }
+
+    .card {
+        border-radius: 16px;
+        padding: 16px 12px;
     }
 
     .result-card {
         flex-direction: column;
         align-items: stretch;
+        gap: 10px;
     }
 
     .short-url {
@@ -206,5 +217,12 @@ body::after {
 
     .copy-btn {
         align-self: center;
+        width: 100%;
+        max-width: 220px;
+    }
+
+    #generate-btn {
+        width: 100%;
+        max-width: 260px;
     }
 }
