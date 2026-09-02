@@ -380,6 +380,28 @@
     <p class="chatbot-footnote">AI can make mistakes. Verify important information.</p>
   </section>
 
+  <div id="server-wake-backdrop" class="server-wake-backdrop" aria-hidden="true">
+    <div class="server-wake-modal" role="dialog" aria-modal="true" aria-labelledby="server-wake-title">
+      <button type="button" class="server-wake-close" id="server-wake-close" aria-label="Cancel and close">&times;</button>
+      <div class="server-wake-icon-wrap">
+        <span class="server-wake-pulse"></span>
+        <span class="server-wake-pulse pulse-delay"></span>
+        <div class="server-wake-icon" id="server-wake-icon">&#9889;</div>
+      </div>
+      <h3 class="server-wake-title" id="server-wake-title">Connecting to AI Hub</h3>
+      <p class="server-wake-desc" id="server-wake-desc">
+        Waking up backend instances to open <span class="server-wake-target" id="server-wake-target">AI Tool</span>... Please hold on a moment.
+      </p>
+      <div class="server-wake-progress-bar">
+        <div class="server-wake-progress-fill"></div>
+      </div>
+      <p class="server-wake-status" id="server-wake-status">Connecting to server instances...</p>
+      <div class="server-wake-actions">
+        <button type="button" class="server-wake-cancel" id="server-wake-cancel-btn">Cancel</button>
+      </div>
+    </div>
+  </div>
+
   <script src="/static/js/home.js"></script>
 </body>
 </html>

@@ -172,3 +172,152 @@
   launcher.removeAttribute("hidden");
   setOpen(false);
 })();
+
+// ==========================================================================
+// Server Pre-Warming & Cold-Start Auto-Redirect Handler
+// ==========================================================================
+(function () {
+  window.__serverAwake = true; // On a tool page served by Render, server is active
+  let isChecking = false;
+  let activePollTimer = null;
+  let pendingUrl = null;
+
+  const backdrop = document.getElementById("server-wake-backdrop");
+  const closeBtn = document.getElementById("server-wake-close");
+  const cancelBtn = document.getElementById("server-wake-cancel-btn");
+  const targetLabel = document.getElementById("server-wake-target");
+  const statusLabel = document.getElementById("server-wake-status");
+  const modalIcon = document.getElementById("server-wake-icon");
+
+  function pingServer(timeoutMs = 12000) {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), timeoutMs);
+
+    return fetch("/api/health", { method: "GET", signal: controller.signal })
+      .then((res) => {
+        clearTimeout(timer);
+        if (res.ok) {
+          window.__serverAwake = true;
+          return true;
+        }
+        return false;
+      })
+      .catch(() => {
+        clearTimeout(timer);
+        return false;
+      });
+  }
+
+  function showWakeModal(toolName, targetUrl) {
+    pendingUrl = targetUrl;
+    if (targetLabel) targetLabel.textContent = toolName || "AI Tool";
+    if (statusLabel) statusLabel.textContent = "Connecting to server instances...";
+    if (modalIcon) {
+      modalIcon.textContent = "⚡";
+      modalIcon.classList.remove("server-wake-ready");
+    }
+    if (backdrop) {
+      backdrop.classList.add("is-active");
+      backdrop.setAttribute("aria-hidden", "false");
+    }
+
+    startPolling();
+  }
+
+  function hideWakeModal() {
+    pendingUrl = null;
+    if (activePollTimer) {
+      clearTimeout(activePollTimer);
+      activePollTimer = null;
+    }
+    isChecking = false;
+    if (backdrop) {
+      backdrop.classList.remove("is-active");
+      backdrop.setAttribute("aria-hidden", "true");
+    }
+  }
+
+  let attemptCount = 0;
+  function startPolling() {
+    if (isChecking) return;
+    isChecking = true;
+    attemptCount = 0;
+
+    function pollStep() {
+      if (!pendingUrl) return;
+      attemptCount++;
+
+      if (statusLabel) {
+        if (attemptCount <= 3) {
+          statusLabel.textContent = "Pinging AI server instances...";
+        } else if (attemptCount <= 8) {
+          statusLabel.textContent = "Waking up container (free tier booting)...";
+        } else {
+          statusLabel.textContent = "Almost ready, initializing models...";
+        }
+      }
+
+      pingServer(5000).then((isAwake) => {
+        if (!pendingUrl) return;
+
+        if (isAwake) {
+          if (statusLabel) statusLabel.textContent = "✓ Server ready! Opening page...";
+          if (modalIcon) {
+            modalIcon.textContent = "✓";
+            modalIcon.classList.add("server-wake-ready");
+          }
+          setTimeout(() => {
+            if (pendingUrl) {
+              window.location.href = pendingUrl;
+            }
+          }, 600);
+        } else {
+          if (attemptCount > 20) {
+            if (statusLabel) statusLabel.textContent = "Opening page now...";
+            setTimeout(() => {
+              if (pendingUrl) window.location.href = pendingUrl;
+            }, 500);
+            return;
+          }
+          activePollTimer = setTimeout(pollStep, 2500);
+        }
+      });
+    }
+
+    pollStep();
+  }
+
+  if (closeBtn) closeBtn.addEventListener("click", hideWakeModal);
+  if (cancelBtn) cancelBtn.addEventListener("click", hideWakeModal);
+  if (backdrop) {
+    backdrop.addEventListener("click", (e) => {
+      if (e.target === backdrop) hideWakeModal();
+    });
+  }
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && backdrop && backdrop.classList.contains("is-active")) {
+      hideWakeModal();
+    }
+  });
+
+  document.addEventListener("click", function (e) {
+    const link = e.target.closest("a");
+    if (!link || !link.href) return;
+
+    const href = link.getAttribute("href") || "";
+    const isBackendRoute =
+      href.startsWith("/Tools/") ||
+      href.startsWith("/Games/") ||
+      href === "/generate-music" ||
+      href === "/Resources" ||
+      href === "/Ethiopian_Knowledge_AI_Assistant";
+
+    if (!isBackendRoute) return;
+    if (window.__serverAwake) return;
+
+    e.preventDefault();
+    const toolName = link.textContent.trim().replace(/^[^\w\u1200-\u137F]+/, "").replace(/▾/, "").trim() || "AI Tool";
+    showWakeModal(toolName, link.href);
+  });
+})();

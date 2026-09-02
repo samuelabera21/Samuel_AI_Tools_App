@@ -725,3 +725,168 @@
   initProjectCarousel("games-grid", "games-story-progress");
   initProjectCarousel("knowledge-grid", "knowledge-story-progress");
 })();
+
+// ==========================================================================
+// Server Pre-Warming & Cold-Start Auto-Redirect Handler
+// ==========================================================================
+(function () {
+  window.__serverAwake = false;
+  let isChecking = false;
+  let activePollTimer = null;
+  let pendingUrl = null;
+
+  const backdrop = document.getElementById("server-wake-backdrop");
+  const closeBtn = document.getElementById("server-wake-close");
+  const cancelBtn = document.getElementById("server-wake-cancel-btn");
+  const targetLabel = document.getElementById("server-wake-target");
+  const statusLabel = document.getElementById("server-wake-status");
+  const modalIcon = document.getElementById("server-wake-icon");
+
+  // Fast silent pre-warming ping on page load
+  function pingServer(timeoutMs = 12000) {
+    if (window.__serverAwake) return Promise.resolve(true);
+    
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), timeoutMs);
+
+    return fetch("/api/health", { method: "GET", signal: controller.signal })
+      .then((res) => {
+        clearTimeout(timer);
+        if (res.ok) {
+          window.__serverAwake = true;
+          return true;
+        }
+        return false;
+      })
+      .catch(() => {
+        clearTimeout(timer);
+        return false;
+      });
+  }
+
+  // Fire pre-warm immediately after load
+  if (document.readyState === "complete" || document.readyState === "interactive") {
+    pingServer(15000);
+  } else {
+    window.addEventListener("DOMContentLoaded", () => pingServer(15000));
+  }
+
+  function showWakeModal(toolName, targetUrl) {
+    pendingUrl = targetUrl;
+    if (targetLabel) targetLabel.textContent = toolName || "AI Tool";
+    if (statusLabel) statusLabel.textContent = "Connecting to server instances...";
+    if (modalIcon) {
+      modalIcon.textContent = "⚡";
+      modalIcon.classList.remove("server-wake-ready");
+    }
+    if (backdrop) {
+      backdrop.classList.add("is-active");
+      backdrop.setAttribute("aria-hidden", "false");
+    }
+
+    startPolling();
+  }
+
+  function hideWakeModal() {
+    pendingUrl = null;
+    if (activePollTimer) {
+      clearTimeout(activePollTimer);
+      activePollTimer = null;
+    }
+    isChecking = false;
+    if (backdrop) {
+      backdrop.classList.remove("is-active");
+      backdrop.setAttribute("aria-hidden", "true");
+    }
+  }
+
+  let attemptCount = 0;
+  function startPolling() {
+    if (isChecking) return;
+    isChecking = true;
+    attemptCount = 0;
+
+    function pollStep() {
+      if (!pendingUrl) return;
+      attemptCount++;
+
+      if (statusLabel) {
+        if (attemptCount <= 3) {
+          statusLabel.textContent = "Pinging AI server instances...";
+        } else if (attemptCount <= 8) {
+          statusLabel.textContent = "Waking up container (free tier booting)...";
+        } else {
+          statusLabel.textContent = "Almost ready, initializing models...";
+        }
+      }
+
+      pingServer(5000).then((isAwake) => {
+        if (!pendingUrl) return; // User cancelled modal
+
+        if (isAwake) {
+          if (statusLabel) statusLabel.textContent = "✓ Server ready! Opening page...";
+          if (modalIcon) {
+            modalIcon.textContent = "✓";
+            modalIcon.classList.add("server-wake-ready");
+          }
+          setTimeout(() => {
+            if (pendingUrl) {
+              window.location.href = pendingUrl;
+            }
+          }, 600);
+        } else {
+          // If still waking up and reached fallback threshold, proceed to URL
+          if (attemptCount > 20) {
+            if (statusLabel) statusLabel.textContent = "Opening page now...";
+            setTimeout(() => {
+              if (pendingUrl) window.location.href = pendingUrl;
+            }, 500);
+            return;
+          }
+          activePollTimer = setTimeout(pollStep, 2500);
+        }
+      });
+    }
+
+    pollStep();
+  }
+
+  if (closeBtn) closeBtn.addEventListener("click", hideWakeModal);
+  if (cancelBtn) cancelBtn.addEventListener("click", hideWakeModal);
+  if (backdrop) {
+    backdrop.addEventListener("click", (e) => {
+      if (e.target === backdrop) hideWakeModal();
+    });
+  }
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && backdrop && backdrop.classList.contains("is-active")) {
+      hideWakeModal();
+    }
+  });
+
+  // Intercept clicks on links pointing to backend routes
+  document.addEventListener("click", function (e) {
+    const link = e.target.closest("a");
+    if (!link || !link.href) return;
+
+    // Check if target is a backend tool/game/service route
+    const href = link.getAttribute("href") || "";
+    const isBackendRoute =
+      href.startsWith("/Tools/") ||
+      href.startsWith("/Games/") ||
+      href === "/generate-music" ||
+      href === "/Resources" ||
+      href === "/Ethiopian_Knowledge_AI_Assistant";
+
+    if (!isBackendRoute) return;
+
+    // If server is already confirmed awake, allow instant normal navigation!
+    if (window.__serverAwake) return;
+
+    // Otherwise, prevent default and display the professional waking up modal
+    e.preventDefault();
+    const toolName = link.textContent.trim().replace(/^[^\w\u1200-\u137F]+/, "").replace(/▾/, "").trim() || "AI Tool";
+    showWakeModal(toolName, link.href);
+  });
+})();

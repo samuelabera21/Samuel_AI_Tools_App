@@ -81,6 +81,11 @@ else:
     ]
     CORS(app, resources={r"/api/*": {"origins": frontend_origins}})
 
+@app.route("/api/health", methods=["GET", "HEAD"])
+def health_check():
+    return jsonify({"status": "ok", "message": "Server is awake"}), 200
+
+
 @app.route("/")
 def home():
     return render_template("home.html")
